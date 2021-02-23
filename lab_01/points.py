@@ -42,6 +42,49 @@ def delete_point(points):
         msg.delete_error()
 
 
+def edit_point(points, entries, buttons, btn_app):
+    """
+        Редактирование точки из таблицы
+    """
+
+    for button in buttons:
+        button.configure(state=tk.DISABLED)
+
+    btn_app.configure(state=tk.NORMAL)
+
+    entries[0].delete(0, 'end')
+    entries[1].delete(0, 'end')
+
+    selected_item = points.selection()[0]
+
+    point = points.item(selected_item)["values"]
+
+    entries[0].insert(0, point[0])
+    entries[1].insert(0, point[1])
+
+
+def apply(points, entries, buttons, btn_app):
+    """
+        Применение редактирования точки
+    """
+    try:
+        x = float(entries[0].get())
+        y = float(entries[1].get())
+
+        selected_point = points.selection()[0]
+        points.item(selected_point, values=(x, y))
+
+        entries[0].delete(0, 'end')
+        entries[1].delete(0, 'end')
+
+        for button in buttons:
+            button.configure(state=tk.NORMAL)
+
+        btn_app.configure(state=tk.DISABLED)
+    except:
+        msg.add_error()
+
+
 def clean_all(points, entries, canvas):
     """
         Очистка всех элементов
@@ -52,3 +95,5 @@ def clean_all(points, entries, canvas):
     entries[0].delete(0, 'end')
     entries[1].delete(0, 'end')
     canvas.delete('all')
+
+

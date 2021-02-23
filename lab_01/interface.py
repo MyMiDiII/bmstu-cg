@@ -7,6 +7,7 @@ import tkinter.ttk as ttk
 
 import messages as msg
 import points as pnts
+import problem as prob
 
 
 MAIN_BG = '#a6f0ff'
@@ -85,23 +86,19 @@ def create_buttons(window, points, entries, canvas):
     btn_delete.configure(text='Удалить точку')
     btn_delete.configure(command=lambda: pnts.delete_point(points))
 
-    btn_edit = tk.Button(window)
-    btn_edit.place(relx=0.023, rely=0.649, relwidth=0.242, relheight=0.05)
-    btn_edit.configure(activebackground="#f9f9f9")
-    btn_edit.configure(text='Редактировать точку')
+    btn_clean = tk.Button(window)
+    btn_clean.place(relx=0.023, rely=0.805, relwidth=0.242, relheight=0.05)
+    btn_clean.configure(activebackground="#cecced")
+    btn_clean.configure(background="#d84e4e")
+    btn_clean.configure(text='Очистить вcё')
+    btn_clean.configure(command=lambda: pnts.clean_all(points, entries, canvas))
 
     btn_solve = tk.Button(window)
     btn_solve.place(relx=0.023, rely=0.865, relwidth=0.242, relheight=0.05)
     btn_solve.configure(activebackground="#f9f9f9")
     btn_solve.configure(background="#4cd876")
     btn_solve.configure(text='Решить')
-
-    btn_clean = tk.Button(window)
-    btn_clean.place(relx=0.023, rely=0.757, relwidth=0.242, relheight=0.05)
-    btn_clean.configure(activebackground="#cecced")
-    btn_clean.configure(background="#d84e4e")
-    btn_clean.configure(text='Очистить вcё')
-    btn_clean.configure(command=lambda: pnts.clean_all(points, entries, canvas))
+    btn_solve.configure(command=lambda: prob.call_solve_problem(points))
 
     btn_problem = tk.Button(window)
     btn_problem.place(relx=0.023, rely=0.925, relwidth=0.242, relheight=0.05)
@@ -109,6 +106,24 @@ def create_buttons(window, points, entries, canvas):
     btn_problem.configure(background="#3fb9d8")
     btn_problem.configure(text='Условие задачи')
     btn_problem.configure(command=msg.problem)
+
+    btn_edit = tk.Button(window)
+    btn_apply = tk.Button(window)
+
+    btns = [btn_add, btn_delete, btn_edit, btn_clean, btn_solve]
+
+    btn_edit.place(relx=0.023, rely=0.649, relwidth=0.242, relheight=0.05)
+    btn_edit.configure(activebackground="#f9f9f9")
+    btn_edit.configure(text='Редактировать точку')
+    btn_edit.configure(command=lambda: pnts.edit_point(points, entries, 
+                                                       btns, btn_apply))
+
+    btn_apply.place(relx=0.023, rely=0.709, relwidth=0.242, relheight=0.05)
+    btn_apply.configure(activebackground="#f9f9f9")
+    btn_apply.configure(text='Применить редактирование')
+    btn_apply.configure(state=tk.DISABLED)
+    btn_apply.configure(command=lambda: pnts.apply(points, entries,
+                                                   btns, btn_apply))
 
 
 def create_entry(window):
