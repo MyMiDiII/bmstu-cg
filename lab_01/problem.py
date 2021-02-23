@@ -29,17 +29,21 @@ def create_arr(points_table):
     return points
 
 
+def vector_prod(point1, point2, point3):
+    """
+        Поиск модуля векторного произведения
+    """
+    return ((point3[0] - point1[0]) * (point2[1] - point1[1])
+            - (point2[0] - point1[0]) * (point3[1] - point1[1]))
+
+
 def is_triangle(point1, point2, point3):
     """
         Проверка, можно ли заданных точках
         построить треугольник
     """
 
-    return not (abs((point3[0] - point1[0])
-                  * (point2[1] - point1[1])
-                  - (point2[0] - point1[0])
-                  * (point3[1] - point1[1]))
-                < EPS)
+    return not (abs(vector_prod(point1, point2, point3)) < EPS)
 
 
 def ratio_point_1D(x1, x2, m, n):
@@ -62,21 +66,71 @@ def ratio_point_2D(point1, point2, m, n):
             ratio_point_1D(point1[1], point2[1], m, n))
 
 
+def check_line(line, vertex, point):
+    """
+        Проверка, лежат ли точка и вершина
+        по одну сторону от прямой, заданной
+        двумя другими вершинами
+    """
+
+    cond_expr = vector_prod(*line, vertex) * vector_prod(*line, point)
+
+    return cond_expr > 0 or abs(cond_expr) < EPS
+
+
+def get_num(vertexes, points):
+    """
+        Поиск количества точек, находящихся
+        внутри треугольника
+    """
+    num = 0
+
+    for point in points:
+        if (check_line((vertexes[0], vertexes[1]), vertexes[2], point)
+            and check_line((vertexes[0], vertexes[2]), vertexes[1], point)
+            and check_line((vertexes[1], vertexes[2]), vertexes[0], point)
+            ):
+            num += 1
+
+    return num
+
+
 def find_diff(triangle, points):
     """
         Поиск разности в заданном треугольнике
     """
 
-    if not is_triangle(points[triangle[0]],
-                       points[triangle[1]],
-                       points[triangle[2]]
-                      ):
+    if not is_triangle(*triangle):
         return -1
 
-    middle = ratio_point_2D(points[triangle[1]], points[triangle[2]], 1, 1)
-    medians = ratio_point_2D(points[triangle[0]], middle, 2, 1)
+    middles = [0, 0, 0]
 
-    return 10
+    for i in range(3):
+        middles[i] = ratio_point_2D(triangle[i % 2],
+                                    triangle[(i + 1) // 2 + 1],
+                                    1, 1)
+        print(i // 2, i + 1 - i // 2) 
+    medians_point = ratio_point_2D(triangle[0], middles[1], 2, 1)
+    print(medians_point)
+
+    max_num = 0
+    min_num = len(points)
+
+    for i in range(6):
+        print("треугольник", i)
+        #print(triangle[(i + 1) % 6 // 2])
+        #print(middles[i // 2])
+        #print(medians_point)
+        vertexes = (triangle[(i + 1) % 6 // 2],
+                    middles[i // 2],
+                    medians_point) 
+        in_points_num = get_num(vertexes, points)
+        print("in_points_num", in_points_num)
+        max_num = max(in_points_num, max_num)
+        min_num = min(in_points_num, min_num)
+
+    print("min/max", min_num, max_num)
+    return max_num - min_num
 
 
 def solve_problem(points):
@@ -92,8 +146,11 @@ def solve_problem(points):
 
     for first in range(length - 2):
         for second in range(1, length - 1):
-            for third in range(2, length): 
-                cur_diff = find_diff((first, second, third), points)
+            for third in range(2, length):
+                print("num", first, second, third)
+                triangle = (points[first], points[second], points[third])
+                cur_diff = find_diff(triangle, points)
+                print("cur_diff", cur_diff)
                 
                 if cur_diff > answer['max_diff']:
                     answer['max_diff'] = cur_diff
