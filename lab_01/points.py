@@ -10,12 +10,15 @@ def add_point(points, entries):
     """
         Добавление точки в таблицу
     """
-
     try:
         x = float(entries[0].get())
         y = float(entries[1].get())
     except:
-        msg.add_error()
+        if not entries[0].get() or not entries[1].get():
+            msg.create_errorbox('Пустой ввод', 'Для добавления точки введите в окна ввода X и Y вещественные числа!')
+        else:
+            msg.create_errorbox('Нечисловые данные', 'Координаты точки должны быть представлены вещественными числами!')
+
     else:
         cur_index = len(points.get_children('')) + 1
         points.insert('', index='end', text=cur_index, values=(x, y))
@@ -39,7 +42,10 @@ def delete_point(points):
         points.delete(points.selection()[0])
         index_update(points)
     except IndexError:
-        msg.delete_error()
+        if not len(points.get_children()):
+            msg.create_errorbox('Отсутствие точек', 'Список точек пуст! Добавьте точки!')
+        else:
+            msg.create_errorbox('Не выбрана точка', 'Для удаления точки выберете её в таблице!')
 
 
 def edit_point(points, entries, buttons, btn_app):
