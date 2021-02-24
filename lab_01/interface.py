@@ -86,19 +86,19 @@ def create_buttons(window, points, entries, canvas):
     btn_delete.configure(text='Удалить точку')
     btn_delete.configure(command=lambda: pnts.delete_point(points))
 
-    btn_clean = tk.Button(window)
-    btn_clean.place(relx=0.023, rely=0.805, relwidth=0.242, relheight=0.05)
-    btn_clean.configure(activebackground="#cecced")
-    btn_clean.configure(background="#d84e4e")
-    btn_clean.configure(text='Очистить вcё')
-    btn_clean.configure(command=lambda: pnts.clean_all(points, entries, canvas))
-
     btn_solve = tk.Button(window)
-    btn_solve.place(relx=0.023, rely=0.865, relwidth=0.242, relheight=0.05)
+    btn_solve.place(relx=0.023, rely=0.805, relwidth=0.242, relheight=0.05)
     btn_solve.configure(activebackground="#f9f9f9")
     btn_solve.configure(background="#4cd876")
     btn_solve.configure(text='Решить')
     btn_solve.configure(command=lambda: prob.call_solve_problem(points, canvas))
+
+    btn_clean = tk.Button(window)
+    btn_clean.place(relx=0.023, rely=0.865, relwidth=0.242, relheight=0.05)
+    btn_clean.configure(activebackground="#cecced")
+    btn_clean.configure(background="#d84e4e")
+    btn_clean.configure(text='Очистить вcё')
+    btn_clean.configure(command=lambda: pnts.clean_all(points, entries, canvas))
 
     btn_problem = tk.Button(window)
     btn_problem.place(relx=0.023, rely=0.925, relwidth=0.242, relheight=0.05)
@@ -147,12 +147,26 @@ def create_entry(window):
     return [ent_x, ent_y]
 
 
+def on_resize(event, sizes, canvas):
+    """
+        Масштабирование содержимого canvas
+    """
+    wscale = float(event.width)/sizes[0]
+    hscale = float(event.height)/sizes[1]
+
+    sizes[0] = event.width
+    sizes[1] = event.height
+
+    canvas.configure(width=sizes[0], height=sizes[1])
+    canvas.scale("all", 0, 0, wscale, hscale)
+
+
 def create_canvas(window):
     """
         Создание окна графического решения
     """
     cnv_solution = tk.Canvas(window)
-    cnv_solution.place(relx=0.289, rely=0.0, relheight=1.0, relwidth=0.713)
+    cnv_solution.place(relx=0.289, y=0, relheight=1.0, relwidth=0.713)
     cnv_solution.configure(background="#ffffff")
     cnv_solution.configure(borderwidth="2")
     cnv_solution.configure(highlightbackground="#ffffff")
@@ -160,8 +174,10 @@ def create_canvas(window):
     cnv_solution.configure(relief="raised")
     cnv_solution.configure(selectbackground="#2908ff")
     cnv_solution.configure(selectforeground="#ffffff")
+    cnv_solution.addtag_all("all")
 
-    cnv_solution.create_line(0, 0, 100, 100)
+    cnv_sizes = [cnv_solution.winfo_reqwidth(), cnv_solution.winfo_reqheight()]
+    cnv_solution.bind("<Configure>", lambda event: on_resize(event, cnv_sizes, cnv_solution))
 
     return cnv_solution
 
