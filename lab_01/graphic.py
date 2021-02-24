@@ -16,4 +16,4 @@ def create_triange(canvas, vertexes):
         Функция отрисовки треугольника
     """
 
-    canvas.create_polygon(*vertexes, outline="#000000", fill="#ffffff", width=2)
+    canvas.create_polygon(*vertexes, outline="#000000", fill="#ffffff", width=4)
