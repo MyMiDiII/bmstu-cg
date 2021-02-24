@@ -189,5 +189,11 @@ def call_solve_problem(points_table, canvas):
 
     graphic.create_triange(canvas, answer["triangle"])
 
+    for i in range(3):
+        middle = ratio_point_2D(answer["triangle"][i % 2],
+                                    answer["triangle"][(i + 1) // 2 + 1],
+                                    1, 1)
+        canvas.create_line(answer["triangle"][(i+2) % 3], middle, width=4)
+
     # Вызвать функцию отображения изображения
 
