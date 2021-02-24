@@ -10,3 +10,10 @@
     Сделать  в  графическом  режиме  вывод полученной
     картинки.
 """
+
+def create_triange(canvas, vertexes):
+    """
+        Функция отрисовки треугольника
+    """
+
+    canvas.create_polygon(*vertexes, outline="#000000", fill="#ffffff", width=2)

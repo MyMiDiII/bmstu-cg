@@ -12,6 +12,7 @@
 """
 
 import messages as msg
+import graphic
 
 
 EPS = 1e-6
@@ -142,7 +143,7 @@ def solve_problem(points):
     if length < 3:
         return -1
 
-    answer = {'max_diff' : -1, 'triangle' : ()}
+    answer = {'max_diff' : -1, 'nums' : (), 'triangle' : ()}
 
     for first in range(length - 2):
         for second in range(1, length - 1):
@@ -154,18 +155,39 @@ def solve_problem(points):
                 
                 if cur_diff > answer['max_diff']:
                     answer['max_diff'] = cur_diff
-                    answer['triangle'] = (first, second, third)
+                    answer['nums'] = (first, second, third)
+                    answer['triangle'] = triangle
 
     return answer
 
 
-def call_solve_problem(points_table):
+def form_text(answer):
+    """
+        Формирование сообщения с решением
+    """
+    text = ('Треугольник с максимальной искомой\nразностью, '
+            + 'равной {:3d}, построен на\nточках:\n'.format(answer["max_diff"])
+           )
+
+    for i, point in enumerate(answer["triangle"]):
+        text += '     %3d(' % (answer["nums"][i] + 1)
+        text += '%6.2f, ' % (point[0])
+        text += '%6.2f)\n' % (point[1])
+
+    return text
+
+
+def call_solve_problem(points_table, canvas):
     """
         Вызов функции решения задачи
     """
 
     points_arr = create_arr(points_table)
     answer = solve_problem(points_arr)
-    print(answer)
 
+    msg.create_infobox('Решение', form_text(answer))
+
+    graphic.create_triange(canvas, answer["triangle"])
+
+    # Вызвать функцию отображения изображения
 

@@ -98,7 +98,7 @@ def create_buttons(window, points, entries, canvas):
     btn_solve.configure(activebackground="#f9f9f9")
     btn_solve.configure(background="#4cd876")
     btn_solve.configure(text='Решить')
-    btn_solve.configure(command=lambda: prob.call_solve_problem(points))
+    btn_solve.configure(command=lambda: prob.call_solve_problem(points, canvas))
 
     btn_problem = tk.Button(window)
     btn_problem.place(relx=0.023, rely=0.925, relwidth=0.242, relheight=0.05)
