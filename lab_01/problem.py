@@ -18,6 +18,14 @@ import graphic
 
 EPS = 1e-6
 
+LESS3 = ('Недостаточное количество!\n'
+         + 'Добавьте хотя бы 3 точки!')
+EMPTY_TABLE = 'Список точек пуст!\nДобавьте точки!'
+NO_TRIANGLES = ('На заданных точках нельзя построить\n'
+                + 'ни один треугольник, так как точки\n'
+                + 'либо лежат на одной прямой, либо\n'
+                + 'совпадают!')
+
 
 def create_arr(points_table):
     """
@@ -142,9 +150,6 @@ def solve_problem(points):
     """
     length = len(points)
 
-    if length < 3:
-        return -1
-
     answer = {'max_diff': -1, 'in_points': [],
               'nums': (), 'triangle': ()}
 
@@ -187,12 +192,22 @@ def call_solve_problem(points_table, canvas):
         Вызов функции решения задачи
     """
 
-    canvas.delete('all')
-
     points_arr = create_arr(points_table)
+
+    if len(points_arr) == 0:
+        msg.create_errorbox('Пустой список точек', EMPTY_TABLE)
+        return
+    elif len(points_arr) < 3:
+        msg.create_errorbox('Недостаточно точек', LESS3)
+        return
     answer = solve_problem(points_arr)
+
+    if answer["max_diff"] == -1:
+        msg.create_errorbox('Нет треугольников', NO_TRIANGLES)
+        return
     print(answer)
 
+    canvas.delete('all')
     msg.create_infobox('Решение', form_text(answer))
 
     triangle_copy = copy.deepcopy(answer["triangle"])
@@ -213,5 +228,3 @@ def call_solve_problem(points_table, canvas):
 
     for point in answer["in_points"]:
         graphic.create_point(canvas, point)
-
-    # Вызвать функцию отображения изображения
