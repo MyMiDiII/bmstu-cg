@@ -67,6 +67,10 @@ def create_table(window):
 
     tr_points.place(relx=0.023, rely=0.057, relheight=0.337, relwidth=0.247)
 
+    scr_points = ttk.Scrollbar(tr_points, orient = 'vertical', command = tr_points.yview)
+    tr_points.configure(yscrollcommand=scr_points.set)
+    scr_points.pack(side = 'right', fill = 'y')
+
     return tr_points
 
 
@@ -118,9 +122,9 @@ def create_buttons(window, points, entries, canvas):
     btn_edit.configure(command=lambda: pnts.edit_point(points, entries, 
                                                        btns, btn_apply))
 
-    btn_apply.place(relx=0.023, rely=0.709, relwidth=0.242, relheight=0.05)
+    btn_apply.place(relx=0.023, rely=0.709, relwidth=0.242, relheight=0.085)
     btn_apply.configure(activebackground="#f9f9f9")
-    btn_apply.configure(text='Применить редактирование')
+    btn_apply.configure(text='Применить\nредактирование')
     btn_apply.configure(state=tk.DISABLED)
     btn_apply.configure(command=lambda: pnts.apply(points, entries,
                                                    btns, btn_apply))
