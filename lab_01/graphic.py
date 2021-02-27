@@ -11,7 +11,20 @@
     картинки.
 """
 
-def create_triange(canvas, vertexes):
+
+def create_point(canvas, point):
+    """
+        Функция отрисовки точки
+    """
+    print(point)
+
+    x1, y1 = (point[0] - 5), (point[1] - 5)
+    x2, y2 = (point[0] + 5), (point[1] + 5)
+
+    canvas.create_oval(x1, y1, x2, y2, fill="#476042")
+
+
+def create_triangle(canvas, vertexes):
     """
         Функция отрисовки треугольника
     """

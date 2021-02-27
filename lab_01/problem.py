@@ -14,7 +14,6 @@
 import messages as msg
 import graphic
 
-
 EPS = 1e-6
 
 
@@ -81,19 +80,18 @@ def check_line(line, vertex, point):
 
 def get_num(vertexes, points):
     """
-        Поиск количества точек, находящихся
-        внутри треугольника
+        Поиск точек, находящихся внутри треугольника
     """
-    num = 0
+    in_points = []
 
     for point in points:
         if (check_line((vertexes[0], vertexes[1]), vertexes[2], point)
-            and check_line((vertexes[0], vertexes[2]), vertexes[1], point)
-            and check_line((vertexes[1], vertexes[2]), vertexes[0], point)
-            ):
-            num += 1
+                and check_line((vertexes[0], vertexes[2]), vertexes[1], point)
+                and check_line((vertexes[1], vertexes[2]), vertexes[0], point)
+        ):
+            in_points.append(tuple(point))
 
-    return num
+    return in_points
 
 
 def find_diff(triangle, points):
@@ -102,7 +100,7 @@ def find_diff(triangle, points):
     """
 
     if not is_triangle(*triangle):
-        return -1
+        return -1, []
 
     middles = [0, 0, 0]
 
@@ -110,28 +108,35 @@ def find_diff(triangle, points):
         middles[i] = ratio_point_2D(triangle[i % 2],
                                     triangle[(i + 1) // 2 + 1],
                                     1, 1)
-        print(i // 2, i + 1 - i // 2) 
+        print(i // 2, i + 1 - i // 2)
     medians_point = ratio_point_2D(triangle[0], middles[1], 2, 1)
     print(medians_point)
 
     max_num = 0
     min_num = len(points)
+    all_in_points = set()
 
     for i in range(6):
         print("треугольник", i)
-        #print(triangle[(i + 1) % 6 // 2])
-        #print(middles[i // 2])
-        #print(medians_point)
+        # print(triangle[(i + 1) % 6 // 2])
+        # print(middles[i // 2])
+        # print(medians_point)
         vertexes = (triangle[(i + 1) % 6 // 2],
                     middles[i // 2],
-                    medians_point) 
-        in_points_num = get_num(vertexes, points)
-        print("in_points_num", in_points_num)
-        max_num = max(in_points_num, max_num)
-        min_num = min(in_points_num, min_num)
+                    medians_point)
+        in_points = get_num(vertexes, points)
+
+        for in_point in in_points:
+            print(in_point)
+            all_in_points.add(in_point)
+
+        print("in_points", in_points)
+        max_num = max(len(in_points), max_num)
+        min_num = min(len(in_points), min_num)
 
     print("min/max", min_num, max_num)
-    return max_num - min_num
+    print("in_points", all_in_points)
+    return max_num - min_num, all_in_points
 
 
 def solve_problem(points):
@@ -143,18 +148,21 @@ def solve_problem(points):
     if length < 3:
         return -1
 
-    answer = {'max_diff' : -1, 'nums' : (), 'triangle' : ()}
+    answer = {'max_diff': -1, 'in_points': set(),
+              'nums': (), 'triangle': ()}
 
     for first in range(length - 2):
         for second in range(1, length - 1):
             for third in range(2, length):
                 print("num", first, second, third)
                 triangle = (points[first], points[second], points[third])
-                cur_diff = find_diff(triangle, points)
+                print("find_diff", find_diff(triangle, points))
+                cur_diff, in_points = find_diff(triangle, points)
                 print("cur_diff", cur_diff)
-                
+
                 if cur_diff > answer['max_diff']:
                     answer['max_diff'] = cur_diff
+                    answer['in_points'] = in_points
                     answer['nums'] = (first, second, third)
                     answer['triangle'] = triangle
 
@@ -167,7 +175,7 @@ def form_text(answer):
     """
     text = ('Треугольник с максимальной искомой\nразностью, '
             + 'равной {:3d}, построен на\nточках:\n'.format(answer["max_diff"])
-           )
+            )
 
     for i, point in enumerate(answer["triangle"]):
         text += '     %3d(' % (answer["nums"][i] + 1)
@@ -182,18 +190,23 @@ def call_solve_problem(points_table, canvas):
         Вызов функции решения задачи
     """
 
+    canvas.delete('all')
+
     points_arr = create_arr(points_table)
     answer = solve_problem(points_arr)
+    print(answer)
 
     msg.create_infobox('Решение', form_text(answer))
 
-    graphic.create_triange(canvas, answer["triangle"])
+    graphic.create_triangle(canvas, answer["triangle"])
 
     for i in range(3):
         middle = ratio_point_2D(answer["triangle"][i % 2],
-                                    answer["triangle"][(i + 1) // 2 + 1],
-                                    1, 1)
-        canvas.create_line(answer["triangle"][(i+2) % 3], middle, width=4)
+                                answer["triangle"][(i + 1) // 2 + 1],
+                                1, 1)
+        canvas.create_line(answer["triangle"][(i + 2) % 3], middle, width=4)
+
+    for point in answer["in_points"]:
+        graphic.create_point(canvas, point)
 
     # Вызвать функцию отображения изображения
-
