@@ -31,6 +31,7 @@ def create_okbox(title, text, image_path):
     infobox = tk.Toplevel()
     infobox.title(title)
     infobox.geometry('+700+450')
+    infobox.resizable(False, False)
 
     pil_img = Image.open(image_path).resize((60, 60))
     img = ImageTk.PhotoImage(pil_img)
