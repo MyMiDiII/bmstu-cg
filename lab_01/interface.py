@@ -56,6 +56,7 @@ def create_table(window):
     """
 
     tr_points = ttk.Treeview(window, columns=COLUMNS)
+    tr_points.configure(selectmode='browse')
 
     tr_points.heading('#0', text='№')
     tr_points.heading('#1', text='X')
