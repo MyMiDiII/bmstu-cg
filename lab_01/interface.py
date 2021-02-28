@@ -62,7 +62,7 @@ def create_table(window):
     tr_points.heading('#1', text='X')
     tr_points.heading('#2', text='Y')
 
-    tr_points.column('#0', minwidth=30, width=108, stretch=True)
+    tr_points.column('#0', minwidth=30, width=40, stretch=True)
     tr_points.column('#1', minwidth=30, width=108, stretch=True)
     tr_points.column('#2', minwidth=30, width=108, stretch=True)
 
