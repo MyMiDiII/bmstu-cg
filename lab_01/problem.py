@@ -89,8 +89,8 @@ def get_num(vertexes, points):
 
     for point in points:
         if (check_line((vertexes[0], vertexes[1]), vertexes[2], point)
-                and check_line((vertexes[0], vertexes[2]), vertexes[1], point)
-                and check_line((vertexes[1], vertexes[2]), vertexes[0], point)
+            and check_line((vertexes[0], vertexes[2]), vertexes[1], point)
+            and check_line((vertexes[1], vertexes[2]), vertexes[0], point)
         ):
             in_points.append(tuple(point))
 
@@ -103,22 +103,22 @@ def find_diff(triangle, points):
     """
 
     if not is_triangle(*triangle):
-        return -1, []
+        return -1, (), []
 
     middles = [0, 0, 0]
 
     for i in range(3):
-        print("middles", i)
         middles[i] = fild_ratio_point(triangle[i % 2],
-                                    triangle[(i + 1) // 2 + 1],
-                                    1, 1)
-        # print(i // 2, i + 1 - i // 2)
-    print("medians_point")
+                                      triangle[(i + 1) // 2 + 1],
+                                      1, 1)
     medians_point = fild_ratio_point(triangle[0], middles[1], 2, 1)
-    # print(medians_point)
 
     max_num = 0
+    max_ind = 0
+
     min_num = len(points)
+    min_ind = 0
+
     all_in_points = set()
 
     for i in range(6):
@@ -136,12 +136,19 @@ def find_diff(triangle, points):
             all_in_points.add(in_point)
 
         # print("in_points", in_points)
-        max_num = max(len(in_points), max_num)
-        min_num = min(len(in_points), min_num)
+        if max_num < len(in_points):
+            max_num = len(in_points)
+            max_ind = i
 
+        if min_num > len(in_points):
+            min_num = len(in_points)
+            min_ind = i
+
+    if min_ind == max_ind and max_num == min_num:
+        min_ind = (min_ind + 1) % 6
     # print("min/max", min_num, max_num)
     # print("in_points", all_in_points)
-    return max_num - min_num, all_in_points
+    return max_num - min_num, (max_ind, min_ind), all_in_points
 
 
 def solve_problem(points):
@@ -150,7 +157,7 @@ def solve_problem(points):
     """
     length = len(points)
 
-    answer = {'max_diff': -1, 'in_points': [],
+    answer = {'max_diff': -1, 'max_min': (),'in_points': [],
               'nums': (), 'triangle': ()}
 
     for first in range(length - 2):
@@ -159,7 +166,7 @@ def solve_problem(points):
                 # print("num", first, second, third)
                 triangle = (points[first], points[second], points[third])
                 # print("find_diff", find_diff(triangle, points))
-                cur_diff, in_points = find_diff(triangle, points)
+                cur_diff, max_min, in_points = find_diff(triangle, points)
                 # print("cur_diff", cur_diff)
 
                 if cur_diff > answer['max_diff']:
@@ -167,6 +174,7 @@ def solve_problem(points):
                     answer['in_points'] = [list(x) for x in in_points]
                     answer['nums'] = (first, second, third)
                     answer['triangle'] = triangle
+                    answer['max_min'] = max_min
 
     return answer
 
@@ -205,7 +213,6 @@ def call_solve_problem(points_table, canvas):
     if answer["max_diff"] == -1:
         msg.create_errorbox('Нет треугольников', NO_TRIANGLES)
         return
-    print(answer)
 
     canvas.delete('all')
     msg.create_infobox('Решение', form_text(answer))
@@ -213,18 +220,23 @@ def call_solve_problem(points_table, canvas):
     triangle_copy = copy.deepcopy(answer["triangle"])
     graphic.full_scale(canvas, answer["triangle"])
     graphic.full_scale(canvas, answer["in_points"])
-    print(answer["triangle"])
-    print(triangle_copy)
+
+    middles = [0, 0, 0]
+    for i in range(3):
+        middles[i] = fild_ratio_point(answer["triangle"][i % 2],
+                                      answer["triangle"][(i + 1) // 2 + 1],
+                                      1, 1)
+    medians_point = fild_ratio_point(answer["triangle"][0], middles[1], 2, 1)
+
+    for i, ind in enumerate(answer["max_min"]):
+        canvas.create_polygon(answer["triangle"][(ind + 1) % 6 // 2], middles[ind // 2], medians_point,
+                              fill="yellow" if i else "red")
 
     graphic.print_point_info(canvas, answer["nums"], answer["triangle"], triangle_copy)
-    print(answer["triangle"])
     graphic.create_triangle(canvas, answer["triangle"])
 
     for i in range(3):
-        middle = fild_ratio_point(answer["triangle"][i % 2],
-                                answer["triangle"][(i + 1) // 2 + 1],
-                                1, 1)
-        canvas.create_line(answer["triangle"][(i + 2) % 3], middle, width=4)
+        canvas.create_line(answer["triangle"][(i + 2) % 3], middles[i], width=4)
 
     for point in answer["in_points"]:
         graphic.create_point(canvas, point)
