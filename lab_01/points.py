@@ -1,5 +1,5 @@
 """
-    Модуль для работы с множеством точек
+    Модуль для работы со списком точек
 """
 
 import tkinter as tk
@@ -30,10 +30,10 @@ def add_point(points, entries):
             msg.create_errorbox('Пустой ввод', EMPTY_ENTRY)
         else:
             msg.create_errorbox('Нечисловые данные', NOT_FLOAT)
-
     else:
         cur_index = len(points.get_children('')) + 1
-        points.insert('', index='end', text=cur_index, values=(x, y))
+        points.insert('', index='end', text=cur_index,
+                values=("{:.2f}".format(x), "{:.2f}".format(y)))
 
 
 def index_update(points):
@@ -125,5 +125,3 @@ def clean_all(points, entries, canvas):
     entries[0].delete(0, 'end')
     entries[1].delete(0, 'end')
     canvas.delete('all')
-
-
