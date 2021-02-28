@@ -11,6 +11,8 @@
     картинки.
 """
 
+import tkinter as tk
+
 
 def full_scale(canvas, points):
     """
@@ -20,27 +22,26 @@ def full_scale(canvas, points):
     """
 
     max_x = max(point[0] for point in points)
-    min_x = min(points, key=lambda x: x[0])[0]
+    min_x = min(point[0] for point in points)
 
-    max_y = max(points, key=lambda x: x[1])[1]
-    min_y = min(points, key=lambda x: x[1])[1]
+    max_y = max(point[1] for point in points)
+    min_y = min(point[1] for point in points)
+    
+    width = canvas.winfo_reqwidth()
+    height = canvas.winfo_reqheight()
 
-    print(canvas.winfo_reqwidth())
-    print(canvas.winfo_reqheight())
-    x_coef = (canvas.winfo_reqwidth() - canvas.winfo_reqwidth() / 5) / (max_x - min_x)
-    y_coef = (canvas.winfo_reqheight() - canvas.winfo_reqheight() / 5) / (max_y - min_y) 
-    print(x_coef, y_coef)
+    x_coef = (width - width / 20 - width / 5) / (max_x - min_x)
+    y_coef = (height - height / 5) / (max_y - min_y) 
 
     for point in points:
-        point[0] = (point[0] - min_x) * x_coef + canvas.winfo_reqwidth() / 10
-        point[1] = canvas.winfo_reqheight() - ((point[1] - min_y) * y_coef + canvas.winfo_reqheight() / 10)
+        point[0] = (point[0] - min_x) * x_coef + width / 10
+        point[1] = height - ((point[1] - min_y) * y_coef + height / 10)
 
 
 def create_point(canvas, point):
     """
         Функция отрисовки точки
     """
-    # print(point)
     size = canvas.winfo_height() / 150
 
     x1, y1 = (point[0] - size), (point[1] - size)
@@ -54,7 +55,7 @@ def create_triangle(canvas, vertexes):
         Функция отрисовки треугольника
     """
 
-    canvas.create_polygon(*vertexes, outline="#000000", fill="#ffffff", width=4)
+    canvas.create_polygon(*vertexes, outline="#000000", fill="", width=4)
 
 
 def point_place(base_point, point):
@@ -75,45 +76,56 @@ def point_place(base_point, point):
     return 2
 
 
+def find_text_zone(zone1, zone2):
+    """
+        Поиск положения информации о точки
+        по положениям двух других
+    """
+
+    if zone1 == zone2:
+        return (zone1 + 2) % 4
+
+    elif abs(zone1 - zone2) % 2 == 1:
+        return 
+
+
+def update_place(x, y, size, zone):
+    """
+        Обновление координат положения текста
+    """
+    if zone == 0:
+        print('zone', 0)
+        return x - size, y + size
+    elif zone == 1:
+        print('zone', 1)
+        return x + size, y + size
+    elif zone == 2:
+        print('zone', 2)
+        return x + size, y - size
+    else:
+        print('zone', 3)
+        return x - size, y - size
+
+
 def print_point_info(canvas, nums, canvas_points, true_points):
     """
         Вывод номеров и координат точек
     """
 
     for i, point in enumerate(true_points):
-        info = "{:3d}({:6.2f}, {:6.2f})".format(nums[i] + 1, point[0], point[1])
+        info = "{:d}({:.2f}, {:.2f})".format(nums[i] + 1, point[0], point[1])
 
-        x_place = canvas_points[i][0] 
+        x_place = canvas_points[i][0]
         y_place = canvas_points[i][1]
 
         point_place1 = point_place(canvas_points[i], canvas_points[(i + 1) % 3])
         point_place2 = point_place(canvas_points[i], canvas_points[(i + 2) % 3])
 
-        print('pp1', point_place1)
-        print('pp2', point_place2)
+        zone = find_text_zone(point_place1, point_place2)
 
-        zone = 3
-        if point_place1 == point_place2:
-            zone = (point_place1 + 2) % 4
+        size = canvas.winfo_reqheight() / 25
 
+        x_place, y_place = update_place(x_place, y_place, size, zone)
 
-        if zone == 0:
-            print('zone', 0)
-            x_place -= 50
-            y_place += 50
-        elif zone == 1:
-            print('zone', 1)
-            x_place += 50
-            y_place += 50
-        elif zone == 2:
-            print('zone', 2)
-            x_place += 50
-            y_place -= 50
-        else:
-            print('zone', 3)
-            x_place -= 50
-            y_place -= 50
-
-        print(x_place, y_place)
-
-        canvas.create_text(x_place, y_place, text=info, font=('Courier', 10))
+        canvas.create_text(x_place, y_place, text=info,
+                           anchor=tk.NW, font=('Symbol', 14))
