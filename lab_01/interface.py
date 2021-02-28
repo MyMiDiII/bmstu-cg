@@ -166,6 +166,7 @@ def on_resize(event, sizes, canvas):
     canvas.scale("all", 0, 0, wscale, hscale)
 
 
+
 def create_canvas(window):
     """
         Создание окна графического решения
@@ -183,6 +184,8 @@ def create_canvas(window):
 
     cnv_sizes = [cnv_solution.winfo_reqwidth(), cnv_solution.winfo_reqheight()]
     cnv_solution.bind("<Configure>", lambda event: on_resize(event, cnv_sizes, cnv_solution))
+    #cnv_solution.create_text(50, 50, text="1(00.00, 00.00)",
+    #                   anchor=tk.CENTER, font=('Dyuthi', 12))
 
     return cnv_solution
 
