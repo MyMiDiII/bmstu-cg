@@ -10,7 +10,8 @@ import points as pnts
 import problem as prob
 
 
-MAIN_BG = '#a6f0ff'
+MAIN_BG = "#a6f0ff"
+GREY = "#f9f9f9"
 
 COLUMNS = ('#1', '#2')
 
@@ -33,7 +34,7 @@ def create_lables(window):
         Создание подсказок
     """
 
-    lbl_points= tk.Label(window)
+    lbl_points = tk.Label(window)
     lbl_points.place(relx=0.023, rely=0.0, relwidth=0.244, relheight=0.057)
     lbl_points.configure(background=MAIN_BG)
     lbl_points.configure(font='-family {Fira Code} -size 10')
@@ -68,9 +69,10 @@ def create_table(window):
 
     tr_points.place(relx=0.023, rely=0.057, relheight=0.337, relwidth=0.247)
 
-    scr_points = ttk.Scrollbar(tr_points, orient = 'vertical', command = tr_points.yview)
+    scr_points = ttk.Scrollbar(tr_points, orient='vertical',
+                               command=tr_points.yview)
     tr_points.configure(yscrollcommand=scr_points.set)
-    scr_points.pack(side = 'right', fill = 'y')
+    scr_points.pack(side='right', fill='y')
 
     return tr_points
 
@@ -81,33 +83,35 @@ def create_buttons(window, points, entries, canvas):
     """
     btn_add = tk.Button(window)
     btn_add.place(relx=0.023, rely=0.529, relwidth=0.242, relheight=0.05)
-    btn_add.configure(activebackground="#f9f9f9")
+    btn_add.configure(activebackground=GREY)
     btn_add.configure(text='Добавить точку')
     btn_add.configure(command=lambda: pnts.add_point(points, entries))
 
     btn_delete = tk.Button(window)
     btn_delete.place(relx=0.023, rely=0.589, relwidth=0.242, relheight=0.05)
-    btn_delete.configure(activebackground="#f9f9f9")
+    btn_delete.configure(activebackground=GREY)
     btn_delete.configure(text='Удалить точку')
     btn_delete.configure(command=lambda: pnts.delete_point(points))
 
     btn_solve = tk.Button(window)
     btn_solve.place(relx=0.023, rely=0.805, relwidth=0.242, relheight=0.05)
-    btn_solve.configure(activebackground="#f9f9f9")
+    btn_solve.configure(activebackground=GREY)
     btn_solve.configure(background="#4cd876")
     btn_solve.configure(text='Решить')
-    btn_solve.configure(command=lambda: prob.call_solve_problem(points, canvas))
+    btn_solve.configure(command=lambda: prob.call_solve_problem(points,
+                                                                canvas))
 
     btn_clean = tk.Button(window)
     btn_clean.place(relx=0.023, rely=0.865, relwidth=0.242, relheight=0.05)
-    btn_clean.configure(activebackground="#cecced")
+    btn_clean.configure(activebackground=GREY)
     btn_clean.configure(background="#d84e4e")
     btn_clean.configure(text='Очистить вcё')
-    btn_clean.configure(command=lambda: pnts.clean_all(points, entries, canvas))
+    btn_clean.configure(command=lambda: pnts.clean_all(points, entries,
+                                                       canvas))
 
     btn_problem = tk.Button(window)
     btn_problem.place(relx=0.023, rely=0.925, relwidth=0.242, relheight=0.05)
-    btn_problem.configure(activebackground="#f9f9f9")
+    btn_problem.configure(activebackground=GREY)
     btn_problem.configure(background="#3fb9d8")
     btn_problem.configure(text='Условие задачи')
     btn_problem.configure(command=msg.problem)
@@ -118,13 +122,13 @@ def create_buttons(window, points, entries, canvas):
     btns = [btn_add, btn_delete, btn_edit, btn_clean, btn_solve]
 
     btn_edit.place(relx=0.023, rely=0.649, relwidth=0.242, relheight=0.05)
-    btn_edit.configure(activebackground="#f9f9f9")
+    btn_edit.configure(activebackground=GREY)
     btn_edit.configure(text='Редактировать точку')
-    btn_edit.configure(command=lambda: pnts.edit_point(points, entries, 
+    btn_edit.configure(command=lambda: pnts.edit_point(points, entries,
                                                        btns, btn_apply))
 
     btn_apply.place(relx=0.023, rely=0.709, relwidth=0.242, relheight=0.085)
-    btn_apply.configure(activebackground="#f9f9f9")
+    btn_apply.configure(activebackground=GREY)
     btn_apply.configure(text='Применить\nредактирование')
     btn_apply.configure(state=tk.DISABLED)
     btn_apply.configure(command=lambda: pnts.apply(points, entries,
@@ -156,15 +160,14 @@ def on_resize(event, sizes, canvas):
     """
         Масштабирование содержимого canvas
     """
-    wscale = float(event.width)/sizes[0]
-    hscale = float(event.height)/sizes[1]
+    wscale = float(event.width) / sizes[0]
+    hscale = float(event.height) / sizes[1]
 
     sizes[0] = event.width
     sizes[1] = event.height
 
     canvas.configure(width=sizes[0], height=sizes[1])
     canvas.scale("all", 0, 0, wscale, hscale)
-
 
 
 def create_canvas(window):
@@ -183,9 +186,8 @@ def create_canvas(window):
     cnv_solution.addtag_all("all")
 
     cnv_sizes = [cnv_solution.winfo_reqwidth(), cnv_solution.winfo_reqheight()]
-    cnv_solution.bind("<Configure>", lambda event: on_resize(event, cnv_sizes, cnv_solution))
-    #cnv_solution.create_text(50, 50, text="1(00.00, 00.00)",
-    #                   anchor=tk.CENTER, font=('Dyuthi', 12))
+    cnv_solution.bind("<Configure>", lambda event: on_resize(event, cnv_sizes,
+                                                             cnv_solution))
 
     return cnv_solution
 
