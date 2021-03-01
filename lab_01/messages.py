@@ -3,8 +3,8 @@
 """
 
 import tkinter as tk
-import tkinter.messagebox as box
 from PIL import ImageTk, Image
+
 
 NAME = 'Маслова Марина'
 GROUP = 'ИУ7-43Б'
@@ -15,7 +15,7 @@ MSGS_PATH = IMAGE_PATH + 'msg_icons/'
 INFO_ICON = MSGS_PATH + 'info_icon.png'
 ERROR_ICON = MSGS_PATH + 'error_icon.png'
 
-PROBLEM_TEXT = (  'На  плоскости  дано  множество точек. Найти такой\n'
+PROBLEM_TEXT = ('На  плоскости  дано  множество точек. Найти такой\n'
                 + 'треугольник с вершинами в этих точках, у которого\n'
                 + 'разность  максимального и минимального количества\n'
                 + 'точек,  попавших  в каждый из 6-ти треугольников,\n'
@@ -90,4 +90,5 @@ def delete_error():
     """
         Вывод сообщения об ошибке при удалении точки
     """
-    create_errorbox('Не выбрана точка', "Для удаления выберете точку в списке!")
+    create_errorbox('Не выбрана точка',
+                    'Для удаления выберете точку в списке!')
