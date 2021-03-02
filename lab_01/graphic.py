@@ -56,12 +56,39 @@ def create_point(canvas, point):
     canvas.create_oval(x1, y1, x2, y2, fill=GREEN)
 
 
+def create_points(canvas, points):
+    """
+        Функция отрисовки множества точек
+    """
+    for point in points:
+        create_point(canvas, point)
+
+
 def create_triangle(canvas, vertexes):
     """
-        Функция отрисовки треугольника
+        Функция отрисовки основного треугольника
     """
 
     canvas.create_polygon(*vertexes, outline=BLACK, fill="", width=4)
+
+
+def create_max_min_triangles(canvas, answer, middles, medians_point):
+    """
+        Функция отрисовки треугольников с
+        максимальным и минимальным количеством точек
+    """
+    for i, ind in enumerate(answer["max_min"]):
+        canvas.create_polygon(answer["triangle"][(ind + 1) % 6 // 2],
+                              middles[ind // 2], medians_point,
+                              fill="yellow" if i else "red")
+
+
+def create_medians(canvas, triangle, middles):
+    """
+        Функция отрисовки медиан
+    """
+    for i in range(3):
+        canvas.create_line(triangle[(i + 2) % 3], middles[i], width=4)
 
 
 def point_place(base_point, point):

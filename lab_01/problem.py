@@ -16,6 +16,7 @@ import copy
 import messages as msg
 import graphic
 
+
 EPS = 1e-6
 
 LESS3 = ('Недостаточное количество!\n'
@@ -53,7 +54,34 @@ def is_triangle(point1, point2, point3):
         построить треугольник
     """
 
-    return not (abs(vector_prod(point1, point2, point3)) < EPS)
+    return not abs(vector_prod(point1, point2, point3)) < EPS
+
+
+def check_line(line, vertex, point):
+    """
+        Проверка, лежат ли точка и вершина
+        по одну сторону от прямой, заданной
+        двумя другими вершинами
+    """
+
+    cond_expr = vector_prod(*line, vertex) * vector_prod(*line, point)
+
+    return cond_expr > 0 or abs(cond_expr) < EPS
+
+
+def get_num(vrts, points):
+    """
+        Поиск точек, находящихся внутри треугольника
+    """
+    in_points = []
+
+    for point in points:
+        if (check_line((vrts[0], vrts[1]), vrts[2], point)
+                and check_line((vrts[0], vrts[2]), vrts[1], point)
+                and check_line((vrts[1], vrts[2]), vrts[0], point)):
+            in_points.append(tuple(point))
+
+    return in_points
 
 
 def fild_ratio_point(point1, point2, m, n):
@@ -69,32 +97,18 @@ def fild_ratio_point(point1, point2, m, n):
     return ratio_point
 
 
-def check_line(line, vertex, point):
+def find_middles(triangle):
     """
-        Проверка, лежат ли точка и вершина
-        по одну сторону от прямой, заданной
-        двумя другими вершинами
+        Поиск координат середин сторон
     """
+    middles = [0, 0, 0]
 
-    cond_expr = vector_prod(*line, vertex) * vector_prod(*line, point)
+    for i in range(3):
+        middles[i] = fild_ratio_point(triangle[i % 2],
+                                      triangle[(i + 1) // 2 + 1],
+                                      1, 1)
 
-    return cond_expr > 0 or abs(cond_expr) < EPS
-
-
-def get_num(vertexes, points):
-    """
-        Поиск точек, находящихся внутри треугольника
-    """
-    in_points = []
-
-    for point in points:
-        if (check_line((vertexes[0], vertexes[1]), vertexes[2], point)
-            and check_line((vertexes[0], vertexes[2]), vertexes[1], point)
-            and check_line((vertexes[1], vertexes[2]), vertexes[0], point)
-        ):
-            in_points.append(tuple(point))
-
-    return in_points
+    return middles
 
 
 def find_diff(triangle, points):
@@ -105,12 +119,7 @@ def find_diff(triangle, points):
     if not is_triangle(*triangle):
         return -1, (), []
 
-    middles = [0, 0, 0]
-
-    for i in range(3):
-        middles[i] = fild_ratio_point(triangle[i % 2],
-                                      triangle[(i + 1) // 2 + 1],
-                                      1, 1)
+    middles = find_middles(triangle)
     medians_point = fild_ratio_point(triangle[0], middles[1], 2, 1)
 
     max_num = 0
@@ -122,20 +131,14 @@ def find_diff(triangle, points):
     all_in_points = set()
 
     for i in range(6):
-        # print("треугольник", i)
-        # print(triangle[(i + 1) % 6 // 2])
-        # print(middles[i // 2])
-        # print(medians_point)
         vertexes = (triangle[(i + 1) % 6 // 2],
                     middles[i // 2],
                     medians_point)
         in_points = get_num(vertexes, points)
 
         for in_point in in_points:
-            # print(in_point)
             all_in_points.add(in_point)
 
-        # print("in_points", in_points)
         if max_num < len(in_points):
             max_num = len(in_points)
             max_ind = i
@@ -146,8 +149,7 @@ def find_diff(triangle, points):
 
     if min_ind == max_ind and max_num == min_num:
         min_ind = (min_ind + 1) % 6
-    # print("min/max", min_num, max_num)
-    # print("in_points", all_in_points)
+
     return max_num - min_num, (max_ind, min_ind), all_in_points
 
 
@@ -157,17 +159,14 @@ def solve_problem(points):
     """
     length = len(points)
 
-    answer = {'max_diff': -1, 'max_min': (),'in_points': [],
+    answer = {'max_diff': -1, 'max_min': (), 'in_points': [],
               'nums': (), 'triangle': ()}
 
     for first in range(length - 2):
         for second in range(1, length - 1):
             for third in range(2, length):
-                # print("num", first, second, third)
                 triangle = (points[first], points[second], points[third])
-                # print("find_diff", find_diff(triangle, points))
                 cur_diff, max_min, in_points = find_diff(triangle, points)
-                # print("cur_diff", cur_diff)
 
                 if cur_diff > answer['max_diff']:
                     answer['max_diff'] = cur_diff
@@ -195,6 +194,32 @@ def form_text(answer):
     return text
 
 
+def is_correct_len(points_arr):
+    """
+        Проверка количества добавленных точек
+    """
+    if len(points_arr) == 0:
+        msg.create_errorbox('Пустой список точек', EMPTY_TABLE)
+        return 0
+
+    if len(points_arr) < 3:
+        msg.create_errorbox('Недостаточно точек', LESS3)
+        return 0
+
+    return 1
+
+
+def are_triangles(answer):
+    """
+        Проверка на наличие треугольников в ответе
+    """
+    if answer["max_diff"] == -1:
+        msg.create_errorbox('Нет треугольников', NO_TRIANGLES)
+        return 0
+
+    return 1
+
+
 def call_solve_problem(points_table, canvas):
     """
         Вызов функции решения задачи
@@ -202,16 +227,12 @@ def call_solve_problem(points_table, canvas):
 
     points_arr = create_arr(points_table)
 
-    if len(points_arr) == 0:
-        msg.create_errorbox('Пустой список точек', EMPTY_TABLE)
+    if not is_correct_len(points_arr):
         return
-    elif len(points_arr) < 3:
-        msg.create_errorbox('Недостаточно точек', LESS3)
-        return
+
     answer = solve_problem(points_arr)
 
-    if answer["max_diff"] == -1:
-        msg.create_errorbox('Нет треугольников', NO_TRIANGLES)
+    if not are_triangles(answer):
         return
 
     canvas.delete('all')
@@ -221,22 +242,12 @@ def call_solve_problem(points_table, canvas):
     graphic.full_scale(canvas, answer["triangle"])
     graphic.full_scale(canvas, answer["in_points"])
 
-    middles = [0, 0, 0]
-    for i in range(3):
-        middles[i] = fild_ratio_point(answer["triangle"][i % 2],
-                                      answer["triangle"][(i + 1) // 2 + 1],
-                                      1, 1)
+    middles = find_middles(answer["triangle"])
     medians_point = fild_ratio_point(answer["triangle"][0], middles[1], 2, 1)
 
-    for i, ind in enumerate(answer["max_min"]):
-        canvas.create_polygon(answer["triangle"][(ind + 1) % 6 // 2], middles[ind // 2], medians_point,
-                              fill="yellow" if i else "red")
-
-    graphic.print_point_info(canvas, answer["nums"], answer["triangle"], triangle_copy)
+    graphic.create_max_min_triangles(canvas, answer, middles, medians_point)
     graphic.create_triangle(canvas, answer["triangle"])
-
-    for i in range(3):
-        canvas.create_line(answer["triangle"][(i + 2) % 3], middles[i], width=4)
-
-    for point in answer["in_points"]:
-        graphic.create_point(canvas, point)
+    graphic.create_medians(canvas, answer["triangle"], middles)
+    graphic.print_point_info(canvas, answer["nums"],
+                             answer["triangle"], triangle_copy)
+    graphic.create_points(canvas, answer["in_points"])
