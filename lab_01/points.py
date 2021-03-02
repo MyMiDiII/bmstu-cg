@@ -16,6 +16,7 @@ NOT_FLOAT = ('Координаты точки должны быть\n'
 NO_POINTS = 'Список точек пуст! Добавьте точки!'
 NO_DEL_SELECTION = 'Для удаления точки выберете её в таблице!'
 NO_EDIT_SELECTION = 'Для редактирования точки выберете её в таблице!'
+UNKNOWN = 'Произошла неизвестная ошибка!'
 
 
 def add_point(points, entries):
@@ -25,15 +26,20 @@ def add_point(points, entries):
     try:
         x = float(entries[0].get())
         y = float(entries[1].get())
-    except:
+
+    except ValueError:
         if not entries[0].get() or not entries[1].get():
             msg.create_errorbox('Пустой ввод', EMPTY_ENTRY)
         else:
             msg.create_errorbox('Нечисловые данные', NOT_FLOAT)
+
+    except Exception:
+        msg.create_errorbox('Неизвестная ошибка', UNKNOWN)
+
     else:
         cur_index = len(points.get_children('')) + 1
         points.insert('', index='end', text=cur_index,
-                values=("{:.2f}".format(x), "{:.2f}".format(y)))
+                      values=("{:.2f}".format(x), "{:.2f}".format(y)))
 
 
 def index_update(points):
@@ -53,11 +59,15 @@ def delete_point(points):
     try:
         points.delete(points.selection()[0])
         index_update(points)
+
     except IndexError:
-        if not len(points.get_children()):
+        if not points.get_children():
             msg.create_errorbox('Отсутствие точек', NO_POINTS)
         else:
             msg.create_errorbox('Не выбрана точка', NO_DEL_SELECTION)
+
+    except Exception:
+        msg.create_errorbox('Неизвестная ошибка', UNKNOWN)
 
 
 def edit_point(points, entries, buttons, btn_app):
@@ -82,23 +92,27 @@ def edit_point(points, entries, buttons, btn_app):
         points.configure(selectmode='none')
 
     except IndexError:
-        if not len(points.get_children()):
+        if not points.get_children():
             msg.create_errorbox('Отсутствие точек', NO_POINTS)
         else:
             msg.create_errorbox('Не выбрана точка', NO_EDIT_SELECTION)
 
+    except Exception:
+        msg.create_errorbox('Неизвестная ошибка', UNKNOWN)
 
 
 def apply(points, entries, buttons, btn_app):
     """
         Применение редактирования точки
     """
+
     try:
         x = float(entries[0].get())
         y = float(entries[1].get())
 
         selected_point = points.selection()[0]
-        points.item(selected_point, values=(x, y))
+        points.item(selected_point, values=("{:.2f}".format(x),
+                                            "{:.2f}".format(y)))
 
         entries[0].delete(0, 'end')
         entries[1].delete(0, 'end')
@@ -108,11 +122,21 @@ def apply(points, entries, buttons, btn_app):
 
         btn_app.configure(state=tk.DISABLED)
         points.configure(selectmode='browse')
-    except:
+
+    except ValueError:
         if not entries[0].get() or not entries[1].get():
             msg.create_errorbox('Пустой ввод', EMPTY_APP_ENTRY)
         else:
             msg.create_errorbox('Нечисловые данные', NOT_FLOAT)
+
+    except IndexError:
+        if not points.get_children():
+            msg.create_errorbox('Отсутствие точек', NO_POINTS)
+        else:
+            msg.create_errorbox('Не выбрана точка', NO_EDIT_SELECTION)
+
+    except Exception:
+        msg.create_errorbox('Неизвестная ошибка', UNKNOWN)
 
 
 def clean_all(points, entries, canvas):
