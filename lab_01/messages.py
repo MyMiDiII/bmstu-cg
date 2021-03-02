@@ -22,15 +22,17 @@ PROBLEM_TEXT = ('На  плоскости  дано  множество точе
                 + 'образованных  пересечением  медиан,  максимальна.\n'
                 + 'Сделать  в  графическом  режиме  вывод полученной\n'
                 + 'картинки.')
+levels = []
 
 
-def create_okbox(title, text, image_path):
+def create_okbox(title, text, image_path, shift):
     """
         Создание сообщения с одной кнопкой OK
     """
     infobox = tk.Toplevel()
+    levels.append(infobox)
     infobox.title(title)
-    infobox.geometry('+700+450')
+    infobox.geometry(shift)
     infobox.resizable(False, False)
 
     pil_img = Image.open(image_path).resize((60, 60))
@@ -55,14 +57,21 @@ def create_infobox(title, text):
     """
         Создание информационного сообщения
     """
-    create_okbox(title, text, INFO_ICON)
+    create_okbox(title, text, INFO_ICON, '+700+450')
 
 
 def create_errorbox(title, text):
     """
         Создание сообщения об ошибке
     """
-    create_okbox(title, text, ERROR_ICON)
+    create_okbox(title, text, ERROR_ICON, '+700+450')
+
+
+def create_hintbox(title, text):
+    """
+        Создание сообщения с подсказкой
+    """
+    create_okbox(title, text, INFO_ICON, '+1300+200')
 
 
 def author():
@@ -92,3 +101,10 @@ def delete_error():
     """
     create_errorbox('Не выбрана точка',
                     'Для удаления выберете точку в списке!')
+
+def destroy_toplevels():
+    """
+        Закрытие всех окон сообщений
+    """
+    for level in levels:
+        level.destroy()

@@ -26,6 +26,9 @@ NO_TRIANGLES = ('На заданных точках нельзя построи�
                 + 'ни один треугольник, так как точки\n'
                 + 'либо лежат на одной прямой, либо\n'
                 + 'совпадают!')
+HINT_TEXT = ('красный – треугольник с максимальным\n'
+             + '          количеством точек,\n'
+             + 'желтый  – с минимальным.')
 
 
 def create_arr(points_table):
@@ -225,6 +228,7 @@ def call_solve_problem(points_table, canvas):
         Вызов функции решения задачи
     """
 
+    msg.destroy_toplevels()
     points_arr = create_arr(points_table)
 
     if not is_correct_len(points_arr):
@@ -237,6 +241,7 @@ def call_solve_problem(points_table, canvas):
 
     canvas.delete('all')
     msg.create_infobox('Решение', form_text(answer))
+    msg.create_hintbox('Обозначения', HINT_TEXT)
 
     triangle_copy = copy.deepcopy(answer["triangle"])
     graphic.full_scale(canvas, answer["triangle"])
