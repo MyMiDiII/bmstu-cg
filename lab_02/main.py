@@ -3,6 +3,14 @@
 """
 
 import tkinter as tk
+import matplotlib
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+
+import fish
+
+
+matplotlib.use('TkAgg')
 
 
 class root_window():
@@ -132,7 +140,7 @@ class root_window():
         self.Entry3_1.configure(font="TkFixedFont")
         self.Entry3_1.configure(selectbackground="blue")
         self.Entry3_1.configure(selectforeground="white")
-        
+
 
     def crtwdg_scaling(self):
         """
@@ -153,14 +161,14 @@ class root_window():
         self.Label2_1.configure(text="Kx:")
 
         self.Label3_1 = tk.Label(self.Labelframe2_1)
-        self.Label3_1.place(relx=0.007, rely=0.637, height=30, width=53
+        self.Label3_1.place(relx=0.507, rely=0.29, height=30, width=53
                 , bordermode='ignore')
         self.Label3_1.configure(activebackground="#f9f9f9")
         self.Label3_1.configure(font=('DejaVu Sans', 12))
         self.Label3_1.configure(text="Ky:")
 
         self.Entry1_1 = tk.Entry(self.Labelframe2_1)
-        self.Entry1_1.place(relx=0.164, rely=0.29, height=29, relwidth=0.289
+        self.Entry1_1.place(relx=0.164, rely=0.29, height=29, relwidth=0.3
                 , bordermode='ignore')
         self.Entry1_1.configure(background="white")
         self.Entry1_1.configure(font="TkFixedFont")
@@ -168,7 +176,7 @@ class root_window():
         self.Entry1_1.configure(selectforeground="white")
 
         self.Entry2_1 = tk.Entry(self.Labelframe2_1)
-        self.Entry2_1.place(relx=0.164, rely=0.645, height=29, relwidth=0.289
+        self.Entry2_1.place(relx=0.664, rely=0.29, height=29, relwidth=0.3
                 , bordermode='ignore')
         self.Entry2_1.configure(background="white")
         self.Entry2_1.configure(font="TkFixedFont")
@@ -176,7 +184,7 @@ class root_window():
         self.Entry2_1.configure(selectforeground="white")
 
         self.Button1_1 = tk.Button(self.Labelframe2_1)
-        self.Button1_1.place(relx=0.47, rely=0.282, height=77, width=180
+        self.Button1_1.place(relx=0.025, rely=0.582, height=40, relwidth=0.94
                 , bordermode='ignore')
         self.Button1_1.configure(activebackground="#f9f9f9")
         self.Button1_1.configure(text="Масштабировать")
@@ -194,7 +202,7 @@ class root_window():
         self.Labelframe2_1_1.configure(text="Поворот")
 
         self.Label2_1_1 = tk.Label(self.Labelframe2_1_1)
-        self.Label2_1_1.place(relx=0.060, rely=0.242, relheight=0.3, width=133,
+        self.Label2_1_1.place(relx=0.025, rely=0.29,
                               bordermode='ignore')
         self.Label2_1_1.configure(activebackground="#f9f9f9")
         self.Label2_1_1.configure(font=('DejaVu Sans', 12))
@@ -202,7 +210,7 @@ class root_window():
         self.Label2_1_1.configure(text="Угол (°):")
 
         self.Entry1_1_1 = tk.Entry(self.Labelframe2_1_1)
-        self.Entry1_1_1.place(relx=0.054, rely=0.637, height=29, relwidth=0.456,
+        self.Entry1_1_1.place(relx=0.390, rely=0.29, height=29, relwidth=0.57,
                               bordermode='ignore')
         self.Entry1_1_1.configure(background="white")
         self.Entry1_1_1.configure(cursor="fleur")
@@ -211,7 +219,7 @@ class root_window():
         self.Entry1_1_1.configure(selectforeground="white")
 
         self.Button1_1_1 = tk.Button(self.Labelframe2_1_1)
-        self.Button1_1_1.place(relx=0.57, rely=0.282, height=77, width=120,
+        self.Button1_1_1.place(relx=0.025, rely=0.582, height=40, relwidth=0.94,
                                bordermode='ignore')
         self.Button1_1_1.configure(activebackground="#f9f9f9")
         self.Button1_1_1.configure(text="Повернуть")
@@ -240,6 +248,31 @@ class root_window():
         self.Button3_1.configure(text="Справка")
 
 
+    def create_matplotlib(self, func):
+        """
+            Создание окна matplotlib
+        """
+        margins = {
+                "left"   : 0.050,
+                "bottom" : 0.050,
+                "right"  : 0.980,
+                "top"    : 0.980
+        }
+
+        self.figure = plt.Figure(figsize=(8.5, 7.5))
+        self.figure.subplots_adjust(**margins)
+        self.subplt = self.figure.add_subplot(111)
+
+        self.subplt.plot(*func)
+        self.subplt.set_xlim((-60, 60))
+        self.subplt.set_ylim((-60, 60))
+        self.subplt.grid(True)
+
+        self.pltcnv = FigureCanvasTkAgg(self.figure, self.root)
+        self.pltcnv.get_tk_widget().grid(row=1, column=1)
+        self.pltcnv.get_tk_widget().place(relx=0.28, rely=0.02)
+
+
     def create_widgets(self):
         """
             Создание виджетов окна
@@ -251,6 +284,7 @@ class root_window():
         self.crtwdg_scaling()
         self.crtwdg_turn()
         self.crtwdg_edit()
+        self.create_matplotlib(self.func)
 
 
     def run(self):
@@ -263,4 +297,6 @@ class root_window():
 
 if __name__=="__main__":
     ROOT = root_window()
+    FISH = fish.Fish()
+    ROOT.func = FISH.body
     ROOT.run()
