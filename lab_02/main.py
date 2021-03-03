@@ -248,7 +248,7 @@ class root_window():
         self.Button3_1.configure(text="Справка")
 
 
-    def create_matplotlib(self, func):
+    def create_matplotlib(self):
         """
             Создание окна matplotlib
         """
@@ -263,7 +263,7 @@ class root_window():
         self.figure.subplots_adjust(**margins)
         self.subplt = self.figure.add_subplot(111)
 
-        self.subplt.plot(*func)
+        self.subplt.plot(self.func.x_list, self.func.y_list)
         self.subplt.set_xlim((-60, 60))
         self.subplt.set_ylim((-60, 60))
         self.subplt.grid(True)
@@ -284,7 +284,7 @@ class root_window():
         self.crtwdg_scaling()
         self.crtwdg_turn()
         self.crtwdg_edit()
-        self.create_matplotlib(self.func)
+        self.create_matplotlib()
 
 
     def run(self):
