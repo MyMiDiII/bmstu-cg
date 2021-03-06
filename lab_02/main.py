@@ -3,14 +3,21 @@
 """
 
 import tkinter as tk
+import tkinter.messagebox as box
 import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import copy
 
 import fish
+import update
 
 
 matplotlib.use('TkAgg')
+
+
+AUTHOR_TITLE = 'Об авторе'
+AUTHOR = 'Маслова Марина\nИУ7-43Б'
 
 
 class root_window():
@@ -33,8 +40,13 @@ class root_window():
         """
             Создание меню
         """
-        self.menu = tk.Menu(self.root,font="TkMenuFont")
-        self.root.configure(menu = self.menu)
+        self.menu = tk.Menu(self.root, font="TkMenuFont")
+
+        self.menu.add_command(label=AUTHOR_TITLE,
+                         command=lambda: box.showinfo(AUTHOR_TITLE, AUTHOR))
+        self.menu.add_command(label='Выход', command=self.root.destroy)
+
+        self.root.configure(menu=self.menu)
 
 
     def crtwdg_figure_centre(self):
@@ -44,17 +56,21 @@ class root_window():
         self.lblfrm_figure_centre = tk.LabelFrame(self.root)
         self.lblfrm_figure_centre.place(relx=0.017, rely=0.013,
                                         relheight=0.109, relwidth=0.25)
-        self.lblfrm_figure_centre.configure(relief='sunken')
-        self.lblfrm_figure_centre.configure(font=('DejaVu Sans', 12))
-        self.lblfrm_figure_centre.configure(relief='sunken')
-        self.lblfrm_figure_centre.configure(text="Центр фигуры")
+        self.lblfrm_figure_centre.configure(
+                relief='sunken',
+                font=('DejaVu Sans', 12),
+                text="Центр фигуры"
+                )
 
         self.lbl_figure_centre = tk.Label(self.lblfrm_figure_centre)
         self.lbl_figure_centre.place(relx=0.007, rely=0.370,
-                                     height=42, width=288,
+                                     relheight=0.5, relwidth=0.98,
                                      bordermode='ignore')
-        self.lbl_figure_centre.configure(font=('DejaVu Sans', 14))
-        self.lbl_figure_centre.configure(text="X:    0.00  Y:    0.00")
+        self.lbl_figure_centre.configure(
+                font=('DejaVu Sans Mono', 12),
+                text="X:{:7.2f}; Y:{:7.2f}".format(self.funcs[7].x_list[0],
+                                                   self.funcs[7].y_list[0])
+                )
 
 
     def crtwdg_transfer(self):
@@ -101,151 +117,168 @@ class root_window():
                            bordermode='ignore')
         self.btn_transfer.configure(activebackground="#f9f9f9")
         self.btn_transfer.configure(text="Перенести")
+        self.btn_transfer.configure(command=lambda: update.move(self, FISH, FISHES))
 
 
     def crtwdg_trans_centre(self):
         """
             Создание виджетов центра преобразований
         """
-        self.lbl_frame4 = tk.LabelFrame(self.root)
-        self.lbl_frame4.place(relx=0.017, rely=0.308,
+        self.lblfrm_centre = tk.LabelFrame(self.root)
+        self.lblfrm_centre.place(relx=0.017, rely=0.308,
                                relheight=0.147, relwidth=0.25)
-        self.lbl_frame4.configure(relief='groove')
-        self.lbl_frame4.configure(font=('DejaVu Sans', 12))
-        self.lbl_frame4.configure(text="Центр преобразований")
+        self.lblfrm_centre.configure(relief='groove')
+        self.lblfrm_centre.configure(font=('DejaVu Sans', 12))
+        self.lblfrm_centre.configure(text="Центр преобразований")
 
-        self.lbl_4 = tk.Label(self.lbl_frame4)
-        self.lbl_4.place(relx=0.017, rely=0.259, height=38, width=53,
+        self.lbl_xc = tk.Label(self.lblfrm_centre)
+        self.lbl_xc.place(relx=0.017, rely=0.259, height=38, width=53,
                           bordermode='ignore')
-        self.lbl_4.configure(font=('DejaVu Sans', 12))
-        self.lbl_4.configure(text="Xc:")
+        self.lbl_xc.configure(font=('DejaVu Sans', 12))
+        self.lbl_xc.configure(text="Xc:")
 
-        self.lbl_4_3 = tk.Label(self.lbl_frame4)
-        self.lbl_4_3.place(relx=0.02, rely=0.612, height=37, width=53,
+        self.lbl_yc = tk.Label(self.lblfrm_centre)
+        self.lbl_yc.place(relx=0.02, rely=0.612, height=37, width=53,
                             bordermode='ignore')
-        self.lbl_4_3.configure(activebackground="#f9f9f9")
-        self.lbl_4_3.configure(font=('DejaVu Sans', 12))
-        self.lbl_4_3.configure(text="Yc:")
+        self.lbl_yc.configure(activebackground="#f9f9f9")
+        self.lbl_yc.configure(font=('DejaVu Sans', 12))
+        self.lbl_yc.configure(text="Yc:")
 
-        self.Entry3 = tk.Entry(self.lbl_frame4)
-        self.Entry3.place(relx=0.208, rely=0.284, height=29, relwidth=0.725,
+        self.ent_xc = tk.Entry(self.lblfrm_centre)
+        self.ent_xc.place(relx=0.208, rely=0.284, height=29, relwidth=0.725,
                           bordermode='ignore')
-        self.Entry3.configure(background="white")
-        self.Entry3.configure(font="TkFixedFont")
+        self.ent_xc.configure(background="white")
+        self.ent_xc.configure(font="TkFixedFont")
+        self.ent_xc.insert(0, "0.00")
 
-        self.Entry3_1 = tk.Entry(self.lbl_frame4)
-        self.Entry3_1.place(relx=0.208, rely=0.638, height=29, relwidth=0.725,
+        self.ent_yc = tk.Entry(self.lblfrm_centre)
+        self.ent_yc.place(relx=0.208, rely=0.638, height=29, relwidth=0.725,
                             bordermode='ignore')
-        self.Entry3_1.configure(background="white")
-        self.Entry3_1.configure(font="TkFixedFont")
-        self.Entry3_1.configure(selectbackground="blue")
-        self.Entry3_1.configure(selectforeground="white")
+        self.ent_yc.configure(background="white")
+        self.ent_yc.configure(font="TkFixedFont")
+        self.ent_yc.configure(selectbackground="blue")
+        self.ent_yc.configure(selectforeground="white")
+        self.ent_yc.insert(0, "0.00")
 
 
     def crtwdg_scaling(self):
         """
             Создание виджетов масштабирования
         """
-        self.lbl_frame2_1 = tk.LabelFrame(self.root)
-        self.lbl_frame2_1.place(relx=0.017, rely=0.472, relheight=0.157,
+        self.lblfrm_scaling = tk.LabelFrame(self.root)
+        self.lblfrm_scaling.place(relx=0.017, rely=0.472, relheight=0.157,
                                  relwidth=0.25)
-        self.lbl_frame2_1.configure(relief='groove')
-        self.lbl_frame2_1.configure(font=('DejaVu Sans', 12))
-        self.lbl_frame2_1.configure(text="Масштабирование")
+        self.lblfrm_scaling.configure(relief='groove')
+        self.lblfrm_scaling.configure(font=('DejaVu Sans', 12))
+        self.lblfrm_scaling.configure(text="Масштабирование")
 
-        self.lbl_2_1 = tk.Label(self.lbl_frame2_1)
-        self.lbl_2_1.place(relx=0.007, rely=0.29, height=29, width=53
+        self.lbl_kx = tk.Label(self.lblfrm_scaling)
+        self.lbl_kx.place(relx=0.007, rely=0.29, height=29, width=53
                 , bordermode='ignore')
-        self.lbl_2_1.configure(activebackground="#f9f9f9")
-        self.lbl_2_1.configure(font=('DejaVu Sans', 12))
-        self.lbl_2_1.configure(text="Kx:")
+        self.lbl_kx.configure(activebackground="#f9f9f9")
+        self.lbl_kx.configure(font=('DejaVu Sans', 12))
+        self.lbl_kx.configure(text="Kx:")
 
-        self.lbl_3_1 = tk.Label(self.lbl_frame2_1)
-        self.lbl_3_1.place(relx=0.507, rely=0.29, height=30, width=53
+        self.lbl_ky = tk.Label(self.lblfrm_scaling)
+        self.lbl_ky.place(relx=0.507, rely=0.29, height=30, width=53
                 , bordermode='ignore')
-        self.lbl_3_1.configure(activebackground="#f9f9f9")
-        self.lbl_3_1.configure(font=('DejaVu Sans', 12))
-        self.lbl_3_1.configure(text="Ky:")
+        self.lbl_ky.configure(activebackground="#f9f9f9")
+        self.lbl_ky.configure(font=('DejaVu Sans', 12))
+        self.lbl_ky.configure(text="Ky:")
 
-        self.Entry1_1 = tk.Entry(self.lbl_frame2_1)
-        self.Entry1_1.place(relx=0.164, rely=0.29, height=29, relwidth=0.3
+        self.ent_kx = tk.Entry(self.lblfrm_scaling)
+        self.ent_kx.place(relx=0.164, rely=0.29, height=29, relwidth=0.3
                 , bordermode='ignore')
-        self.Entry1_1.configure(background="white")
-        self.Entry1_1.configure(font="TkFixedFont")
-        self.Entry1_1.configure(selectbackground="blue")
-        self.Entry1_1.configure(selectforeground="white")
+        self.ent_kx.configure(background="white")
+        self.ent_kx.configure(font="TkFixedFont")
+        self.ent_kx.configure(selectbackground="blue")
+        self.ent_kx.configure(selectforeground="white")
 
-        self.Entry2_1 = tk.Entry(self.lbl_frame2_1)
-        self.Entry2_1.place(relx=0.664, rely=0.29, height=29, relwidth=0.3
+        self.ent_ky = tk.Entry(self.lblfrm_scaling)
+        self.ent_ky.place(relx=0.664, rely=0.29, height=29, relwidth=0.3
                 , bordermode='ignore')
-        self.Entry2_1.configure(background="white")
-        self.Entry2_1.configure(font="TkFixedFont")
-        self.Entry2_1.configure(selectbackground="blue")
-        self.Entry2_1.configure(selectforeground="white")
+        self.ent_ky.configure(background="white")
+        self.ent_ky.configure(font="TkFixedFont")
+        self.ent_ky.configure(selectbackground="blue")
+        self.ent_ky.configure(selectforeground="white")
 
-        self.Button1_1 = tk.Button(self.lbl_frame2_1)
-        self.Button1_1.place(relx=0.025, rely=0.582, height=40, relwidth=0.94
+        self.btn_scaling = tk.Button(self.lblfrm_scaling)
+        self.btn_scaling.place(relx=0.025, rely=0.582, height=40, relwidth=0.94
                 , bordermode='ignore')
-        self.Button1_1.configure(activebackground="#f9f9f9")
-        self.Button1_1.configure(text="Масштабировать")
+        self.btn_scaling.configure(activebackground="#f9f9f9")
+        self.btn_scaling.configure(text="Масштабировать")
+        self.btn_scaling.configure(command= lambda: update.scale(self, FISH, FISHES))
 
 
     def crtwdg_turn(self):
         """
             Создание виджетов поворота
         """
-        self.lbl_frame2_1_1 = tk.LabelFrame(self.root)
-        self.lbl_frame2_1_1.place(relx=0.017, rely=0.649, relheight=0.157,
+        self.lblfrm_turn = tk.LabelFrame(self.root)
+        self.lblfrm_turn.place(relx=0.017, rely=0.649, relheight=0.157,
                                    relwidth=0.25)
-        self.lbl_frame2_1_1.configure(relief='groove')
-        self.lbl_frame2_1_1.configure(font=('DejaVu Sans', 12))
-        self.lbl_frame2_1_1.configure(text="Поворот")
+        self.lblfrm_turn.configure(relief='groove')
+        self.lblfrm_turn.configure(font=('DejaVu Sans', 12))
+        self.lblfrm_turn.configure(text="Поворот")
 
-        self.lbl_2_1_1 = tk.Label(self.lbl_frame2_1_1)
-        self.lbl_2_1_1.place(relx=0.025, rely=0.29,
+        self.lbl_angle = tk.Label(self.lblfrm_turn)
+        self.lbl_angle.place(relx=0.025, rely=0.29,
                               bordermode='ignore')
-        self.lbl_2_1_1.configure(activebackground="#f9f9f9")
-        self.lbl_2_1_1.configure(font=('DejaVu Sans', 12))
-        self.lbl_2_1_1.configure(justify=tk.CENTER)
-        self.lbl_2_1_1.configure(text="Угол (°):")
+        self.lbl_angle.configure(activebackground="#f9f9f9")
+        self.lbl_angle.configure(font=('DejaVu Sans', 12))
+        self.lbl_angle.configure(justify=tk.CENTER)
+        self.lbl_angle.configure(text="Угол (°):")
 
-        self.Entry1_1_1 = tk.Entry(self.lbl_frame2_1_1)
-        self.Entry1_1_1.place(relx=0.390, rely=0.29, height=29, relwidth=0.57,
+        self.ent_angle = tk.Entry(self.lblfrm_turn)
+        self.ent_angle.place(relx=0.390, rely=0.29, height=29, relwidth=0.57,
                               bordermode='ignore')
-        self.Entry1_1_1.configure(background="white")
-        self.Entry1_1_1.configure(cursor="fleur")
-        self.Entry1_1_1.configure(font="TkFixedFont")
-        self.Entry1_1_1.configure(selectbackground="blue")
-        self.Entry1_1_1.configure(selectforeground="white")
+        self.ent_angle.configure(background="white")
+        self.ent_angle.configure(cursor="fleur")
+        self.ent_angle.configure(font="TkFixedFont")
+        self.ent_angle.configure(selectbackground="blue")
+        self.ent_angle.configure(selectforeground="white")
 
-        self.Button1_1_1 = tk.Button(self.lbl_frame2_1_1)
-        self.Button1_1_1.place(relx=0.025, rely=0.582, height=40, relwidth=0.94,
+        self.btn_turn = tk.Button(self.lblfrm_turn)
+        self.btn_turn.place(relx=0.025, rely=0.582, height=40, relwidth=0.94,
                                bordermode='ignore')
-        self.Button1_1_1.configure(activebackground="#f9f9f9")
-        self.Button1_1_1.configure(text="Повернуть")
+        self.btn_turn.configure(activebackground="#f9f9f9")
+        self.btn_turn.configure(text="Повернуть")
+        self.btn_turn.configure(command=lambda: update.turn(self, FISH, FISHES))
 
 
     def crtwdg_edit(self):
         """
             Создание виджетов редактирования
         """
-        self.Button2 = tk.Button(self.root)
-        self.Button2.place(relx=0.016, rely=0.819, height=37, width=140)
-        self.Button2.configure(text="← Назад")
+        self.btn_undo = tk.Button(self.root)
+        self.btn_undo.place(relx=0.016, rely=0.819, height=37, width=140)
+        self.btn_undo.configure(text="← Назад")
+        self.btn_undo.configure(command=lambda: update.undo(ROOT, FISH, FISHES))
 
-        self.Button2_1 = tk.Button(self.root)
-        self.Button2_1.place(relx=0.151, rely=0.819, height=37, width=140)
-        self.Button2_1.configure(activebackground="#f9f9f9")
-        self.Button2_1.configure(text="Вперед →")
+        self.btn_redo = tk.Button(self.root)
+        self.btn_redo.place(relx=0.151, rely=0.819, height=37, width=140)
+        self.btn_redo.configure(activebackground="#f9f9f9")
+        self.btn_redo.configure(text="Вперед →")
+        self.btn_redo.configure(state=tk.DISABLED)
+        self.btn_redo.configure(command=lambda: update.redo(ROOT, FISH, FISHES))
 
-        self.Button3 = tk.Button(self.root)
-        self.Button3.place(relx=0.017, rely=0.876, height=37, width=300)
-        self.Button3.configure(text="Исходное изображение")
+        self.btn_original = tk.Button(self.root)
+        self.btn_original.place(relx=0.017, rely=0.876, height=37, width=300)
+        self.btn_original.configure(text="Исходное изображение")
+        FISH.move(10, 10)
+        FISHES.add(copy.deepcopy(FISH))
+        self.lbl_figure_centre.configure(
+                font=('DejaVu Sans Mono', 12),
+                text="X:{:7.2f}; Y:{:7.2f}".format(self.funcs[7].x_list[0],
+                                                     self.funcs[7].y_list[0])
+                )
+        self.btn_original.configure(command=lambda: update.reset(ROOT,
+                                                   FISH, FISHES))
 
-        self.Button3_1 = tk.Button(self.root)
-        self.Button3_1.place(relx=0.017, rely=0.932, height=37, width=300)
-        self.Button3_1.configure(activebackground="#f9f9f9")
-        self.Button3_1.configure(text="Справка")
+        self.btn_help = tk.Button(self.root)
+        self.btn_help.place(relx=0.017, rely=0.932, height=37, width=300)
+        self.btn_help.configure(activebackground="#f9f9f9")
+        self.btn_help.configure(text="Справка")
 
 
     def create_matplotlib(self):
@@ -266,8 +299,8 @@ class root_window():
         for func in self.funcs:
             self.subplt.plot(func.x_list, func.y_list, color='k', linewidth=2)
 
-        self.subplt.set_xlim((-60, 60))
-        self.subplt.set_ylim((-60, 60))
+        self.subplt.set_xlim((-80, 80))
+        self.subplt.set_ylim((-80, 80))
         self.subplt.grid(True)
 
         self.pltcnv = FigureCanvasTkAgg(self.figure, self.root)
@@ -301,5 +334,5 @@ if __name__=="__main__":
     ROOT = root_window()
     FISH = fish.Fish()
     ROOT.funcs = FISH.full 
-    FISHES = [FISH.full]
+    FISHES = update.History(0, [copy.deepcopy(FISH)])
     ROOT.run()

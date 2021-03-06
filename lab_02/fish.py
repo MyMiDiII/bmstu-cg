@@ -25,6 +25,10 @@ class Fish:
         self.button_fin = self.create_button_fin()
         self.full = [self.body, self.head, self.eye, self.mouth,
                      self.tail, self.top_fin, self.button_fin]
+        self.move(-8, 0)
+        self.centre = Func([0], [0])
+        self.full.append(self.centre)
+
 
     def reset(self):
         """
@@ -43,9 +47,6 @@ class Fish:
         for angle in angles:
             body.x_list.append(large_sa * cos(np.radians(angle)))
             body.y_list.append(small_sa * sin(np.radians(angle)))
-
-        for i in range(len(body.x_list)):
-            print(body.x_list[i], body.y_list[i])
 
         return body
 
@@ -112,8 +113,6 @@ class Fish:
         """
             Перенос изображения рыбы
         """
-        print(FISHES)
-
         for element in self.full:
             element.x_list = [x + dx for x in element.x_list]
             element.y_list = [y + dy for y in element.y_list]
@@ -141,5 +140,3 @@ class Fish:
             element.y_list = [yc - (tmp_x[i] - xc) * sin(np.radians(phi)) 
                               + (y - yc) * cos(np.radians(phi))
                               for i, y in enumerate(element.y_list)]
-
-
