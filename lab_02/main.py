@@ -83,19 +83,19 @@ class root_window():
         self.lblfrm_transfer.configure(text="Перенос")
 
         self.lbl_dx = tk.Label(self.lblfrm_transfer)
-        self.lbl_dx.place(relx=0.007, rely=0.29, height=29, width=53,
+        self.lbl_dx.place(relx=0.007, rely=0.29, relheight=0.25, relwidth=0.15,
                           bordermode='ignore')
         self.lbl_dx.configure(font=('DejaVu Sans', 12))
         self.lbl_dx.configure(text="dx:")
 
         self.lbl_dy = tk.Label(self.lblfrm_transfer)
-        self.lbl_dy.place(relx=0.007, rely=0.637, height=30, width=53,
+        self.lbl_dy.place(relx=0.007, rely=0.637, relheight=0.25, relwidth=0.15,
                           bordermode='ignore')
         self.lbl_dy.configure(font=('DejaVu Sans', 12))
         self.lbl_dy.configure(text="dy:")
 
         self.ent_dx = tk.Entry(self.lblfrm_transfer)
-        self.ent_dx.place(relx=0.164, rely=0.29, height=29, relwidth=0.389,
+        self.ent_dx.place(relx=0.164, rely=0.29, relheight=0.25, relwidth=0.4,
                           bordermode='ignore')
         self.ent_dx.configure(background="white")
         self.ent_dx.configure(font="TkFixedFont")
@@ -103,7 +103,7 @@ class root_window():
         self.ent_dx.configure(selectforeground="white")
 
         self.ent_dy = tk.Entry(self.lblfrm_transfer)
-        self.ent_dy.place(relx=0.171, rely=0.645, height=29, relwidth=0.389,
+        self.ent_dy.place(relx=0.171, rely=0.645, relheight=0.25, relwidth=0.4,
                           bordermode='ignore')
         self.ent_dy.configure(background="white")
         self.ent_dy.configure(font="TkFixedFont")
@@ -111,7 +111,8 @@ class root_window():
         self.ent_dy.configure(selectforeground="white")
 
         self.btn_transfer = tk.Button(self.lblfrm_transfer)
-        self.btn_transfer.place(relx=0.57, rely=0.282, height=77, width=120,
+        self.btn_transfer.place(relx=0.6, rely=0.282,
+                                relheight=0.6, relwidth=0.37,
                            bordermode='ignore')
         self.btn_transfer.configure(activebackground="#f9f9f9")
         self.btn_transfer.configure(text="Перенести")
@@ -124,33 +125,33 @@ class root_window():
         """
         self.lblfrm_centre = tk.LabelFrame(self.root)
         self.lblfrm_centre.place(relx=0.017, rely=0.308,
-                               relheight=0.147, relwidth=0.25)
+                                 relheight=0.147, relwidth=0.25)
         self.lblfrm_centre.configure(relief='groove')
         self.lblfrm_centre.configure(font=('DejaVu Sans', 12))
         self.lblfrm_centre.configure(text="Центр преобразований")
 
         self.lbl_xc = tk.Label(self.lblfrm_centre)
-        self.lbl_xc.place(relx=0.017, rely=0.259, height=38, width=53,
+        self.lbl_xc.place(relx=0.017, rely=0.259, relheight=0.3, relwidth=0.15,
                           bordermode='ignore')
         self.lbl_xc.configure(font=('DejaVu Sans', 12))
         self.lbl_xc.configure(text="Xc:")
 
         self.lbl_yc = tk.Label(self.lblfrm_centre)
-        self.lbl_yc.place(relx=0.02, rely=0.612, height=37, width=53,
+        self.lbl_yc.place(relx=0.02, rely=0.612, relheight=0.3, relwidth=0.15,
                             bordermode='ignore')
         self.lbl_yc.configure(activebackground="#f9f9f9")
         self.lbl_yc.configure(font=('DejaVu Sans', 12))
         self.lbl_yc.configure(text="Yc:")
 
         self.ent_xc = tk.Entry(self.lblfrm_centre)
-        self.ent_xc.place(relx=0.208, rely=0.284, height=29, relwidth=0.725,
+        self.ent_xc.place(relx=0.208, rely=0.284, relheight=0.25, relwidth=0.75,
                           bordermode='ignore')
         self.ent_xc.configure(background="white")
         self.ent_xc.configure(font="TkFixedFont")
         self.ent_xc.insert(0, "0.00")
 
         self.ent_yc = tk.Entry(self.lblfrm_centre)
-        self.ent_yc.place(relx=0.208, rely=0.638, height=29, relwidth=0.725,
+        self.ent_yc.place(relx=0.208, rely=0.638, relheight=0.25, relwidth=0.75,
                             bordermode='ignore')
         self.ent_yc.configure(background="white")
         self.ent_yc.configure(font="TkFixedFont")
@@ -165,27 +166,27 @@ class root_window():
         """
         self.lblfrm_scaling = tk.LabelFrame(self.root)
         self.lblfrm_scaling.place(relx=0.017, rely=0.472, relheight=0.157,
-                                 relwidth=0.25)
+                                  relwidth=0.25)
         self.lblfrm_scaling.configure(relief='groove')
         self.lblfrm_scaling.configure(font=('DejaVu Sans', 12))
         self.lblfrm_scaling.configure(text="Масштабирование")
 
         self.lbl_kx = tk.Label(self.lblfrm_scaling)
-        self.lbl_kx.place(relx=0.007, rely=0.29, height=29, width=53
+        self.lbl_kx.place(relx=0.007, rely=0.29, relheight=0.25, width=53
                 , bordermode='ignore')
         self.lbl_kx.configure(activebackground="#f9f9f9")
         self.lbl_kx.configure(font=('DejaVu Sans', 12))
         self.lbl_kx.configure(text="Kx:")
 
         self.lbl_ky = tk.Label(self.lblfrm_scaling)
-        self.lbl_ky.place(relx=0.507, rely=0.29, height=30, width=53
+        self.lbl_ky.place(relx=0.507, rely=0.29, relheight=0.25, width=53
                 , bordermode='ignore')
         self.lbl_ky.configure(activebackground="#f9f9f9")
         self.lbl_ky.configure(font=('DejaVu Sans', 12))
         self.lbl_ky.configure(text="Ky:")
 
         self.ent_kx = tk.Entry(self.lblfrm_scaling)
-        self.ent_kx.place(relx=0.164, rely=0.29, height=29, relwidth=0.3
+        self.ent_kx.place(relx=0.164, rely=0.27, relheight=0.25, relwidth=0.3
                 , bordermode='ignore')
         self.ent_kx.configure(background="white")
         self.ent_kx.configure(font="TkFixedFont")
@@ -193,7 +194,7 @@ class root_window():
         self.ent_kx.configure(selectforeground="white")
 
         self.ent_ky = tk.Entry(self.lblfrm_scaling)
-        self.ent_ky.place(relx=0.664, rely=0.29, height=29, relwidth=0.3
+        self.ent_ky.place(relx=0.664, rely=0.27, relheight=0.25, relwidth=0.3
                 , bordermode='ignore')
         self.ent_ky.configure(background="white")
         self.ent_ky.configure(font="TkFixedFont")
@@ -201,7 +202,7 @@ class root_window():
         self.ent_ky.configure(selectforeground="white")
 
         self.btn_scaling = tk.Button(self.lblfrm_scaling)
-        self.btn_scaling.place(relx=0.025, rely=0.582, height=40, relwidth=0.94
+        self.btn_scaling.place(relx=0.025, rely=0.6, relheight=0.3, relwidth=0.945
                 , bordermode='ignore')
         self.btn_scaling.configure(activebackground="#f9f9f9")
         self.btn_scaling.configure(text="Масштабировать")
@@ -228,7 +229,7 @@ class root_window():
         self.lbl_angle.configure(text="Угол (°):")
 
         self.ent_angle = tk.Entry(self.lblfrm_turn)
-        self.ent_angle.place(relx=0.390, rely=0.29, height=29, relwidth=0.57,
+        self.ent_angle.place(relx=0.32, rely=0.25, relheight=0.25, relwidth=0.65,
                               bordermode='ignore')
         self.ent_angle.configure(background="white")
         self.ent_angle.configure(cursor="fleur")
@@ -237,7 +238,7 @@ class root_window():
         self.ent_angle.configure(selectforeground="white")
 
         self.btn_turn = tk.Button(self.lblfrm_turn)
-        self.btn_turn.place(relx=0.025, rely=0.582, height=40, relwidth=0.94,
+        self.btn_turn.place(relx=0.025, rely=0.582, relheight=0.32, relwidth=0.95,
                                bordermode='ignore')
         self.btn_turn.configure(activebackground="#f9f9f9")
         self.btn_turn.configure(text="Повернуть")
@@ -249,20 +250,20 @@ class root_window():
             Создание виджетов редактирования
         """
         self.btn_undo = tk.Button(self.root)
-        self.btn_undo.place(relx=0.016, rely=0.819, height=37, width=140)
+        self.btn_undo.place(relx=0.016, rely=0.819, relheight=0.08, relwidth=0.12)
         self.btn_undo.configure(text="← Назад")
         self.btn_undo.configure(state=tk.DISABLED)
         self.btn_undo.configure(command=lambda: update.undo(ROOT, FISH, FISHES))
 
         self.btn_redo = tk.Button(self.root)
-        self.btn_redo.place(relx=0.151, rely=0.819, height=37, width=140)
+        self.btn_redo.place(relx=0.147, rely=0.819, relheight=0.08, relwidth=0.12)
         self.btn_redo.configure(activebackground="#f9f9f9")
         self.btn_redo.configure(text="Вперед →")
         self.btn_redo.configure(state=tk.DISABLED)
         self.btn_redo.configure(command=lambda: update.redo(ROOT, FISH, FISHES))
 
         self.btn_original = tk.Button(self.root)
-        self.btn_original.place(relx=0.017, rely=0.876, height=37, width=300)
+        self.btn_original.place(relx=0.016, rely=0.9, relheight=0.08, relwidth=0.251)
         self.btn_original.configure(text="Исходное изображение")
         self.btn_original.configure(command=lambda: update.reset(ROOT,
                                                    FISH, FISHES))
