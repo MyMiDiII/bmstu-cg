@@ -2,17 +2,23 @@
     Модуль для работы с изображением рыбы
 """
 
-import numpy as np
 from math import sin, cos
+import numpy as np
 
 class Func:
+    """
+        Класс функции, заданной узлами
+    """
     def __init__(self, x_list, y_list):
         self.x_list = x_list
         self.y_list = y_list
 
 
 class Fish:
-    def __init__(self, *args, **kwargs):
+    """
+        Класс изображения рыбы
+    """
+    def __init__(self):
         """
             Конструктор класса
         """
@@ -134,9 +140,9 @@ class Fish:
         phi = -phi
         for element in self.full:
             tmp_x = [x for x in element.x_list]
-            element.x_list = [xc + (x - xc) * cos(np.radians(phi)) 
+            element.x_list = [xc + (x - xc) * cos(np.radians(phi))
                               + (element.y_list[i] - yc) * sin(np.radians(phi))
                               for i, x in enumerate(element.x_list)]
-            element.y_list = [yc - (tmp_x[i] - xc) * sin(np.radians(phi)) 
+            element.y_list = [yc - (tmp_x[i] - xc) * sin(np.radians(phi))
                               + (y - yc) * cos(np.radians(phi))
                               for i, y in enumerate(element.y_list)]
