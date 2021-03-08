@@ -253,6 +253,7 @@ class root_window():
         self.btn_undo = tk.Button(self.root)
         self.btn_undo.place(relx=0.016, rely=0.819, height=37, width=140)
         self.btn_undo.configure(text="← Назад")
+        self.btn_undo.configure(state=tk.DISABLED)
         self.btn_undo.configure(command=lambda: update.undo(ROOT, FISH, FISHES))
 
         self.btn_redo = tk.Button(self.root)
@@ -265,12 +266,10 @@ class root_window():
         self.btn_original = tk.Button(self.root)
         self.btn_original.place(relx=0.017, rely=0.876, height=37, width=300)
         self.btn_original.configure(text="Исходное изображение")
-        FISH.move(10, 10)
-        FISHES.add(copy.deepcopy(FISH))
         self.lbl_figure_centre.configure(
                 font=('DejaVu Sans Mono', 12),
                 text="X:{:7.2f}; Y:{:7.2f}".format(self.funcs[7].x_list[0],
-                                                     self.funcs[7].y_list[0])
+                                                   self.funcs[7].y_list[0])
                 )
         self.btn_original.configure(command=lambda: update.reset(ROOT,
                                                    FISH, FISHES))
