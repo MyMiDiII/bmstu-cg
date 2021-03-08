@@ -12,13 +12,13 @@ NONNUMERIC = 'Нечисловые данные'
 EMPTY = 'Пустой ввод'
 
 NONNUM_MOVE = 'dx и dy должны быть представлены вещественными числами'
-EMPTY_MOVE =  'Для выполнения переноса заполните поля dx и dy'
+EMPTY_MOVE = 'Для выполнения переноса заполните поля dx и dy'
 
 NONNUM_SCALE = 'Xc, Yc, Kx и Ky должны быть представлены вещественными числами'
-EMPTY_SCALE =  'Для выполнения масштабирования заполните поля Xc, Yc, Kx и Ky'
+EMPTY_SCALE = 'Для выполнения масштабирования заполните поля Xc, Yc, Kx и Ky'
 
 NONNUM_ROTATION = 'Xc, Yc и угол должны быть представлены вещественными числами'
-EMPTY_ROTATION =  'Для выполнения поворота заполните поля Xc, Yc и "Угол (°)"'
+EMPTY_ROTATION = 'Для выполнения поворота заполните поля Xc, Yc и "Угол (°)"'
 
 FONT = 'DejaVu Sans Mono'
 FONT_SIZE = 14
@@ -26,27 +26,45 @@ FONT_CONFIG = (FONT, FONT_SIZE)
 
 
 class History:
+    """
+        Класс истории состояний изображения
+    """
     def __init__(self, index, buf):
+        """
+            Коструктор класса
+        """
         self.index = index
         self.buf = buf
 
-    
+
     def add(self, func):
+        """
+            Добавление состояния в историю
+        """
         self.index += 1
         self.buf = self.buf[:self.index] + [func]
 
 
     def back(self, fish):
+        """
+            Шаг назад
+        """
         self.index -= 1
         self.update_fish(fish)
 
 
     def forward(self, fish):
+        """
+            Шаг вперед
+        """
         self.index += 1
         self.update_fish(fish)
 
 
     def update_fish(self, fish):
+        """
+            Постановка текущего состояния
+        """
         fish_copy = copy.deepcopy(self.buf[self.index])
 
         for i, part in enumerate(fish_copy.full):
@@ -59,10 +77,10 @@ def renew_label(window):
         центра фигуры
     """
     window.lbl_figure_centre.configure(
-            font=FONT_CONFIG,
-            text="X:{:7.2f}; Y:{:7.2f}".format(window.funcs[7].x_list[0],
-                                               window.funcs[7].y_list[0])
-            )
+        font=FONT_CONFIG,
+        text="X:{:7.2f}; Y:{:7.2f}".format(window.funcs[7].x_list[0],
+                                           window.funcs[7].y_list[0])
+        )
 
 
 def move(window, fish, fishes):
@@ -116,7 +134,7 @@ def scale(window, fish, fishes):
         renew_label(window)
 
 
-def turn(window, fish, fishes):
+def rotate(window, fish, fishes):
     """
         Запуск масштабирования
     """
@@ -124,7 +142,7 @@ def turn(window, fish, fishes):
         phi = float(window.ent_angle.get())
         xc = float(window.ent_xc.get())
         yc = float(window.ent_yc.get())
-        
+
     except ValueError:
         if (window.ent_xc.get() and window.ent_yc.get()
                 and window.ent_angle.get()):

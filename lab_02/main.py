@@ -338,24 +338,24 @@ class RootWindow():
             )
 
 
-    def crtwdg_turn(self):
+    def crtwdg_rotate(self):
         """
             Создание виджетов поворота
         """
-        self.lblfrm_turn = tk.LabelFrame(self.root)
-        self.lblfrm_turn.place(
+        self.lblfrm_rotate = tk.LabelFrame(self.root)
+        self.lblfrm_rotate.place(
             relx=0.017,
             rely=0.649,
             relheight=0.157,
             relwidth=0.25
             )
-        self.lblfrm_turn.configure(
+        self.lblfrm_rotate.configure(
             relief='groove',
             font=('DejaVu Sans', 12),
             text="Поворот"
             )
 
-        self.lbl_angle = tk.Label(self.lblfrm_turn)
+        self.lbl_angle = tk.Label(self.lblfrm_rotate)
         self.lbl_angle.place(
             relx=0.025,
             rely=0.29,
@@ -368,7 +368,7 @@ class RootWindow():
             text="Угол (°):"
             )
 
-        self.ent_angle = tk.Entry(self.lblfrm_turn)
+        self.ent_angle = tk.Entry(self.lblfrm_rotate)
         self.ent_angle.place(
             relx=0.32,
             rely=0.25,
@@ -385,18 +385,18 @@ class RootWindow():
             )
 
 
-        self.btn_turn = tk.Button(self.lblfrm_turn)
-        self.btn_turn.place(
+        self.btn_rotate = tk.Button(self.lblfrm_rotate)
+        self.btn_rotate.place(
             relx=0.025,
             rely=0.582,
             relheight=0.32,
             relwidth=0.95,
             bordermode='ignore'
             )
-        self.btn_turn.configure(
+        self.btn_rotate.configure(
             activebackground="#f9f9f9",
             text="Повернуть",
-            command=lambda: update.turn(self, FISH, FISHES)
+            command=lambda: update.rotate(self, FISH, FISHES)
             )
 
 
@@ -484,7 +484,7 @@ class RootWindow():
         self.crtwdg_transfer()
         self.crtwdg_trans_centre()
         self.crtwdg_scaling()
-        self.crtwdg_turn()
+        self.crtwdg_rotate()
         self.crtwdg_edit()
         self.create_matplotlib()
 
