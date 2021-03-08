@@ -20,6 +20,11 @@ EMPTY_SCALE =  'Для выполнения масштабирования за�
 NONNUM_ROTATION = 'Xc, Yc и угол должны быть представлены вещественными числами'
 EMPTY_ROTATION =  'Для выполнения поворота заполните поля Xc, Yc и "Угол (°)"'
 
+FONT = 'DejaVu Sans Mono'
+FONT_SIZE = 14
+FONT_CONFIG = (FONT, FONT_SIZE)
+
+
 class History:
     def __init__(self, index, buf):
         self.index = index
@@ -54,7 +59,7 @@ def renew_label(window):
         центра фигуры
     """
     window.lbl_figure_centre.configure(
-            font=('DejaVu Sans Mono', 12),
+            font=FONT_CONFIG,
             text="X:{:7.2f}; Y:{:7.2f}".format(window.funcs[7].x_list[0],
                                                window.funcs[7].y_list[0])
             )

@@ -19,7 +19,6 @@ matplotlib.use('TkAgg')
 AUTHOR_TITLE = 'Об авторе'
 AUTHOR = 'Маслова Марина\nИУ7-43Б'
 
-
 class root_window():
     """
         Класс главного окна
@@ -30,9 +29,8 @@ class root_window():
             Конструктор класса
         """
         self.root = tk.Tk()
-        self.root.geometry("1200x790+350+130")
-        self.root.minsize(500, 100)
-        self.root.resizable(True, True)
+        self.root.geometry("1500x950+200+40")
+        self.root.resizable(False, False)
         self.root.title("ЛР2")
 
 
@@ -67,7 +65,7 @@ class root_window():
                                      relheight=0.5, relwidth=0.98,
                                      bordermode='ignore')
         self.lbl_figure_centre.configure(
-                font=('DejaVu Sans Mono', 12),
+                font=update.FONT_CONFIG,
                 text="X:{:7.2f}; Y:{:7.2f}".format(self.funcs[7].x_list[0],
                                                    self.funcs[7].y_list[0])
                 )
@@ -266,18 +264,8 @@ class root_window():
         self.btn_original = tk.Button(self.root)
         self.btn_original.place(relx=0.017, rely=0.876, height=37, width=300)
         self.btn_original.configure(text="Исходное изображение")
-        self.lbl_figure_centre.configure(
-                font=('DejaVu Sans Mono', 12),
-                text="X:{:7.2f}; Y:{:7.2f}".format(self.funcs[7].x_list[0],
-                                                   self.funcs[7].y_list[0])
-                )
         self.btn_original.configure(command=lambda: update.reset(ROOT,
                                                    FISH, FISHES))
-
-        self.btn_help = tk.Button(self.root)
-        self.btn_help.place(relx=0.017, rely=0.932, height=37, width=300)
-        self.btn_help.configure(activebackground="#f9f9f9")
-        self.btn_help.configure(text="Справка")
 
 
     def create_matplotlib(self):
