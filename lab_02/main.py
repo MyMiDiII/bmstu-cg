@@ -125,7 +125,7 @@ class RootWindow():
             )
         self.lbl_dy.configure(
             font=('DejaVu Sans', 12),
-            text="dy"
+            text="dy:"
             )
 
         self.ent_dx = tk.Entry(self.lblfrm_transfer)
@@ -378,7 +378,6 @@ class RootWindow():
             )
         self.ent_angle.configure(
             background="white",
-            cursor="fleur",
             font="TkFixedFont",
             selectbackground="blue",
             selectforeground="white"
@@ -471,7 +470,7 @@ class RootWindow():
             relx=0.28,
             rely=0.02,
             relheight=0.96,
-            relwidth=0.71
+            relwidth=0.70
             )
 
 
