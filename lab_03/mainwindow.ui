@@ -92,6 +92,11 @@ p, li { white-space: pre-wrap; }
              <string>Библиотечная функция</string>
             </property>
            </item>
+           <item>
+            <property name="text">
+             <string>ЦДА</string>
+            </property>
+           </item>
           </widget>
          </item>
         </layout>
@@ -127,7 +132,7 @@ p, li { white-space: pre-wrap; }
             <bool>false</bool>
            </property>
            <property name="styleSheet">
-            <string notr="true">background-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:2, fx:0.5, fy:0.511, stop:0 rgba(0, 0, 0, 255), stop:1 rgba(255, 255, 255, 255));</string>
+            <string notr="true">background-color: black</string>
            </property>
            <property name="text">
             <string/>
@@ -159,11 +164,6 @@ p, li { white-space: pre-wrap; }
            </item>
            <item>
             <property name="text">
-             <string>Оранжевый</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
              <string>Желтый</string>
             </property>
            </item>
@@ -174,17 +174,17 @@ p, li { white-space: pre-wrap; }
            </item>
            <item>
             <property name="text">
+             <string>Голубой</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
              <string>Синий</string>
             </property>
            </item>
            <item>
             <property name="text">
              <string>Фиолетовый</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Другой...</string>
             </property>
            </item>
           </widget>

@@ -21,6 +21,9 @@ err_t get_segment(const segment_request_t &segment_config)
     case STANDART:
         standart_segment_draw(segment_config.segment, segment_config.canvas);
         break;
+    case DDA:
+        dda(segment_config.segment, segment_config.canvas);
+        break;
     default:
         break;
     }

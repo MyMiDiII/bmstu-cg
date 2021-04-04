@@ -12,6 +12,12 @@ err_t handle_request(const request_t &request)
     case SPECTRUM:
         rc = get_spectrum(request.spectrum_config);
         break;
+    case TIME:
+        rc = get_times(request.time_config);
+        break;
+    case CLEAR:
+        clear_canvas(request.clear_config);
+        break;
     default:
         break;
     }

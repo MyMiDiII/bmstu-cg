@@ -23,6 +23,7 @@ canvas_t MainWindow::init_canvas()
     static canvas_t canvas;
 
     canvas.scene = ui->graphicsView->scene();
+    canvas.color = (color_code_t) ui->comboBox_color->currentIndex();
     canvas.width = canvas.scene->width();
     canvas.height = canvas.scene->height();
 
@@ -50,7 +51,6 @@ void MainWindow::read_segment(segment_t &segment)
 void MainWindow::create_segment_config(segment_request_t &config)
 {
     config.algorithm = (algorithm_code_t) ui->comboBox_algorithm->currentIndex();
-    config.color = (color_code_t) ui->comboBox_color->currentIndex();
     config.canvas = init_canvas();
     read_segment(config.segment);
 }
@@ -73,7 +73,6 @@ void MainWindow::read_spectrum(spectrum_t &spectrum)
 void MainWindow::create_spectrum_config(spectrum_request_t &config)
 {
     config.algorithm = (algorithm_code_t) ui->comboBox_algorithm->currentIndex();
-    config.color = (color_code_t) ui->comboBox_color->currentIndex();
     config.canvas = init_canvas();
     read_spectrum(config.spectrum);
 }
@@ -90,5 +89,47 @@ void MainWindow::on_btn_spectrum_clicked()
 void MainWindow::on_btn_time_clicked()
 {
     TimeChart *timechart = new TimeChart();
-    timechart->showMaximized();
+    timechart->show();
+}
+
+void MainWindow::on_btn_clear_clicked()
+{
+    request_t request = {.code = CLEAR};
+    request.clear_config = init_canvas();
+
+    handle_request(request);
+}
+
+
+void MainWindow::on_comboBox_color_currentIndexChanged(int index)
+{
+    switch (index)
+    {
+    case 0:
+        ui->lbl_color->setStyleSheet("background: black");
+        break;
+    case 1:
+        ui->lbl_color->setStyleSheet("background: white");
+        break;
+    case 2:
+        ui->lbl_color->setStyleSheet("background: red");
+        break;
+    case 3:
+        ui->lbl_color->setStyleSheet("background: yellow");
+        break;
+    case 4:
+        ui->lbl_color->setStyleSheet("background: rgb(45, 255, 0)");
+        break;
+    case 5:
+        ui->lbl_color->setStyleSheet("background: cyan");
+        break;
+    case 6:
+        ui->lbl_color->setStyleSheet("background: blue");
+        break;
+    case 7:
+        ui->lbl_color->setStyleSheet("background: darkMagenta");
+        break;
+    default:
+        break;
+    }
 }

@@ -37,9 +37,7 @@ void draw_spectrum(const canvas_t &canvas, const points_arr_t &points)
     point_t begin = {.x = canvas.width / 2, .y = canvas.height / 2};
 
     for (size_t i = 0; i < points.len; i++)
-    {
         standart_draw_line(begin, move_point(begin, points.arr[i]), canvas);
-    }
 }
 
 

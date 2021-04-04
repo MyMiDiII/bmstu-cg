@@ -5,11 +5,14 @@
 #include "spectrum.h"
 #include "draw.h"
 #include "errors.h"
+#include "times.h"
 
 enum request_code_t
 {
     SEGMENT,
-    SPECTRUM
+    SPECTRUM,
+    TIME,
+    CLEAR
 };
 
 struct request_t
@@ -19,6 +22,8 @@ struct request_t
     {
         segment_request_t segment_config;
         spectrum_request_t spectrum_config;
+        long long int *time_config;
+        canvas_t clear_config;
     };
 };
 

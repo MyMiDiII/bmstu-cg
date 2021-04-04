@@ -6,12 +6,19 @@
 enum color_code_t
 {
     BLACK,
-    WHITE
+    WHITE,
+    RED,
+    YELLOW,
+    GREEN,
+    CYAN,
+    BLUE,
+    PURPLE
 };
 
 struct canvas_t
 {
     QGraphicsScene *scene;
+    color_code_t color;
     int width;
     int height;
 };

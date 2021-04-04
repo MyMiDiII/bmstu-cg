@@ -14,7 +14,6 @@ struct spectrum_t
 struct spectrum_request_t
 {
     canvas_t canvas;
-    color_code_t color;
     algorithm_code_t algorithm;
     spectrum_t spectrum;
 };

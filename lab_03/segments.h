@@ -18,13 +18,13 @@ struct segment_t
 
 enum algorithm_code_t
 {
-    STANDART
+    STANDART,
+    DDA
 };
 
 struct segment_request_t
 {
     canvas_t canvas;
-    color_code_t color;
     algorithm_code_t algorithm;
     segment_t segment;
 };

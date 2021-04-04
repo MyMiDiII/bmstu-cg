@@ -25,6 +25,10 @@ private slots:
 
     void on_btn_time_clicked();
 
+    void on_btn_clear_clicked();
+
+    void on_comboBox_color_currentIndexChanged(int index);
+
 private:
     canvas_t init_canvas();
 
