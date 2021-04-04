@@ -27,7 +27,7 @@ void dda(const point_t begin, const point_t end, const canvas_t &canvas)
     {
         double round_x = round(x);
         double round_y = round(y);
-        //draw_point(round(x), round(y), canvas);
+        draw_point(round_x, round_y, canvas);
         x += dx;
         y += dy;
     }

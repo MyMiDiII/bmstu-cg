@@ -133,3 +133,9 @@ void MainWindow::on_comboBox_color_currentIndexChanged(int index)
         break;
     }
 }
+
+void MainWindow::on_btn_gradation_clicked()
+{
+    StepChart *stepchart = new StepChart();
+    stepchart->showMaximized();
+}

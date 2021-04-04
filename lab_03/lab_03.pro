@@ -10,6 +10,7 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    brezenham.cpp \
     dda.cpp \
     draw.cpp \
     errors.cpp \
@@ -19,10 +20,12 @@ SOURCES += \
     segments.cpp \
     spectrum.cpp \
     stepchart.cpp \
+    steps.cpp \
     timechart.cpp \
     times.cpp
 
 HEADERS += \
+    brezenham.h \
     dda.h \
     draw.h \
     errors.h \
@@ -31,6 +34,7 @@ HEADERS += \
     segments.h \
     spectrum.h \
     stepchart.h \
+    steps.h \
     timechart.h \
     times.h
 

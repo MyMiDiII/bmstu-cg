@@ -4,6 +4,7 @@
 #include <QMainWindow>
 
 #include "timechart.h"
+#include "stepchart.h"
 #include "requests.h"
 
 QT_BEGIN_NAMESPACE
@@ -28,6 +29,8 @@ private slots:
     void on_btn_clear_clicked();
 
     void on_comboBox_color_currentIndexChanged(int index);
+
+    void on_btn_gradation_clicked();
 
 private:
     canvas_t init_canvas();
