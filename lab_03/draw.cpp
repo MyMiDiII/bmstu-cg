@@ -43,6 +43,12 @@ void draw_line(const int x1, const int y1,
     canvas.scene->addLine(x1, y1, x2, y2, pen);
 }
 
+void draw_point(const int x, const int y, const canvas_t &canvas)
+{
+    QPen pen = get_pen(canvas.color);
+    canvas.scene->addLine(x, y, x, y, pen);
+}
+
 void clear_canvas(const canvas_t &canvas)
 {
     canvas.scene->clear();

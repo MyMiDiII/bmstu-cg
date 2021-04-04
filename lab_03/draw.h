@@ -27,6 +27,8 @@ void draw_line(const int x1, const int y1,
                const int x2, const int y2,
                const canvas_t &canvas);
 
+void draw_point(const int x, const int y, const canvas_t &canvas);
+
 void clear_canvas(const canvas_t &canvas);
 
 #endif // DRAW_H

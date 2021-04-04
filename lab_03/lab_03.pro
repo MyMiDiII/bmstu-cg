@@ -18,6 +18,7 @@ SOURCES += \
     requests.cpp \
     segments.cpp \
     spectrum.cpp \
+    stepchart.cpp \
     timechart.cpp \
     times.cpp
 
@@ -29,11 +30,13 @@ HEADERS += \
     requests.h \
     segments.h \
     spectrum.h \
+    stepchart.h \
     timechart.h \
     times.h
 
 FORMS += \
     mainwindow.ui \
+    stepchart.ui \
     timechart.ui
 
 # Default rules for deployment.

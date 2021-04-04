@@ -4,6 +4,7 @@
 #include "draw.h"
 #include "segments.h"
 #include "errors.h"
+#include "dda.h"
 
 struct spectrum_t
 {

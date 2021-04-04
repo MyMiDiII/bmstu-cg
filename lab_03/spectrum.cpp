@@ -32,12 +32,13 @@ err_t get_points_set(points_arr_t &points, const spectrum_t &spectrum)
 }
 
 
-void draw_spectrum(const canvas_t &canvas, const points_arr_t &points)
+void draw_spectrum(void (*algorithm)(const point_t, const point_t, const canvas_t &),
+                   const canvas_t &canvas, const points_arr_t &points)
 {
     point_t begin = {.x = canvas.width / 2, .y = canvas.height / 2};
 
     for (size_t i = 0; i < points.len; i++)
-        standart_draw_line(begin, move_point(begin, points.arr[i]), canvas);
+        algorithm(begin, move_point(begin, points.arr[i]), canvas);
 }
 
 
@@ -50,15 +51,21 @@ err_t get_spectrum(const spectrum_request_t &spectrum_config)
     if (rc)
         return rc;
 
+    void (*algorithm)(const point_t, const point_t, const canvas_t &) = NULL;
+
     switch (spectrum_config.algorithm)
     {
     case STANDART:
-        draw_spectrum(spectrum_config.canvas, points);
-        destroy_points_arr(points);
+        algorithm = standart_draw_line;
         break;
+    case DDA:
+        algorithm = dda;
     default:
         break;
     }
+
+    draw_spectrum(algorithm, spectrum_config.canvas, points);
+    destroy_points_arr(points);
 
     return OK;
 }

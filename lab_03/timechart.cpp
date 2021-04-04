@@ -13,6 +13,7 @@ TimeChart::TimeChart(QWidget *parent) :
 
     QStringList algorithms;
     algorithms << "Библиотечная функция";
+    algorithms << "ЦДА";
 
     QBarSet *vset = new QBarSet("Time");
     long long int times[ALGORITHM_NUM];

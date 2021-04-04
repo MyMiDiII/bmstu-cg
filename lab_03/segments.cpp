@@ -1,4 +1,5 @@
 #include "segments.h"
+#include "dda.h"
 
 
 void standart_draw_line(const point_t begin, const point_t end,
@@ -22,7 +23,7 @@ err_t get_segment(const segment_request_t &segment_config)
         standart_segment_draw(segment_config.segment, segment_config.canvas);
         break;
     case DDA:
-        dda(segment_config.segment, segment_config.canvas);
+        dda_draw(segment_config.segment, segment_config.canvas);
         break;
     default:
         break;
