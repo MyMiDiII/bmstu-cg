@@ -3,8 +3,9 @@
 
 #include "errors.h"
 #include "dda.h"
+#include "brezenham.h"
 
-#define ALGORITHM_NUM 2
+#define ALGORITHM_NUM 5
 
 err_t get_times(long long int times[ALGORITHM_NUM]);
 

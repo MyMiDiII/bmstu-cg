@@ -7,6 +7,8 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     QGraphicsScene *scene = new QGraphicsScene(this);
     scene->setSceneRect(0, 0, 998, 874);
@@ -18,12 +20,18 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+color_t MainWindow::set_color(int index)
+{
+    color_t color = { .color = (color_code_t) index, .intensity = 255 };
+    return color;
+}
+
 canvas_t MainWindow::init_canvas()
 {
     static canvas_t canvas;
 
     canvas.scene = ui->graphicsView->scene();
-    canvas.color = (color_code_t) ui->comboBox_color->currentIndex();
+    canvas.color = set_color(ui->comboBox_color->currentIndex());
     canvas.width = canvas.scene->width();
     canvas.height = canvas.scene->height();
 
@@ -89,7 +97,7 @@ void MainWindow::on_btn_spectrum_clicked()
 void MainWindow::on_btn_time_clicked()
 {
     TimeChart *timechart = new TimeChart();
-    timechart->show();
+    timechart->showMaximized();
 }
 
 void MainWindow::on_btn_clear_clicked()

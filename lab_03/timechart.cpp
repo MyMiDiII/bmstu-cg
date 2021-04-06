@@ -14,6 +14,9 @@ TimeChart::TimeChart(QWidget *parent) :
     QStringList algorithms;
     algorithms << "Библиотечная функция";
     algorithms << "ЦДА";
+    algorithms << "Брезенхем (real)";
+    algorithms << "Брезенхем (int)";
+    algorithms << "Брезенхем (со сглаживанием))";
 
     QBarSet *vset = new QBarSet("Time");
     long long int times[ALGORITHM_NUM];

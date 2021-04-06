@@ -3,6 +3,13 @@
 
 #include <QGraphicsScene>
 
+enum algorithm_mode_t
+{
+    DRAW_MODE,
+    TIME_MODE,
+    STEP_MODE
+};
+
 enum color_code_t
 {
     BLACK,
@@ -15,10 +22,16 @@ enum color_code_t
     PURPLE
 };
 
+struct color_t
+{
+    color_code_t color;
+    int intensity;
+};
+
 struct canvas_t
 {
     QGraphicsScene *scene;
-    color_code_t color;
+    color_t color;
     int width;
     int height;
 };

@@ -33,6 +33,8 @@ private slots:
     void on_btn_gradation_clicked();
 
 private:
+    color_t set_color(int index);
+
     canvas_t init_canvas();
 
     void read_begin(point_t &point);

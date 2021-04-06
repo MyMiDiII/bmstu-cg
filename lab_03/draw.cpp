@@ -1,34 +1,34 @@
 #include "draw.h"
 
-QPen get_pen(const color_code_t color)
+QPen get_pen(const color_t color)
 {
     static QPen pen;
 
-    switch (color)
+    switch (color.color)
     {
     case WHITE:
-        pen.setColor(Qt::white);
+        pen.setColor(QColor(255, 255, 255, color.intensity));
         break;
     case RED:
-        pen.setColor(Qt::red);
+        pen.setColor(QColor(255, 0, 0, color.intensity));
         break;
     case YELLOW:
-        pen.setColor(Qt::yellow);
+        pen.setColor(QColor(255, 255, 0, color.intensity));
         break;
     case GREEN:
-        pen.setColor(Qt::green);
+        pen.setColor(QColor(0, 255, 0, color.intensity));
         break;
     case BLUE:
-        pen.setColor(Qt::blue);
+        pen.setColor(QColor(0, 0, 255, color.intensity));
         break;
     case CYAN:
-        pen.setColor(Qt::cyan);
+        pen.setColor(QColor(0, 255, 255, color.intensity));
         break;
     case PURPLE:
-        pen.setColor(Qt::darkMagenta);
+        pen.setColor(QColor(255, 0, 255, color.intensity));
         break;
     default:
-        pen.setColor(Qt::black);
+        pen.setColor(QColor(0, 0, 0, color.intensity));
         break;
     }
 

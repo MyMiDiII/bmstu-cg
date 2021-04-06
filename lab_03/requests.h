@@ -27,6 +27,6 @@ struct request_t
     };
 };
 
-err_t handle_request(const request_t &request);
+err_t handle_request(request_t &request);
 
 #endif // REQUESTS_H

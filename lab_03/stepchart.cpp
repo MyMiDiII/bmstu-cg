@@ -27,16 +27,26 @@ StepChart::StepChart(QWidget *parent) :
     axisY->applyNiceNumbers();
     chart->addAxis(axisY, Qt::AlignLeft);
 
+    char names[4][100] =
+        {
+            "ЦДА",
+            "Брезенхем (float)",
+            "Брезенхем (int)",
+            "Брезенхем (сглаживание)"
+        };
 
     for (int code = 1; code < ALGORITHM_NUM; ++code)
     {
         QLineSeries *series = new QLineSeries();
 
-        series->setName("ЦДА");
+        series->setName(names[code - 1]);
 
         find_steps(series, (algorithm_code_t)code);
 
         chart->addSeries(series);
+        QPen pen = series->pen();
+        pen.setWidth(10);
+        series->setPen(pen);
         series->attachAxis(axisX);
         series->attachAxis(axisY);
     }

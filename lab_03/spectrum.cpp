@@ -32,17 +32,21 @@ err_t get_points_set(points_arr_t &points, const spectrum_t &spectrum)
 }
 
 
-void draw_spectrum(void (*algorithm)(const point_t, const point_t, const canvas_t &),
-                   const canvas_t &canvas, const points_arr_t &points)
+void draw_spectrum(int (*algorithm)(const point_t, const point_t, canvas_t &,
+                                     const algorithm_mode_t),
+                   canvas_t &canvas, const points_arr_t &points)
 {
+    if (!algorithm)
+        return ;
+
     point_t begin = {.x = canvas.width / 2, .y = canvas.height / 2};
 
     for (size_t i = 0; i < points.len; i++)
-        algorithm(begin, move_point(begin, points.arr[i]), canvas);
+        algorithm(begin, move_point(begin, points.arr[i]), canvas, DRAW_MODE);
 }
 
 
-err_t get_spectrum(const spectrum_request_t &spectrum_config)
+err_t get_spectrum(spectrum_request_t &spectrum_config)
 {
     points_arr_t points;
     points_arr_init(points);
@@ -51,7 +55,8 @@ err_t get_spectrum(const spectrum_request_t &spectrum_config)
     if (rc)
         return rc;
 
-    void (*algorithm)(const point_t, const point_t, const canvas_t &) = NULL;
+    int (*algorithm)(const point_t, const point_t, canvas_t &,
+                      const algorithm_mode_t mode) = NULL;
 
     switch (spectrum_config.algorithm)
     {
@@ -60,6 +65,16 @@ err_t get_spectrum(const spectrum_request_t &spectrum_config)
         break;
     case DDA:
         algorithm = dda;
+        break;
+    case REAL_BREZENHAM:
+        algorithm = real_brezenham;
+        break;
+    case INT_BREZENHAM:
+        algorithm = int_brezenham;
+        break;
+    case SMOOTHING_BREZENHAM:
+        algorithm = smoothing_brezenham;
+        break;
     default:
         break;
     }

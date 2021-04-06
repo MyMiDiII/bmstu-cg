@@ -4,8 +4,9 @@
 #include "segments.h"
 #include "draw.h"
 
-void dda_draw(const segment_t &segment, const canvas_t &canvas);
+int dda_draw(const segment_t &segment, canvas_t &canvas);
 
-void dda(const point_t begin, const point_t end, const canvas_t &canvas);
+int dda(const point_t begin, const point_t end, canvas_t &canvas,
+        const algorithm_mode_t mode = DRAW_MODE);
 
 #endif // DDA_H

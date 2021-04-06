@@ -97,6 +97,21 @@ p, li { white-space: pre-wrap; }
              <string>ЦДА</string>
             </property>
            </item>
+           <item>
+            <property name="text">
+             <string>Брезенхем (float)</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Брезенхем (int)</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Брезенхем (со сглаживанием)</string>
+            </property>
+           </item>
           </widget>
          </item>
         </layout>
