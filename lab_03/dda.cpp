@@ -1,16 +1,17 @@
-#include <cmath>
+#include <math.h>
 
 #include "dda.h"
 
 using namespace std;
 
-int dda(const point_t begin, const point_t end, canvas_t &canvas,
-         const algorithm_mode_t mode)
-{
-    double dx = end.x - begin.x;
-    double dy = end.y - begin.y;
 
-    double len = max(abs(dx), abs(dy));
+int dda(const point_t begin, const point_t end, canvas_t &canvas,
+        const algorithm_mode_t mode)
+{
+    int dx = end.x - begin.x;
+    int dy = end.y - begin.y;
+
+    int len = max(abs(dx), abs(dy));
 
     if (!len)
     {
@@ -19,8 +20,8 @@ int dda(const point_t begin, const point_t end, canvas_t &canvas,
         return 0;
     }
 
-    dx = dx / len;
-    dy = dy / len;
+    double xinc = (double) dx / len;
+    double yinc = (double) dy / len;
 
     double x = begin.x;
     double y = begin.y;
@@ -36,12 +37,15 @@ int dda(const point_t begin, const point_t end, canvas_t &canvas,
         if (DRAW_MODE == mode)
             draw_point(round_x, round_y, canvas);
 
-        steps += (round_x != x_prev && round_y != y_prev) ? 1 : 0;
-        x_prev = round_x;
-        y_prev = round_y;
+        x += xinc;
+        y += yinc;
 
-        x += dx;
-        y += dy;
+        if (STEP_MODE == mode)
+        {
+            steps += (round_x != x_prev && round_y != y_prev) ? 1 : 0;
+            x_prev = round_x;
+            y_prev = round_y;
+        }
     }
 
     return steps;

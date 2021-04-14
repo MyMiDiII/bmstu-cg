@@ -13,11 +13,12 @@ StepChart::StepChart(QWidget *parent) :
     ui->setupUi(this);
 
     QChart *chart = new QChart();
-    chart->setTitle(QString("Исследование ступенчатости"));
+    chart->setTitle(QString("Исследование ступенчатости"
+                            "<pre>       Длина: 500"));
     chart->setAnimationOptions(QtCharts::QChart::SeriesAnimations);
 
     QValueAxis *axisX = new QValueAxis();
-    axisX->setTitleText("Угол");
+    axisX->setTitleText("Угол (°)");
     axisX->applyNiceNumbers();
     chart->addAxis(axisX, Qt::AlignBottom);
 
@@ -27,12 +28,13 @@ StepChart::StepChart(QWidget *parent) :
     axisY->applyNiceNumbers();
     chart->addAxis(axisY, Qt::AlignLeft);
 
-    char names[4][100] =
+    char names[5][100] =
         {
             "ЦДА",
             "Брезенхем (float)",
             "Брезенхем (int)",
-            "Брезенхем (сглаживание)"
+            "Брезенхем (устр. ступенчатости)",
+            "Ву"
         };
 
     for (int code = 1; code < ALGORITHM_NUM; ++code)

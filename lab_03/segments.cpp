@@ -1,7 +1,7 @@
 #include "segments.h"
 #include "dda.h"
 #include "brezenham.h"
-
+#include "wu.h"
 
 int standart_draw_line(const point_t begin, const point_t end,
                        canvas_t &canvas,
@@ -36,6 +36,9 @@ err_t get_segment(segment_request_t &segment_config)
         break;
     case SMOOTHING_BREZENHAM:
         smoothing_brezenham_draw(segment_config.segment, segment_config.canvas);
+        break;
+    case WU:
+        wu_draw(segment_config.segment, segment_config.canvas);
         break;
     default:
         break;

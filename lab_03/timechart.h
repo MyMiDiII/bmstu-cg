@@ -2,6 +2,7 @@
 #define TIMECHART_H
 
 #include <QDialog>
+#include <QtCharts/QtCharts>
 
 namespace Ui {
 class TimeChart;
@@ -16,6 +17,7 @@ public:
     ~TimeChart();
 
 private:
+    void setHaxisGap(QBarSet *vset);
     void create_chart();
     Ui::TimeChart *ui;
 };

@@ -22,7 +22,8 @@ SOURCES += \
     stepchart.cpp \
     steps.cpp \
     timechart.cpp \
-    times.cpp
+    times.cpp \
+    wu.cpp
 
 HEADERS += \
     brezenham.h \
@@ -36,7 +37,8 @@ HEADERS += \
     stepchart.h \
     steps.h \
     timechart.h \
-    times.h
+    times.h \
+    wu.h
 
 FORMS += \
     mainwindow.ui \

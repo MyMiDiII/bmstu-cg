@@ -9,7 +9,7 @@ int (*count_steps_funcs[ALGORITHM_NUM - 1])(
         const point_t begin, const point_t end,
         canvas_t &canvas,
         const algorithm_mode_t mode) = { dda,
-        real_brezenham, int_brezenham, smoothing_brezenham};
+        real_brezenham, int_brezenham, smoothing_brezenham, wu};
 
 void find_steps(QLineSeries *series, const algorithm_code_t code)
 {

@@ -6,6 +6,7 @@
 #include "errors.h"
 #include "dda.h"
 #include "brezenham.h"
+#include "wu.h"
 
 struct spectrum_t
 {
@@ -21,5 +22,7 @@ struct spectrum_request_t
 };
 
 err_t get_spectrum(spectrum_request_t &spectrum_config);
+
+err_t get_points_set(points_arr_t &points, const spectrum_t &spectrum);
 
 #endif // SPECTRUM_H

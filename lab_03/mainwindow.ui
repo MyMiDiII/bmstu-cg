@@ -109,7 +109,12 @@ p, li { white-space: pre-wrap; }
            </item>
            <item>
             <property name="text">
-             <string>Брезенхем (со сглаживанием)</string>
+             <string>Брезенхем (с устраненем ступенчатости)</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Ву</string>
             </property>
            </item>
           </widget>
@@ -236,10 +241,10 @@ p, li { white-space: pre-wrap; }
                <item>
                 <widget class="QSpinBox" name="spinBox_xb">
                  <property name="minimum">
-                  <number>-10000</number>
+                  <number>0</number>
                  </property>
                  <property name="maximum">
-                  <number>10000</number>
+                  <number>867</number>
                  </property>
                 </widget>
                </item>
@@ -257,10 +262,10 @@ p, li { white-space: pre-wrap; }
                <item>
                 <widget class="QSpinBox" name="spinBox_yb">
                  <property name="minimum">
-                  <number>-10000</number>
+                  <number>0</number>
                  </property>
                  <property name="maximum">
-                  <number>10000</number>
+                  <number>876</number>
                  </property>
                 </widget>
                </item>
@@ -289,10 +294,10 @@ p, li { white-space: pre-wrap; }
                <item>
                 <widget class="QSpinBox" name="spinBox_xe">
                  <property name="minimum">
-                  <number>-10000</number>
+                  <number>0</number>
                  </property>
                  <property name="maximum">
-                  <number>10000</number>
+                  <number>867</number>
                  </property>
                 </widget>
                </item>
@@ -310,10 +315,10 @@ p, li { white-space: pre-wrap; }
                <item>
                 <widget class="QSpinBox" name="spinBox_ye">
                  <property name="minimum">
-                  <number>-10000</number>
+                  <number>0</number>
                  </property>
                  <property name="maximum">
-                  <number>10000</number>
+                  <number>876</number>
                  </property>
                 </widget>
                </item>
@@ -353,10 +358,16 @@ p, li { white-space: pre-wrap; }
              <item>
               <widget class="QSpinBox" name="spinBox_len">
                <property name="minimum">
-                <number>0</number>
+                <number>1</number>
                </property>
                <property name="maximum">
                 <number>10000</number>
+               </property>
+               <property name="value">
+                <number>300</number>
+               </property>
+               <property name="displayIntegerBase">
+                <number>10</number>
                </property>
               </widget>
              </item>
@@ -378,6 +389,9 @@ p, li { white-space: pre-wrap; }
                </property>
                <property name="maximum">
                 <number>10000</number>
+               </property>
+               <property name="value">
+                <number>36</number>
                </property>
               </widget>
              </item>
@@ -405,14 +419,6 @@ p, li { white-space: pre-wrap; }
           </property>
          </widget>
         </item>
-        <item row="1" column="0">
-         <widget class="QPushButton" name="btn_reset">
-          <property name="text">
-           <string>Настройки по
-умолчанию</string>
-          </property>
-         </widget>
-        </item>
         <item row="0" column="1">
          <widget class="QPushButton" name="btn_gradation">
           <property name="text">
@@ -421,7 +427,7 @@ p, li { white-space: pre-wrap; }
           </property>
          </widget>
         </item>
-        <item row="1" column="1">
+        <item row="1" column="0" colspan="2">
          <widget class="QPushButton" name="btn_clear">
           <property name="text">
            <string>Очистить

@@ -22,7 +22,8 @@ enum algorithm_code_t
     DDA,
     REAL_BREZENHAM,
     INT_BREZENHAM,
-    SMOOTHING_BREZENHAM
+    SMOOTHING_BREZENHAM,
+    WU
 };
 
 struct segment_request_t

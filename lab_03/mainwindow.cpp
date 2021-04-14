@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+algorithm_code_t prev = STANDART; algorithm_code_t cur = STANDART;
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -11,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     QGraphicsScene *scene = new QGraphicsScene(this);
-    scene->setSceneRect(0, 0, 998, 874);
+    scene->setSceneRect(-1, -1, 867, 876);
     ui->graphicsView->setScene(scene);
 }
 
@@ -26,14 +28,29 @@ color_t MainWindow::set_color(int index)
     return color;
 }
 
+void MainWindow::check_canvas(canvas_t &canvas)
+{
+    request_t request;
+    request.code = SPECTRUM;
+    request.spectrum_config.algorithm = prev;
+    request.spectrum_config.canvas = canvas;
+    request.spectrum_config.canvas.color.color = WHITE;
+    read_spectrum(request.spectrum_config.spectrum);
+
+    if (!(prev == STANDART || cur == STANDART
+        || prev == WU || cur == WU || prev == cur))
+        handle_request(request);
+}
+
 canvas_t MainWindow::init_canvas()
 {
-    static canvas_t canvas;
+    canvas_t canvas;
 
     canvas.scene = ui->graphicsView->scene();
     canvas.color = set_color(ui->comboBox_color->currentIndex());
     canvas.width = canvas.scene->width();
     canvas.height = canvas.scene->height();
+    check_canvas(canvas);
 
     return canvas;
 }
@@ -81,6 +98,7 @@ void MainWindow::read_spectrum(spectrum_t &spectrum)
 void MainWindow::create_spectrum_config(spectrum_request_t &config)
 {
     config.algorithm = (algorithm_code_t) ui->comboBox_algorithm->currentIndex();
+    cur = config.algorithm;
     config.canvas = init_canvas();
     read_spectrum(config.spectrum);
 }
@@ -92,6 +110,7 @@ void MainWindow::on_btn_spectrum_clicked()
     create_spectrum_config(request.spectrum_config);
 
     handle_request(request);
+    prev = request.segment_config.algorithm;
 }
 
 void MainWindow::on_btn_time_clicked()
@@ -135,7 +154,7 @@ void MainWindow::on_comboBox_color_currentIndexChanged(int index)
         ui->lbl_color->setStyleSheet("background: blue");
         break;
     case 7:
-        ui->lbl_color->setStyleSheet("background: darkMagenta");
+        ui->lbl_color->setStyleSheet("background: Magenta");
         break;
     default:
         break;

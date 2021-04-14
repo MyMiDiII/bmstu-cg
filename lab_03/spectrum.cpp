@@ -75,6 +75,9 @@ err_t get_spectrum(spectrum_request_t &spectrum_config)
     case SMOOTHING_BREZENHAM:
         algorithm = smoothing_brezenham;
         break;
+    case WU:
+        algorithm = wu;
+        break;
     default:
         break;
     }
