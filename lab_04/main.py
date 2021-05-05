@@ -1,11 +1,14 @@
 import sys
 from PyQt5 import QtWidgets, uic
-from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem, QHeaderView
+from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
+from PyQt5.QtWidgets import QHeaderView, QGraphicsScene
+from PyQt5.QtGui import QPen, QColor
 
 from MainWindow import Ui_MainWindow
 
 import circle
 import ellipce
+import point
 
 
 def callError(title, text):
@@ -38,6 +41,25 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.cirSpBtn.clicked.connect(self.drawCircleSpectrum)
         self.elSpBtn.clicked.connect(self.drawEllipceSpectrum)
 
+        self.scene = QGraphicsScene()
+        self.scene.setSceneRect(0, 0, 979, 809)
+        self.graphicsView.setScene(self.scene)
+
+        self.pen = QPen()
+        self.colorCB.currentIndexChanged.connect(self.setColor)
+
+        self.clearBtn.clicked.connect(self.scene.clear)
+
+
+    def setColor(self):
+        colors = [
+            "black",
+            "white",
+            "blue",
+            "red"
+        ]
+        self.pen.setColor(QColor(colors[self.colorCB.currentIndex()]))
+
 
     def switch(self):
         self.figureSW.setCurrentIndex(
@@ -47,32 +69,41 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.figureCB.currentIndex()
                 )
 
+
     def cirConf(self):
-        print("here")
         spinBoxes = [
             self.cirSpRbSB,
             self.cirSpReSB,
             self.cirSpStepSB,
             self.cirSpNumSB
             ]
-        print("here")
 
         for i, SB in enumerate(spinBoxes):
-            print(i == self.cirSpConfCB.currentIndex())
             SB.setDisabled(i == self.cirSpConfCB.currentIndex())
+
 
     def drawCircle(self):
         Xc = self.cirXcSB.value()
         Yc = self.cirYcSB.value()
         R = self.cirRSB.value()
+
+        """
+        for n in range(10):
+            for x in range(0, 979):
+                for y in range(0, 809):
+                    point.drawPoint(x, y, self.scene)
+        """
+
         funs = [
             circle.canon,
             circle.parametric,
             circle.brezenham,
             circle.midpoint,
-            circle.libfunc]
+            circle.libfunc
+            ]
 
-        funs[self.algoCB.currentIndex()](Xc, Yc, R)
+        funs[self.algoCB.currentIndex()](Xc, Yc, R, self.scene, self.pen)
+
 
     def drawEllipce(self):
         Xc = self.elXcSB.value()
@@ -84,9 +115,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             ellipce.parametric,
             ellipce.brezenham,
             ellipce.midpoint,
-            ellipce.libfunc]
+            ellipce.libfunc
+            ]
 
-        funs[self.algoCB.currentIndex()](Xc, Yc, Ra, Rb)
+        funs[self.algoCB.currentIndex()](Xc, Yc, Ra, Rb, self.scene)
+
 
     def drawCircleSpectrum(self):
         Xc = self.cirXcSB.value()
@@ -97,9 +130,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             circle.parametric,
             circle.brezenham,
             circle.midpoint,
-            circle.libfunc]
+            circle.libfunc
+            ]
 
         funs[self.algoCB.currentIndex()](Xc, Yc, R)
+
 
     def drawEllipceSpectrum(self):
         Xc = self.elXcSB.value()
