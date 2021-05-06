@@ -9,12 +9,12 @@ ySigns = [1, 1, -1, -1]
 
 def canon(Xc, Yc, Ra, Rb, scene, pen):
     """
-        Отрисовка окружности по
+        Отрисовка эллипса по
         каноническому уравнению
     """
     doubleA = Ra * Ra
     doubleB = Rb * Rb
-    xRange = doubleA / sqrt(doubleA + doubleB)
+    xRange = round(doubleA / sqrt(doubleA + doubleB))
     sqrtCoef = Rb / Ra
     x = 0
 
@@ -32,7 +32,7 @@ def canon(Xc, Yc, Ra, Rb, scene, pen):
         x += 1
 
     y = 0
-    yRange = doubleB / sqrt(doubleA + doubleB)
+    yRange = round(doubleB / sqrt(doubleA + doubleB))
     sqrtCoef = Ra / Rb
 
     while y <= yRange:
@@ -51,11 +51,29 @@ def canon(Xc, Yc, Ra, Rb, scene, pen):
     print("Ммм, канон!", Xc, Yc, Ra, Rb)
 
 
-def parametric(Xc, Yc, Ra, Rb, scene):
+def parametric(Xc, Yc, Ra, Rb, scene, pen):
     """
-        Отрисовка окружности по
+        Отрисовка эллипса по
         параметрическому уравнению
     """
+    tRange = pi / 2
+    tStep = 1 / max(Ra, Rb)
+    t = 0
+
+    while t < tRange + tStep:
+        x = int(round(Ra * cos(t)))
+        y = int(round(Rb * sin(t)))
+
+        for i in range(4):
+            point.drawPoint(
+                Xc + xSigns[i] * x,
+                Yc + ySigns[i] * y,
+                scene,
+                pen
+            )
+
+        t += tStep
+
     print("Все связано", Xc, Yc, Ra, Rb)
 
 
