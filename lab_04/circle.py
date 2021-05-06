@@ -104,6 +104,7 @@ def brezenham(xc, yc, R, scene, pen):
                 pen
             )
 
+        # TODO выделить функции
         if capDelta < 0:
             delta = 2 * capDelta + 2 * y - 1
 
@@ -139,6 +140,34 @@ def midpoint(xc, yc, R, scene, pen):
         Отрисовка окружности
         алгоритмом средней точки
     """
+    x = 0
+    y = R
+    trialFunc = 1.25 - R
+
+    while x <= y:
+        for i in range(4):
+            point.drawPoint(
+                xc + xSigns[i] * x,
+                yc + ySigns[i] * y,
+                scene,
+                pen
+            )
+            # TODO 
+            point.drawPoint(
+                xc + ySigns[i] * y,
+                yc + xSigns[i] * x,
+                scene,
+                pen
+            )
+        
+        x += 1
+
+        if trialFunc > 0:
+            y -= 1
+            trialFunc -= 2 * y
+
+        trialFunc = trialFunc + 2 * x + 1
+
     print("Золотая середина", xc, yc, R, scene)
 
 

@@ -107,6 +107,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         Yc = self.elYcSB.value()
         Ra = self.elRaSB.value()
         Rb = self.elRbSB.value()
+
         funs = [
             ellipce.canon,
             ellipce.parametric,
@@ -115,13 +116,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             ellipce.libfunc
             ]
 
-        funs[self.algoCB.currentIndex()](Xc, Yc, Ra, Rb, self.scene)
+        funs[self.algoCB.currentIndex()](Xc, Yc, Ra, Rb, self.scene, self.pen)
 
 
     def drawCircleSpectrum(self):
         Xc = self.cirXcSB.value()
         Yc = self.cirYcSB.value()
         R = self.cirRSB.value()
+
         funs = [
             circle.canon,
             circle.parametric,
@@ -138,6 +140,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         Yc = self.elYcSB.value()
         Ra = self.elRaSB.value()
         Rb = self.elRbSB.value()
+
         funs = [
             ellipce.canon,
             ellipce.parametric,
