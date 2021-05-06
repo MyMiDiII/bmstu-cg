@@ -102,7 +102,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             circle.libfunc
             ]
 
-        funs[self.algoCB.currentIndex()](Xc, Yc, R, self.scene, self.pen)
+        xy = funs[self.algoCB.currentIndex()](Xc, Yc, R, self.scene, self.pen)
+
+        print(len(xy))
+        for xandy in xy:
+            print(xandy)
 
 
     def drawEllipce(self):

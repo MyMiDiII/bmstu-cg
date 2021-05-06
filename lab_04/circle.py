@@ -1,9 +1,45 @@
+from math import sqrt, pi, cos, sin
+
+import point
+
+SQRT2 = sqrt(2)
+xSigns = [1, -1, -1, 1]
+ySigns = [1, 1, -1, -1]
+
 def canon(xc, yc, R, scene, pen):
     """
         Отрисовка окружности по
         каноническому уравнению
     """
+    xRange = int(round(R / SQRT2))
+    rSecPow = R * R
+    x = 0
+    xyList = []
+
+    while x <= xRange:
+        y = int(round(sqrt(rSecPow - x * x)))
+        xyList.append([x, y])
+
+        for i in range(4):
+            point.drawPoint(
+                xc + xSigns[i] * x,
+                yc + ySigns[i] * y,
+                scene,
+                pen
+            )
+            # TODO 
+            point.drawPoint(
+                xc + ySigns[i] * y,
+                yc + xSigns[i] * x,
+                scene,
+                pen
+            )
+
+        x += 1
+
     print("Ммм, канон!", xc, yc, R, scene)
+
+    return xyList
 
 
 def parametric(xc, yc, R, scene, pen):
@@ -11,7 +47,36 @@ def parametric(xc, yc, R, scene, pen):
         Отрисовка окружности по
         параметрическому уравнению
     """
+    tRange = pi / 4
+    tStep = 1 / R
+    t = 0
+    xyList = []
+
+    while t < tRange + tStep:
+        x = int(round(R * sin(t)))
+        y = int(round(R * cos(t)))
+        xyList.append([x, y])
+
+        for i in range(4):
+            point.drawPoint(
+                xc + xSigns[i] * x,
+                yc + ySigns[i] * y,
+                scene,
+                pen
+            )
+            # TODO 
+            point.drawPoint(
+                xc + ySigns[i] * y,
+                yc + xSigns[i] * x,
+                scene,
+                pen
+            )
+
+        t += tStep
+
     print("Все связано", xc, yc, R, scene)
+
+    return xyList
 
 
 def brezenham(xc, yc, R, scene, pen):
