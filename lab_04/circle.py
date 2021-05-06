@@ -84,6 +84,53 @@ def brezenham(xc, yc, R, scene, pen):
         Отрисовка окружности
         алгоритмом Брезенхема
     """
+    x = 0
+    y = R
+    capDelta = 2 * (1 - R)
+
+    while y >= x:
+        for i in range(4):
+            point.drawPoint(
+                xc + xSigns[i] * x,
+                yc + ySigns[i] * y,
+                scene,
+                pen
+            )
+            # TODO 
+            point.drawPoint(
+                xc + ySigns[i] * y,
+                yc + xSigns[i] * x,
+                scene,
+                pen
+            )
+
+        if capDelta < 0:
+            delta = 2 * capDelta + 2 * y - 1
+
+            if delta <= 0:
+                x += 1
+                capDelta = capDelta + 2 * x + 1
+            else:
+                x += 1
+                y -= 1
+                capDelta = capDelta + 2 * x - 2 * y + 2
+
+        elif capDelta > 0:
+            delta = 2 * capDelta - 2 * x - 1
+
+            if delta <= 0:
+                x += 1
+                y -= 1
+                capDelta = capDelta + 2 * x - 2 * y + 2
+            else:
+                y -= 1
+                capDelta = capDelta - 2 * y + 1
+
+        else:
+            x += 1
+            y -= 1
+            capDelta = capDelta + 2 * x - 2 * y + 2
+
     print("От него не спрятаться", xc, yc, R, scene)
 
 

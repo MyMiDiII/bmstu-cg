@@ -87,13 +87,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         Yc = self.cirYcSB.value()
         R = self.cirRSB.value()
 
-        """
-        for n in range(10):
-            for x in range(0, 979):
-                for y in range(0, 809):
-                    point.drawPoint(x, y, self.scene)
-        """
-
         funs = [
             circle.canon,
             circle.parametric,
