@@ -50,12 +50,10 @@ def parametric(xc, yc, R, scene, pen):
     tRange = pi / 4
     tStep = 1 / R
     t = 0
-    xyList = []
 
     while t < tRange + tStep:
-        x = int(round(R * sin(t)))
-        y = int(round(R * cos(t)))
-        xyList.append([x, y])
+        x = int(round(R * cos(t)))
+        y = int(round(R * sin(t)))
 
         for i in range(4):
             point.drawPoint(
@@ -75,8 +73,6 @@ def parametric(xc, yc, R, scene, pen):
         t += tStep
 
     print("Все связано", xc, yc, R, scene)
-
-    return xyList
 
 
 def brezenham(xc, yc, R, scene, pen):
