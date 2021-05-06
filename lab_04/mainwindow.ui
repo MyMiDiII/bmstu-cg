@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1433</width>
+    <width>1451</width>
     <height>836</height>
    </rect>
   </property>
@@ -19,7 +19,7 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>411</width>
+      <width>440</width>
       <height>813</height>
      </rect>
     </property>
@@ -127,7 +127,7 @@
         <item row="0" column="0">
          <widget class="QStackedWidget" name="figureSW">
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="cirPage">
            <layout class="QGridLayout" name="gridLayout">
@@ -139,13 +139,25 @@
              </widget>
             </item>
             <item row="2" column="1">
-             <widget class="QSpinBox" name="cirRSB"/>
+             <widget class="QSpinBox" name="cirRSB">
+              <property name="maximum">
+               <number>1000</number>
+              </property>
+             </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QSpinBox" name="cirXcSB"/>
+             <widget class="QSpinBox" name="cirXcSB">
+              <property name="maximum">
+               <number>981</number>
+              </property>
+             </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QSpinBox" name="cirYcSB"/>
+             <widget class="QSpinBox" name="cirYcSB">
+              <property name="maximum">
+               <number>811</number>
+              </property>
+             </widget>
             </item>
             <item row="0" column="0">
              <widget class="QLabel" name="cirXcLbl">
@@ -173,13 +185,25 @@
           <widget class="QWidget" name="elPage">
            <layout class="QGridLayout" name="gridLayout_2">
             <item row="1" column="1">
-             <widget class="QSpinBox" name="elRaSB"/>
+             <widget class="QSpinBox" name="elRaSB">
+              <property name="maximum">
+               <number>1000</number>
+              </property>
+             </widget>
             </item>
             <item row="0" column="3">
-             <widget class="QSpinBox" name="elYcSB"/>
+             <widget class="QSpinBox" name="elYcSB">
+              <property name="maximum">
+               <number>811</number>
+              </property>
+             </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QSpinBox" name="elXcSB"/>
+             <widget class="QSpinBox" name="elXcSB">
+              <property name="maximum">
+               <number>981</number>
+              </property>
+             </widget>
             </item>
             <item row="0" column="0">
              <widget class="QLabel" name="elXcLbl">
@@ -210,7 +234,11 @@
              </widget>
             </item>
             <item row="1" column="3">
-             <widget class="QSpinBox" name="elRbSB"/>
+             <widget class="QSpinBox" name="elRbSB">
+              <property name="maximum">
+               <number>1000</number>
+              </property>
+             </widget>
             </item>
             <item row="2" column="0" colspan="4">
              <widget class="QPushButton" name="elBtn">
@@ -235,7 +263,7 @@
         <item>
          <widget class="QStackedWidget" name="spectrumSW">
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="cirSpPage">
            <layout class="QGridLayout" name="gridLayout_4">
@@ -261,7 +289,11 @@
              </widget>
             </item>
             <item row="1" column="4">
-             <widget class="QSpinBox" name="cirSpStepSB"/>
+             <widget class="QSpinBox" name="cirSpStepSB">
+              <property name="maximum">
+               <number>10000</number>
+              </property>
+             </widget>
             </item>
             <item row="2" column="0">
              <widget class="QLabel" name="cirSpReLbl">
@@ -271,13 +303,25 @@
              </widget>
             </item>
             <item row="2" column="1">
-             <widget class="QSpinBox" name="cirSpReSB"/>
+             <widget class="QSpinBox" name="cirSpReSB">
+              <property name="maximum">
+               <number>10000</number>
+              </property>
+             </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QSpinBox" name="cirSpRbSB"/>
+             <widget class="QSpinBox" name="cirSpRbSB">
+              <property name="maximum">
+               <number>10000</number>
+              </property>
+             </widget>
             </item>
             <item row="2" column="4">
-             <widget class="QSpinBox" name="cirSpNumSB"/>
+             <widget class="QSpinBox" name="cirSpNumSB">
+              <property name="maximum">
+               <number>10000</number>
+              </property>
+             </widget>
             </item>
             <item row="3" column="0" colspan="5">
              <widget class="QPushButton" name="cirSpBtn">
@@ -343,10 +387,18 @@
              </widget>
             </item>
             <item row="1" column="4">
-             <widget class="QSpinBox" name="elSpStepSB"/>
+             <widget class="QSpinBox" name="elSpStepSB">
+              <property name="maximum">
+               <number>10000</number>
+              </property>
+             </widget>
             </item>
             <item row="2" column="1">
-             <widget class="QSpinBox" name="elSpRbSB"/>
+             <widget class="QSpinBox" name="elSpRbSB">
+              <property name="maximum">
+               <number>10000</number>
+              </property>
+             </widget>
             </item>
             <item row="1" column="2">
              <widget class="QLabel" name="elSpStepLbl">
@@ -356,10 +408,18 @@
              </widget>
             </item>
             <item row="2" column="4">
-             <widget class="QSpinBox" name="elSpNumSB"/>
+             <widget class="QSpinBox" name="elSpNumSB">
+              <property name="maximum">
+               <number>10000</number>
+              </property>
+             </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QSpinBox" name="elSpRaSB"/>
+             <widget class="QSpinBox" name="elSpRaSB">
+              <property name="maximum">
+               <number>10000</number>
+              </property>
+             </widget>
             </item>
             <item row="3" column="0" colspan="5">
              <widget class="QPushButton" name="elSpBtn">
@@ -429,7 +489,7 @@
    <widget class="QGraphicsView" name="graphicsView">
     <property name="geometry">
      <rect>
-      <x>440</x>
+      <x>460</x>
       <y>10</y>
       <width>981</width>
       <height>811</height>
