@@ -2,12 +2,8 @@ from math import sqrt, pi, cos, sin
 
 import draw
 
-SQRT2 = sqrt(2)
-xSigns = [1, -1, -1, 1]
-ySigns = [1, 1, -1, -1]
 
-
-def canon(Xc, Yc, Ra, Rb, scene, pen):
+def canon(Xc, Yc, Ra, Rb, scene, pen, drawFlag=True):
     """
         Отрисовка эллипса по
         каноническому уравнению
@@ -24,7 +20,8 @@ def canon(Xc, Yc, Ra, Rb, scene, pen):
     while x <= xRange:
         y = int(round(sqrtCoef * sqrt(sqrA - x * x)))
 
-        draw.drawEllipsePoints(x, y, Xc, Yc, scene, pen)
+        if drawFlag:
+            draw.drawEllipsePoints(x, y, Xc, Yc, scene, pen)
 
         x += 1
 
@@ -41,7 +38,7 @@ def canon(Xc, Yc, Ra, Rb, scene, pen):
         y += 1
 
 
-def parametric(Xc, Yc, Ra, Rb, scene, pen):
+def parametric(Xc, Yc, Ra, Rb, scene, pen, drawFlag=True):
     """
         Отрисовка эллипса по
         параметрическому уравнению
@@ -54,12 +51,13 @@ def parametric(Xc, Yc, Ra, Rb, scene, pen):
         x = int(round(Ra * cos(t)))
         y = int(round(Rb * sin(t)))
 
-        draw.drawEllipsePoints(x, y, Xc, Yc, scene, pen)
+        if drawFlag:
+            draw.drawEllipsePoints(x, y, Xc, Yc, scene, pen)
 
         t += tStep
 
 
-def brezenham(Xc, Yc, Ra, Rb, scene, pen):
+def brezenham(Xc, Yc, Ra, Rb, scene, pen, drawFlag=True):
     """
         Отрисовка эллипса
         алгоритмом Брезенхема
@@ -72,9 +70,9 @@ def brezenham(Xc, Yc, Ra, Rb, scene, pen):
     capDelta = sqrB - sqrA * (2 * Rb - 1)
 
     while y >= 0:
-        draw.drawEllipsePoints(x, y, Xc, Yc, scene, pen)
+        if drawFlag:
+            draw.drawEllipsePoints(x, y, Xc, Yc, scene, pen)
 
-        # TODO выделить функции
         if capDelta < 0:
             delta = 2 * capDelta + sqrA * (2 * y - 1)
 
@@ -103,12 +101,12 @@ def brezenham(Xc, Yc, Ra, Rb, scene, pen):
             capDelta = capDelta + 2 * x * sqrB - 2 * y * sqrA + sqrA + sqrB
 
 
-    if not Rb:
+    if not Rb and drawFlag:
         for x in range(Xc - Ra, Xc + Ra + 1):
             draw.drawPoint(x, Yc, scene, pen)
 
 
-def midpoint(Xc, Yc, Ra, Rb, scene, pen):
+def midpoint(Xc, Yc, Ra, Rb, scene, pen, drawFlag=True):
     """
         Отрисовка эллипса
         алгоритмом средней точки
@@ -123,7 +121,8 @@ def midpoint(Xc, Yc, Ra, Rb, scene, pen):
               if sqrA or sqrB else 0)
 
     while x <= xRange:
-        draw.drawEllipsePoints(x, y, Xc, Yc, scene, pen)
+        if drawFlag:
+            draw.drawEllipsePoints(x, y, Xc, Yc, scene, pen)
 
         x += 1
 
@@ -140,7 +139,8 @@ def midpoint(Xc, Yc, Ra, Rb, scene, pen):
               if sqrA or sqrB else 0)
 
     while y <= yRange:
-        draw.drawEllipsePoints(x, y, Xc, Yc, scene, pen)
+        if drawFlag:
+            draw.drawEllipsePoints(x, y, Xc, Yc, scene, pen)
 
         y += 1
 
