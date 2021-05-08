@@ -439,22 +439,12 @@
              <widget class="QComboBox" name="elSpConfCB">
               <item>
                <property name="text">
-                <string>Без Ra нач</string>
+                <string>Шаг по Ra</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Без Rb нач</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Без шага</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
-                <string>Без количества</string>
+                <string>Шаг по Rb</string>
                </property>
               </item>
              </widget>

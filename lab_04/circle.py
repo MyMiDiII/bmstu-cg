@@ -14,11 +14,9 @@ def canon(xc, yc, R, scene, pen):
     xRange = int(round(R / SQRT2))
     rSecPow = R * R
     x = 0
-    xyList = []
 
     while x <= xRange:
         y = int(round(sqrt(rSecPow - x * x)))
-        xyList.append([x, y])
 
         for i in range(4):
             point.drawPoint(
@@ -37,9 +35,7 @@ def canon(xc, yc, R, scene, pen):
 
         x += 1
 
-    print("Ммм, канон!", xc, yc, R, scene)
-
-    return xyList
+    #print("Ммм, канон!", xc, yc, R, scene)
 
 
 def parametric(xc, yc, R, scene, pen):
@@ -62,7 +58,7 @@ def parametric(xc, yc, R, scene, pen):
                 scene,
                 pen
             )
-            # TODO 
+
             point.drawPoint(
                 xc + ySigns[i] * y,
                 yc + xSigns[i] * x,
@@ -71,8 +67,6 @@ def parametric(xc, yc, R, scene, pen):
             )
 
         t += tStep
-
-    print("Все связано", xc, yc, R, scene)
 
 
 def brezenham(xc, yc, R, scene, pen):
@@ -92,7 +86,7 @@ def brezenham(xc, yc, R, scene, pen):
                 scene,
                 pen
             )
-            # TODO 
+
             point.drawPoint(
                 xc + ySigns[i] * y,
                 yc + xSigns[i] * x,
@@ -128,8 +122,6 @@ def brezenham(xc, yc, R, scene, pen):
             y -= 1
             capDelta = capDelta + 2 * x - 2 * y + 2
 
-    print("От него не спрятаться", xc, yc, R, scene)
-
 
 def midpoint(xc, yc, R, scene, pen):
     """
@@ -148,7 +140,7 @@ def midpoint(xc, yc, R, scene, pen):
                 scene,
                 pen
             )
-            # TODO 
+
             point.drawPoint(
                 xc + ySigns[i] * y,
                 yc + xSigns[i] * x,
@@ -164,8 +156,6 @@ def midpoint(xc, yc, R, scene, pen):
 
         trialFunc = trialFunc + 2 * x + 1
 
-    print("Золотая середина", xc, yc, R, scene)
-
 
 def libfunc(xc, yc, R, scene, pen):
     """
@@ -173,4 +163,3 @@ def libfunc(xc, yc, R, scene, pen):
         библиотечной функции
     """
     scene.addEllipse(xc - R, yc - R, 2 * R, 2 * R, pen)
-    print("Все ради этого", xc, yc, R, scene)
