@@ -27,12 +27,8 @@ def parametric(xc, yc, R, scene, pen, drawFlag=True):
         Отрисовка окружности по
         параметрическому уравнению
     """
-    if not R:
-        draw.drawPoint(xc, yc, scene, pen)
-        return
-
     tRange = pi / 4
-    tStep = 1 / R
+    tStep = 1 / R if R else 1
     t = 0
 
     while t < tRange + tStep:
