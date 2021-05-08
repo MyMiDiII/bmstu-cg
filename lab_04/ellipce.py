@@ -40,8 +40,6 @@ def canon(Xc, Yc, Ra, Rb, scene, pen):
 
         y += 1
 
-    print("Ммм, канон!", Xc, Yc, Ra, Rb)
-
 
 def parametric(Xc, Yc, Ra, Rb, scene, pen):
     """
@@ -59,8 +57,6 @@ def parametric(Xc, Yc, Ra, Rb, scene, pen):
         draw.drawEllipsePoints(x, y, Xc, Yc, scene, pen)
 
         t += tStep
-
-    print("Все связано", Xc, Yc, Ra, Rb)
 
 
 def brezenham(Xc, Yc, Ra, Rb, scene, pen):
@@ -111,8 +107,6 @@ def brezenham(Xc, Yc, Ra, Rb, scene, pen):
         for x in range(Xc - Ra, Xc + Ra + 1):
             draw.drawPoint(x, Yc, scene, pen)
 
-    print("От него не спрятаться", Xc, Yc, Ra, Rb)
-
 
 def midpoint(Xc, Yc, Ra, Rb, scene, pen):
     """
@@ -156,8 +150,6 @@ def midpoint(Xc, Yc, Ra, Rb, scene, pen):
 
         trialFunc = trialFunc + sqrA * (2 * y + 1)
 
-    print("Золотая середина", Xc, Yc, Ra, Rb)
-
 
 def libfunc(Xc, Yc, Ra, Rb, scene, pen):
     """
@@ -165,4 +157,3 @@ def libfunc(Xc, Yc, Ra, Rb, scene, pen):
         библиотечной функции
     """
     scene.addEllipse(Xc - Ra, Yc - Rb, 2 * Ra, 2 * Rb, pen)
-    print("Все ради этого", Xc, Yc, Ra, Rb)

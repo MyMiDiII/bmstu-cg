@@ -233,9 +233,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         Ra = RaB
         Rb = RbB
-        coef = (Ra * Ra / Rb / Rb
+        coef = (Ra / Rb
                 if conf
-                else Rb * Rb / Ra / Ra)
+                else Rb / Ra)
 
         for _ in range(num):
             funs[self.algoCB.currentIndex()](
