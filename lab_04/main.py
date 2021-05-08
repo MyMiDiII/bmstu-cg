@@ -12,7 +12,6 @@ from MainWindow import Ui_MainWindow
 
 import circle
 import ellipce
-import point
 
 
 SCENEWIDTH = 979

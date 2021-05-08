@@ -1,10 +1,8 @@
 from math import sqrt, pi, cos, sin
 
-import point
+import draw
 
 SQRT2 = sqrt(2)
-xSigns = [1, -1, -1, 1]
-ySigns = [1, 1, -1, -1]
 
 def canon(xc, yc, R, scene, pen):
     """
@@ -12,7 +10,7 @@ def canon(xc, yc, R, scene, pen):
         каноническому уравнению
     """
     if not R:
-        point.drawPoint(xc, yc, scene, pen)
+        draw.drawPoint(xc, yc, scene, pen)
         return
 
     xRange = int(round(R / SQRT2))
@@ -22,24 +20,9 @@ def canon(xc, yc, R, scene, pen):
     while x <= xRange:
         y = int(round(sqrt(rSecPow - x * x)))
 
-        for i in range(4):
-            point.drawPoint(
-                xc + xSigns[i] * x,
-                yc + ySigns[i] * y,
-                scene,
-                pen
-            )
-            # TODO 
-            point.drawPoint(
-                xc + ySigns[i] * y,
-                yc + xSigns[i] * x,
-                scene,
-                pen
-            )
+        draw.drawCirclePoints(x, y, xc, yc, scene, pen)
 
         x += 1
-
-    #print("Ммм, канон!", xc, yc, R, scene)
 
 
 def parametric(xc, yc, R, scene, pen):
@@ -48,7 +31,7 @@ def parametric(xc, yc, R, scene, pen):
         параметрическому уравнению
     """
     if not R:
-        point.drawPoint(xc, yc, scene, pen)
+        draw.drawPoint(xc, yc, scene, pen)
         return
 
     tRange = pi / 4
@@ -59,20 +42,7 @@ def parametric(xc, yc, R, scene, pen):
         x = int(round(R * cos(t)))
         y = int(round(R * sin(t)))
 
-        for i in range(4):
-            point.drawPoint(
-                xc + xSigns[i] * x,
-                yc + ySigns[i] * y,
-                scene,
-                pen
-            )
-
-            point.drawPoint(
-                xc + ySigns[i] * y,
-                yc + xSigns[i] * x,
-                scene,
-                pen
-            )
+        draw.drawCirclePoints(x, y, xc, yc, scene, pen)
 
         t += tStep
 
@@ -87,20 +57,7 @@ def brezenham(xc, yc, R, scene, pen):
     capDelta = 2 * (1 - R)
 
     while y >= x:
-        for i in range(4):
-            point.drawPoint(
-                xc + xSigns[i] * x,
-                yc + ySigns[i] * y,
-                scene,
-                pen
-            )
-
-            point.drawPoint(
-                xc + ySigns[i] * y,
-                yc + xSigns[i] * x,
-                scene,
-                pen
-            )
+        draw.drawCirclePoints(x, y, xc, yc, scene, pen)
 
         # TODO выделить функции
         if capDelta < 0:
@@ -141,20 +98,7 @@ def midpoint(xc, yc, R, scene, pen):
     trialFunc = 1.25 - R
 
     while x <= y:
-        for i in range(4):
-            point.drawPoint(
-                xc + xSigns[i] * x,
-                yc + ySigns[i] * y,
-                scene,
-                pen
-            )
-
-            point.drawPoint(
-                xc + ySigns[i] * y,
-                yc + xSigns[i] * x,
-                scene,
-                pen
-            )
+        draw.drawCirclePoints(x, y, xc, yc, scene, pen)
         
         x += 1
 

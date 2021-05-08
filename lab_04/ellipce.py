@@ -1,6 +1,6 @@
 from math import sqrt, pi, cos, sin
 
-import point
+import draw
 
 SQRT2 = sqrt(2)
 xSigns = [1, -1, -1, 1]
@@ -11,9 +11,6 @@ def canon(Xc, Yc, Ra, Rb, scene, pen):
     """
         Отрисовка эллипса по
         каноническому уравнению
-    if not Ra and not Rb:
-        point.drawPoint(Xc, Yc, scene, pen)
-        return
     """
 
     sqrA = Ra * Ra
@@ -27,13 +24,7 @@ def canon(Xc, Yc, Ra, Rb, scene, pen):
     while x <= xRange:
         y = int(round(sqrtCoef * sqrt(sqrA - x * x)))
 
-        for i in range(4):
-            point.drawPoint(
-                Xc + xSigns[i] * x,
-                Yc + ySigns[i] * y,
-                scene,
-                pen
-            )
+        draw.drawEllipsePoints(x, y, Xc, Yc, scene, pen)
 
         x += 1
 
@@ -45,13 +36,7 @@ def canon(Xc, Yc, Ra, Rb, scene, pen):
     while y <= yRange:
         x = int(round(sqrtCoef * sqrt(sqrB - y * y)))
 
-        for i in range(4):
-            point.drawPoint(
-                Xc + xSigns[i] * x,
-                Yc + ySigns[i] * y,
-                scene,
-                pen
-            )
+        draw.drawEllipsePoints(x, y, Xc, Yc, scene, pen)
 
         y += 1
 
@@ -71,13 +56,7 @@ def parametric(Xc, Yc, Ra, Rb, scene, pen):
         x = int(round(Ra * cos(t)))
         y = int(round(Rb * sin(t)))
 
-        for i in range(4):
-            point.drawPoint(
-                Xc + xSigns[i] * x,
-                Yc + ySigns[i] * y,
-                scene,
-                pen
-            )
+        draw.drawEllipsePoints(x, y, Xc, Yc, scene, pen)
 
         t += tStep
 
@@ -97,13 +76,7 @@ def brezenham(Xc, Yc, Ra, Rb, scene, pen):
     capDelta = sqrB - sqrA * (2 * Rb - 1)
 
     while y >= 0:
-        for i in range(4):
-            point.drawPoint(
-                Xc + xSigns[i] * x,
-                Yc + ySigns[i] * y,
-                scene,
-                pen
-            )
+        draw.drawEllipsePoints(x, y, Xc, Yc, scene, pen)
 
         # TODO выделить функции
         if capDelta < 0:
@@ -136,7 +109,7 @@ def brezenham(Xc, Yc, Ra, Rb, scene, pen):
 
     if not Rb:
         for x in range(Xc - Ra, Xc + Ra + 1):
-            point.drawPoint(x, Yc, scene, pen)
+            draw.drawPoint(x, Yc, scene, pen)
 
     print("От него не спрятаться", Xc, Yc, Ra, Rb)
 
@@ -156,13 +129,7 @@ def midpoint(Xc, Yc, Ra, Rb, scene, pen):
               if sqrA or sqrB else 0)
 
     while x <= xRange:
-        for i in range(4):
-            point.drawPoint(
-                Xc + xSigns[i] * x,
-                Yc + ySigns[i] * y,
-                scene,
-                pen
-            )
+        draw.drawEllipsePoints(x, y, Xc, Yc, scene, pen)
 
         x += 1
 
@@ -179,13 +146,7 @@ def midpoint(Xc, Yc, Ra, Rb, scene, pen):
               if sqrA or sqrB else 0)
 
     while y <= yRange:
-        for i in range(4):
-            point.drawPoint(
-                Xc + xSigns[i] * x,
-                Yc + ySigns[i] * y,
-                scene,
-                pen
-            )
+        draw.drawEllipsePoints(x, y, Xc, Yc, scene, pen)
 
         y += 1
 
