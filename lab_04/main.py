@@ -12,6 +12,7 @@ from MainWindow import Ui_MainWindow
 
 import circle
 import ellipce
+import math
 
 
 SCENEWIDTH = 979
@@ -67,20 +68,21 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             circle.parametric,
             circle.brezenham,
             circle.midpoint,
-            circle.libfunc
             ]
 
-        for i in range(5):
+        plt.figure(figsize=(14.6, 7.9))
+        plt.get_current_fig_manager().window.move(250, 100)
+        for i in range(4):
             timesList = []
             rList = []
-            for r in range(1, 10000, 1000):
+            for r in range(0, 10000, 1000):
                 sumtime = 0
-                for _ in range(20):
+                for _ in range(50):
                     start = time.time()
-                    funs[i](450, 400, r, self.scene, self.pen)
+                    funs[i](450, 400, r, self.scene, self.pen, False)
                     sumtime += time.time() - start
 
-                timesList.append(sumtime / 20)
+                timesList.append(sumtime / 50)
                 rList.append(r)
             plt.plot(rList, timesList, label=str(funs[i]))
 
@@ -132,11 +134,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             circle.libfunc
             ]
 
-        xy = funs[self.algoCB.currentIndex()](Xc, Yc, R, self.scene, self.pen)
-
-        print(len(xy))
-        for xandy in xy:
-            print(xandy)
+        funs[self.algoCB.currentIndex()](Xc, Yc, R, self.scene, self.pen)
 
 
     def drawEllipce(self):
@@ -167,30 +165,26 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             Rb = Re - step * num
 
             if Rb < 0:
-                print("ERROR")
+                callError(
+                    "Ошибка в значениях параметров!",
+                    "При заданных значениях некоторые радиусы"
+                    + " окружностей в спектре будут отрицательны!"
+                )
                 return
 
-        if curConf == 2:
-            if not num:
-                print("ERROR")
-                return
-
+        if curConf == 2 and num:
             step = (Re - Rb) / num
 
-            if abs(step) < 1e-6 or step < 0:
-                print("ERROR")
-                return
 
         if curConf == 3:
             if not step:
-                print("ERROR")
+                callError(
+                    "Нулевой шаг!",
+                    "Шаг спектра должен быть отличен от нуля!"
+                )
                 return
 
-            num = (Re - Rb) // step + 1
-
-            if num <= 0:
-                print("ERROR")
-                return
+            num = abs(Re - Rb) // step + 1
 
 
         funs = [
@@ -213,6 +207,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             )
 
             R += step
+            R = int(math.ceil(R))
 
 
     def drawEllipceSpectrum(self):
@@ -249,16 +244,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
             if conf:
                 Rb += step
-                Ra = Rb * coef
+                Ra = int(math.ceil(Rb * coef))
             else:
                 Ra += step
-                Rb = Ra * coef
+                Rb = int(math.ceil(Ra * coef))
         
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     main = MainWindow()
-    main.move(200, 100)
+    main.move(250, 100)
     main.setFixedSize(1451, 836)
     main.show()
     sys.exit(app.exec_())

@@ -4,15 +4,11 @@ import draw
 
 SQRT2 = sqrt(2)
 
-def canon(xc, yc, R, scene, pen):
+def canon(xc, yc, R, scene, pen, drawFlag=True):
     """
         Отрисовка окружности по
         каноническому уравнению
     """
-    if not R:
-        draw.drawPoint(xc, yc, scene, pen)
-        return
-
     xRange = int(round(R / SQRT2))
     rSecPow = R * R
     x = 0
@@ -20,12 +16,13 @@ def canon(xc, yc, R, scene, pen):
     while x <= xRange:
         y = int(round(sqrt(rSecPow - x * x)))
 
-        draw.drawCirclePoints(x, y, xc, yc, scene, pen)
+        if drawFlag:
+            draw.drawCirclePoints(x, y, xc, yc, scene, pen)
 
         x += 1
 
 
-def parametric(xc, yc, R, scene, pen):
+def parametric(xc, yc, R, scene, pen, drawFlag=True):
     """
         Отрисовка окружности по
         параметрическому уравнению
@@ -42,12 +39,13 @@ def parametric(xc, yc, R, scene, pen):
         x = int(round(R * cos(t)))
         y = int(round(R * sin(t)))
 
-        draw.drawCirclePoints(x, y, xc, yc, scene, pen)
+        if drawFlag:
+            draw.drawCirclePoints(x, y, xc, yc, scene, pen)
 
         t += tStep
 
 
-def brezenham(xc, yc, R, scene, pen):
+def brezenham(xc, yc, R, scene, pen, drawFlag=True):
     """
         Отрисовка окружности
         алгоритмом Брезенхема
@@ -57,9 +55,9 @@ def brezenham(xc, yc, R, scene, pen):
     capDelta = 2 * (1 - R)
 
     while y >= x:
-        draw.drawCirclePoints(x, y, xc, yc, scene, pen)
+        if drawFlag:
+            draw.drawCirclePoints(x, y, xc, yc, scene, pen)
 
-        # TODO выделить функции
         if capDelta < 0:
             delta = 2 * capDelta + 2 * y - 1
 
@@ -88,7 +86,7 @@ def brezenham(xc, yc, R, scene, pen):
             capDelta = capDelta + 2 * x - 2 * y + 2
 
 
-def midpoint(xc, yc, R, scene, pen):
+def midpoint(xc, yc, R, scene, pen, drawFlag=True):
     """
         Отрисовка окружности
         алгоритмом средней точки
@@ -98,7 +96,8 @@ def midpoint(xc, yc, R, scene, pen):
     trialFunc = 1.25 - R
 
     while x <= y:
-        draw.drawCirclePoints(x, y, xc, yc, scene, pen)
+        if drawFlag:
+            draw.drawCirclePoints(x, y, xc, yc, scene, pen)
         
         x += 1
 
