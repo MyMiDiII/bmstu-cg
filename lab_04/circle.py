@@ -11,6 +11,10 @@ def canon(xc, yc, R, scene, pen):
         Отрисовка окружности по
         каноническому уравнению
     """
+    if not R:
+        point.drawPoint(xc, yc, scene, pen)
+        return
+
     xRange = int(round(R / SQRT2))
     rSecPow = R * R
     x = 0
@@ -43,6 +47,10 @@ def parametric(xc, yc, R, scene, pen):
         Отрисовка окружности по
         параметрическому уравнению
     """
+    if not R:
+        point.drawPoint(xc, yc, scene, pen)
+        return
+
     tRange = pi / 4
     tStep = 1 / R
     t = 0

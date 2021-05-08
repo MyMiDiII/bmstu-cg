@@ -11,11 +11,17 @@ def canon(Xc, Yc, Ra, Rb, scene, pen):
     """
         Отрисовка эллипса по
         каноническому уравнению
+    if not Ra and not Rb:
+        point.drawPoint(Xc, Yc, scene, pen)
+        return
     """
+
     sqrA = Ra * Ra
     sqrB = Rb * Rb
-    xRange = round(sqrA / sqrt(sqrA + sqrB))
-    sqrtCoef = Rb / Ra
+
+    xRange = (round(sqrA / sqrt(sqrA + sqrB))
+              if sqrA or sqrB else 0)
+    sqrtCoef = Rb / Ra if Ra else 0
     x = 0
 
     while x <= xRange:
@@ -32,8 +38,9 @@ def canon(Xc, Yc, Ra, Rb, scene, pen):
         x += 1
 
     y = 0
-    yRange = round(sqrB / sqrt(sqrA + sqrB))
-    sqrtCoef = Ra / Rb
+    yRange = (round(sqrB / sqrt(sqrA + sqrB))
+              if sqrA or sqrB else 0)
+    sqrtCoef = Ra / Rb if Rb else 0
 
     while y <= yRange:
         x = int(round(sqrtCoef * sqrt(sqrB - y * y)))
@@ -57,7 +64,7 @@ def parametric(Xc, Yc, Ra, Rb, scene, pen):
         параметрическому уравнению
     """
     tRange = pi / 2
-    tStep = 1 / max(Ra, Rb)
+    tStep = 1 / max(Ra, Rb) if Ra or Rb else 1
     t = 0
 
     while t < tRange + tStep:
@@ -125,6 +132,12 @@ def brezenham(Xc, Yc, Ra, Rb, scene, pen):
             x += 1
             y -= 1
             capDelta = capDelta + 2 * x * sqrB - 2 * y * sqrA + sqrA + sqrB
+
+
+    if not Rb:
+        for x in range(Xc - Ra, Xc + Ra + 1):
+            point.drawPoint(x, Yc, scene, pen)
+
     print("От него не спрятаться", Xc, Yc, Ra, Rb)
 
 
@@ -138,8 +151,9 @@ def midpoint(Xc, Yc, Ra, Rb, scene, pen):
 
     x = 0
     y = Rb
-    trialFunc = sqrB - sqrA * (Rb - 1 / 4)
-    xRange = int(round(sqrA / sqrt(sqrA + sqrB)))
+    trialFunc = sqrB - sqrA * (Rb - 1 / 4) if Rb else 0
+    xRange = (round(sqrA / sqrt(sqrA + sqrB))
+              if sqrA or sqrB else 0)
 
     while x <= xRange:
         for i in range(4):
@@ -160,8 +174,9 @@ def midpoint(Xc, Yc, Ra, Rb, scene, pen):
 
     x = Ra
     y = 0
-    trialFunc = sqrA - sqrB * (Ra - 1 / 4)
-    yRange = int(round(sqrB / sqrt(sqrA + sqrB)))
+    trialFunc = sqrA - sqrB * (Ra - 1 / 4) if Ra else 0
+    yRange = (round(sqrB / sqrt(sqrA + sqrB))
+              if sqrA or sqrB else 0)
 
     while y <= yRange:
         for i in range(4):
