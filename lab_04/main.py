@@ -11,7 +11,7 @@ import time
 from MainWindow import Ui_MainWindow
 
 import circle
-import ellipce
+import ellipse
 import math
 import times
 
@@ -48,12 +48,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.figureCB.currentIndexChanged.connect(self.switch)
 
         self.cirBtn.clicked.connect(self.drawCircle)
-        self.elBtn.clicked.connect(self.drawEllipce)
+        self.elBtn.clicked.connect(self.drawEllipse)
         self.elCentreBtn.clicked.connect(self.setElCentre)
         self.cirCentreBtn.clicked.connect(self.setCirCentre)
 
         self.cirSpBtn.clicked.connect(self.drawCircleSpectrum)
-        self.elSpBtn.clicked.connect(self.drawEllipceSpectrum)
+        self.elSpBtn.clicked.connect(self.drawEllipseSpectrum)
 
         self.scene = QGraphicsScene()
         self.scene.setSceneRect(0, 0, SCENEWIDTH, SCENEHEIGHT)
@@ -132,18 +132,18 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         funs[self.algoCB.currentIndex()](Xc, Yc, R, self.scene, self.pen)
 
 
-    def drawEllipce(self):
+    def drawEllipse(self):
         Xc = self.elXcSB.value()
         Yc = self.elYcSB.value()
         Ra = self.elRaSB.value()
         Rb = self.elRbSB.value()
 
         funs = [
-            ellipce.canon,
-            ellipce.parametric,
-            ellipce.brezenham,
-            ellipce.midpoint,
-            ellipce.libfunc
+            ellipse.canon,
+            ellipse.parametric,
+            ellipse.brezenham,
+            ellipse.midpoint,
+            ellipse.libfunc
             ]
 
         funs[self.algoCB.currentIndex()](Xc, Yc, Ra, Rb, self.scene, self.pen)
@@ -181,6 +181,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
             num = abs(Re - Rb) // step + 1
 
+            if Re < Rb:
+                step = -step
+
 
         funs = [
             circle.canon,
@@ -205,27 +208,25 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             R = int(math.ceil(R))
 
 
-    def drawEllipceSpectrum(self):
+    def drawEllipseSpectrum(self):
         RaB = self.elSpRaSB.value()
         RbB = self.elSpRbSB.value()
         step = self.elSpStepSB.value()
         num = self.elSpNumSB.value()
 
         funs = [
-            ellipce.canon,
-            ellipce.parametric,
-            ellipce.brezenham,
-            ellipce.midpoint,
-            ellipce.libfunc
+            ellipse.canon,
+            ellipse.parametric,
+            ellipse.brezenham,
+            ellipse.midpoint,
+            ellipse.libfunc
         ]
 
         conf = self.elSpConfCB.currentIndex()
 
         Ra = RaB
         Rb = RbB
-        coef = (Ra / Rb
-                if conf
-                else Rb / Ra)
+        coef = 1 if Ra == Rb else (Ra / Rb if conf else Rb / Ra)
 
         for _ in range(num):
             funs[self.algoCB.currentIndex()](
