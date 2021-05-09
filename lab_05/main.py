@@ -51,11 +51,48 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.scene.addPixmap(QPixmap.fromImage(self.img))
 
         self.addPointBtn.clicked.connect(self.addPoint)
-        #self.closeFigBtn.clicked.connect(self.closeFigBtn)
+        self.closeFigBtn.setDisabled(True)
+        self.closeFigBtn.clicked.connect(self.closeFig)
 
         self.clearBtn.clicked.connect(self.clear)
 
         self.draw()
+
+    def closeFig(self):
+        if self.polygon.num < 3:
+            self.closeFigBtn.setDisabled(False)
+            return
+
+        # TODO функция :З
+        num = self.pointsTable.rowCount()
+        self.pointsTable.setRowCount(num + 1)
+        self.pointsTable.setItem(
+            num,
+            0,
+            QTableWidgetItem("end")
+        )
+        self.pointsTable.setItem(
+            num,
+            1,
+            QTableWidgetItem("end")
+        )
+
+        painter = QPainter(self.img)
+
+        first = self.polygon.getFirstPoint()
+        last = self.polygon.getLastPoint()
+
+        painter.drawLine(last.x, last.y, first.x, first.y)
+
+        self.scene.clear()
+        self.scene.addPixmap(QPixmap.fromImage(self.img))
+
+        painter.end()
+
+        self.polygons.append(self.polygon)
+        self.polygon.clear()
+
+        self.closeFigBtn.setDisabled(True)
 
     def clear(self):
         self.scene.clear()
@@ -90,11 +127,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             last = self.polygon.getLastPoint()
             painter.drawLine(last.x, last.y, point.x, point.y)
 
+        self.scene.clear()
         self.scene.addPixmap(QPixmap.fromImage(self.img))
         painter.end()
 
         self.polygon.addPoint(point)
-
+        if self.polygon.num > 2:
+            self.closeFigBtn.setDisabled(False)
 
     def chooseColor(self):
         """

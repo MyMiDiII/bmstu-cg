@@ -44,3 +44,10 @@ class Polygon:
 
     def getLastPoint(self):
         return self.points[self.num - 1]
+
+    def getFirstPoint(self):
+        return self.points[0]
+
+    def clear(self):
+        self.points = []
+        self.num = 0
