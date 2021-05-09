@@ -41,7 +41,7 @@ def getCircleTimes(scene, pen):
                 funcs[i](450, 400, r, scene, pen, False)
                 sumtime += time.time() - start
 
-            timesList.append(sumtime / 50)
+            timesList.append(sumtime / 25)
             rList.append(r)
         plt.plot(rList, timesList, label=funcsNames[i])
 
@@ -88,7 +88,7 @@ def getEllipseTimes(scene, pen):
                 funcs[i](450, 400, Ra, Rb, scene, pen, False)
                 sumtime += time.time() - start
 
-            timesList.append(sumtime / 50)
+            timesList.append(sumtime / 25)
             rList.append(Ra)
 
         plt.plot(rList, timesList, label=funcsNames[i])
