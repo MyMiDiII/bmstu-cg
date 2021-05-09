@@ -11,6 +11,7 @@ from PyQt5.QtCore import QSize
 
 from MainWindow import Ui_MainWindow
 
+from draw import Canvas
 from geometry import Point, Edge, Polygon
 
 BACKGROUNDSTRING = ("background-color: qlineargradient(spread:pad, "
@@ -43,14 +44,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         
         self.colorBtn.clicked.connect(self.chooseColor)
 
-        self.scene = QGraphicsScene()
-        self.scene.setSceneRect(0, 0, 1185, 874)
-        self.graphicsView.setScene(self.scene)
         self.img = QImage(1185, 874, QImage.Format_RGB32)
         self.img.fill(QColor("white"))
+        self.scene = Canvas(self, self.img, self.polygons, self.polygon)
+        self.scene.setSceneRect(0, 0, 1185, 874)
+        self.graphicsView.setScene(self.scene)
         self.scene.addPixmap(QPixmap.fromImage(self.img))
 
-        self.addPointBtn.clicked.connect(self.addPoint)
+        self.addPointBtn.clicked.connect(self.handleAddPoint)
         self.closeFigBtn.setDisabled(True)
         self.closeFigBtn.clicked.connect(self.closeFig)
 
@@ -100,12 +101,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.scene.addPixmap(QPixmap.fromImage(self.img))
         self.pointsTable.setRowCount(0)
 
-    def addPoint(self):
-        """
-            Добавление вершины
-        """
-        point = Point(self.xSB.value(), self.ySB.value())
-
+    def addPoint(self, point):
         num = self.pointsTable.rowCount()
         self.pointsTable.setRowCount(num + 1)
         self.pointsTable.setItem(
@@ -118,6 +114,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             1,
             QTableWidgetItem(str(point.y))
         )
+
+    def handleAddPoint(self):
+        """
+            Добавление вершины
+        """
+        point = Point(self.xSB.value(), self.ySB.value())
+
+        self.addPoint(point)
 
         painter = QPainter(self.img)
 
