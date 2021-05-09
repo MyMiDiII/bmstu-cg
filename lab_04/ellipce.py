@@ -33,7 +33,8 @@ def canon(Xc, Yc, Ra, Rb, scene, pen, drawFlag=True):
     while y <= yRange:
         x = int(round(sqrtCoef * sqrt(sqrB - y * y)))
 
-        draw.drawEllipsePoints(x, y, Xc, Yc, scene, pen)
+        if drawFlag:
+            draw.drawEllipsePoints(x, y, Xc, Yc, scene, pen)
 
         y += 1
 
