@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import time
 
 import circle
-import ellipce
+import ellipse
 
 
 def getCircleTimes(scene, pen):
@@ -27,6 +27,7 @@ def getCircleTimes(scene, pen):
         "Алгорит средней точки"
     ]
 
+    plt.rcParams['font.size'] = '16'
     plt.figure(figsize=(14.6, 7.9))
     plt.get_current_fig_manager().window.move(250, 100)
     plt.get_current_fig_manager().canvas.set_window_title("ВРЕМЯ ГЕНЕРАЦИИ ОКРУЖНОСТЕЙ")
@@ -58,10 +59,10 @@ def getEllipseTimes(scene, pen):
         Подсчет времени окружностей
     """
     funcs = [
-        ellipce.canon,
-        ellipce.parametric,
-        ellipce.brezenham,
-        ellipce.midpoint
+        ellipse.canon,
+        ellipse.parametric,
+        ellipse.brezenham,
+        ellipse.midpoint
     ]
 
     funcsNames = [
@@ -71,6 +72,7 @@ def getEllipseTimes(scene, pen):
         "Алгорит средней точки"
     ]
 
+    plt.rcParams['font.size'] = '16'
     plt.figure(figsize=(14.6, 7.9))
     plt.get_current_fig_manager().window.move(250, 100)
     plt.get_current_fig_manager().canvas.set_window_title("ВРЕМЯ ГЕНЕРАЦИИ ЭЛЛИПСОВ")
