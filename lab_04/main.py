@@ -13,6 +13,7 @@ from MainWindow import Ui_MainWindow
 import circle
 import ellipce
 import math
+import times
 
 
 SCENEWIDTH = 979
@@ -48,6 +49,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.cirBtn.clicked.connect(self.drawCircle)
         self.elBtn.clicked.connect(self.drawEllipce)
+        self.elCentreBtn.clicked.connect(self.setElCentre)
+        self.cirCentreBtn.clicked.connect(self.setCirCentre)
+
         self.cirSpBtn.clicked.connect(self.drawCircleSpectrum)
         self.elSpBtn.clicked.connect(self.drawEllipceSpectrum)
 
@@ -62,32 +66,23 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.clearBtn.clicked.connect(self.scene.clear)
 
 
+    def setElCentre(self):
+        self.elXcSB.setValue(CENTRE["X"])
+        self.elYcSB.setValue(CENTRE["Y"])
+
+
+    def setCirCentre(self):
+        self.cirXcSB.setValue(CENTRE["X"])
+        self.cirYcSB.setValue(CENTRE["Y"])
+
+
     def getTime(self):
-        funs = [
-            circle.canon,
-            circle.parametric,
-            circle.brezenham,
-            circle.midpoint,
-            ]
+        mode = self.figureCB.currentIndex()
 
-        plt.figure(figsize=(14.6, 7.9))
-        plt.get_current_fig_manager().window.move(250, 100)
-        for i in range(4):
-            timesList = []
-            rList = []
-            for r in range(0, 10000, 1000):
-                sumtime = 0
-                for _ in range(50):
-                    start = time.time()
-                    funs[i](450, 400, r, self.scene, self.pen, False)
-                    sumtime += time.time() - start
-
-                timesList.append(sumtime / 50)
-                rList.append(r)
-            plt.plot(rList, timesList, label=str(funs[i]))
-
-        plt.legend()
-        plt.show()
+        if mode:
+            times.getEllipseTimes(self.scene, self.pen)
+        else:
+            times.getCircleTimes(self.scene, self.pen)
 
 
     def setColor(self):
@@ -162,7 +157,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         curConf = self.cirSpConfCB.currentIndex()
 
         if curConf == 0:
-            Rb = Re - step * num
+            Rb = Re - step * (num - 1)
 
             if Rb < 0:
                 callError(
