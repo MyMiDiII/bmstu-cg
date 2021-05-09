@@ -12,7 +12,7 @@ def canon(Xc, Yc, Ra, Rb, scene, pen, drawFlag=True):
     sqrA = Ra * Ra
     sqrB = Rb * Rb
 
-    xRange = (round(sqrA / sqrt(sqrA + sqrB))
+    xRange = (int(round(sqrA / sqrt(sqrA + sqrB)))
               if sqrA or sqrB else 0)
     sqrtCoef = Rb / Ra if Ra else 0
     x = 0
@@ -26,7 +26,7 @@ def canon(Xc, Yc, Ra, Rb, scene, pen, drawFlag=True):
         x += 1
 
     y = 0
-    yRange = (round(sqrB / sqrt(sqrA + sqrB))
+    yRange = (int(round(sqrB / sqrt(sqrA + sqrB)))
               if sqrA or sqrB else 0)
     sqrtCoef = Ra / Rb if Rb else 0
 
@@ -118,7 +118,7 @@ def midpoint(Xc, Yc, Ra, Rb, scene, pen, drawFlag=True):
     x = 0
     y = Rb
     trialFunc = sqrB - sqrA * (Rb - 1 / 4) if Rb else 0
-    xRange = (round(sqrA / sqrt(sqrA + sqrB))
+    xRange = (int(round(sqrA / sqrt(sqrA + sqrB)))
               if sqrA or sqrB else 0)
 
     while x <= xRange:
@@ -136,7 +136,7 @@ def midpoint(Xc, Yc, Ra, Rb, scene, pen, drawFlag=True):
     x = Ra
     y = 0
     trialFunc = sqrA - sqrB * (Ra - 1 / 4) if Ra else 0
-    yRange = (round(sqrB / sqrt(sqrA + sqrB))
+    yRange = (int(round(sqrB / sqrt(sqrA + sqrB)))
               if sqrA or sqrB else 0)
 
     while y <= yRange:
