@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Maslova Lab04</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QWidget" name="verticalLayoutWidget">
@@ -87,7 +87,7 @@
           </item>
           <item>
            <property name="text">
-            <string>Библиотечная фукнция</string>
+            <string>Библиотечная функция</string>
            </property>
           </item>
          </widget>
@@ -130,18 +130,11 @@
            <number>0</number>
           </property>
           <widget class="QWidget" name="cirPage">
-           <layout class="QGridLayout" name="gridLayout">
-            <item row="1" column="0">
-             <widget class="QLabel" name="cirYcLbl">
+           <layout class="QGridLayout" name="gridLayout_6">
+            <item row="0" column="0">
+             <widget class="QLabel" name="cirXcLbl">
               <property name="text">
-               <string>Yc:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QSpinBox" name="cirRSB">
-              <property name="maximum">
-               <number>1000</number>
+               <string>Xc:</string>
               </property>
              </widget>
             </item>
@@ -152,17 +145,25 @@
               </property>
              </widget>
             </item>
+            <item row="0" column="2" rowspan="2">
+             <widget class="QPushButton" name="cirCentreBtn">
+              <property name="text">
+               <string>Центр
+холста</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="cirYcLbl">
+              <property name="text">
+               <string>Yc:</string>
+              </property>
+             </widget>
+            </item>
             <item row="1" column="1">
              <widget class="QSpinBox" name="cirYcSB">
               <property name="maximum">
                <number>811</number>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="cirXcLbl">
-              <property name="text">
-               <string>Xc:</string>
               </property>
              </widget>
             </item>
@@ -173,7 +174,14 @@
               </property>
              </widget>
             </item>
-            <item row="3" column="0" colspan="2">
+            <item row="2" column="1" colspan="2">
+             <widget class="QSpinBox" name="cirRSB">
+              <property name="maximum">
+               <number>1000</number>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0" colspan="3">
              <widget class="QPushButton" name="cirBtn">
               <property name="text">
                <string>Построить</string>
@@ -184,17 +192,10 @@
           </widget>
           <widget class="QWidget" name="elPage">
            <layout class="QGridLayout" name="gridLayout_2">
-            <item row="1" column="1">
-             <widget class="QSpinBox" name="elRaSB">
-              <property name="maximum">
-               <number>1000</number>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="3">
-             <widget class="QSpinBox" name="elYcSB">
-              <property name="maximum">
-               <number>811</number>
+            <item row="0" column="0">
+             <widget class="QLabel" name="elXcLbl">
+              <property name="text">
+               <string>Xc:</string>
               </property>
              </widget>
             </item>
@@ -205,10 +206,24 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="elXcLbl">
+            <item row="0" column="2">
+             <widget class="QLabel" name="elYcLbl">
               <property name="text">
-               <string>Xc:</string>
+               <string>Yc:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="3" colspan="2">
+             <widget class="QSpinBox" name="elYcSB">
+              <property name="maximum">
+               <number>811</number>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="5">
+             <widget class="QPushButton" name="elCentreBtn">
+              <property name="text">
+               <string>Центр холста</string>
               </property>
              </widget>
             </item>
@@ -219,28 +234,28 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="2">
+            <item row="1" column="1">
+             <widget class="QSpinBox" name="elRaSB">
+              <property name="maximum">
+               <number>1000</number>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2" colspan="2">
              <widget class="QLabel" name="elRbLbl">
               <property name="text">
                <string>Rb:</string>
               </property>
              </widget>
             </item>
-            <item row="0" column="2">
-             <widget class="QLabel" name="elYcLbl">
-              <property name="text">
-               <string>Yc:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="3">
+            <item row="1" column="4" colspan="2">
              <widget class="QSpinBox" name="elRbSB">
               <property name="maximum">
                <number>1000</number>
               </property>
              </widget>
             </item>
-            <item row="2" column="0" colspan="4">
+            <item row="2" column="0" colspan="6">
              <widget class="QPushButton" name="elBtn">
               <property name="text">
                <string>Построить</string>
@@ -290,6 +305,9 @@
             </item>
             <item row="1" column="4">
              <widget class="QSpinBox" name="cirSpStepSB">
+              <property name="minimum">
+               <number>1</number>
+              </property>
               <property name="maximum">
                <number>10000</number>
               </property>
@@ -318,6 +336,9 @@
             </item>
             <item row="2" column="4">
              <widget class="QSpinBox" name="cirSpNumSB">
+              <property name="minimum">
+               <number>1</number>
+              </property>
               <property name="maximum">
                <number>10000</number>
               </property>
@@ -365,17 +386,10 @@
           </widget>
           <widget class="QWidget" name="elSpPage">
            <layout class="QGridLayout" name="gridLayout_5">
-            <item row="2" column="0">
-             <widget class="QLabel" name="elSpRbLbl">
-              <property name="text">
-               <string>Rb нач</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="2" colspan="2">
-             <widget class="QLabel" name="elSpNumLbl">
-              <property name="text">
-               <string>Количество</string>
+            <item row="2" column="1">
+             <widget class="QSpinBox" name="elSpRbSB">
+              <property name="maximum">
+               <number>10000</number>
               </property>
              </widget>
             </item>
@@ -386,17 +400,20 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="4">
-             <widget class="QSpinBox" name="elSpStepSB">
+            <item row="2" column="4">
+             <widget class="QSpinBox" name="elSpNumSB">
+              <property name="minimum">
+               <number>1</number>
+              </property>
               <property name="maximum">
                <number>10000</number>
               </property>
              </widget>
             </item>
-            <item row="2" column="1">
-             <widget class="QSpinBox" name="elSpRbSB">
-              <property name="maximum">
-               <number>10000</number>
+            <item row="0" column="0" colspan="2">
+             <widget class="QLabel" name="elSpConfLbl">
+              <property name="text">
+               <string>Параметры</string>
               </property>
              </widget>
             </item>
@@ -407,13 +424,6 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="4">
-             <widget class="QSpinBox" name="elSpNumSB">
-              <property name="maximum">
-               <number>10000</number>
-              </property>
-             </widget>
-            </item>
             <item row="1" column="1">
              <widget class="QSpinBox" name="elSpRaSB">
               <property name="maximum">
@@ -421,17 +431,20 @@
               </property>
              </widget>
             </item>
-            <item row="3" column="0" colspan="5">
-             <widget class="QPushButton" name="elSpBtn">
+            <item row="2" column="0">
+             <widget class="QLabel" name="elSpRbLbl">
               <property name="text">
-               <string>Построить</string>
+               <string>Rb нач</string>
               </property>
              </widget>
             </item>
-            <item row="0" column="0" colspan="2">
-             <widget class="QLabel" name="elSpConfLbl">
-              <property name="text">
-               <string>Параметры</string>
+            <item row="1" column="4">
+             <widget class="QSpinBox" name="elSpStepSB">
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>10000</number>
               </property>
              </widget>
             </item>
@@ -447,6 +460,20 @@
                 <string>Шаг по Rb</string>
                </property>
               </item>
+             </widget>
+            </item>
+            <item row="2" column="2" colspan="2">
+             <widget class="QLabel" name="elSpNumLbl">
+              <property name="text">
+               <string>Количество</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0" colspan="5">
+             <widget class="QPushButton" name="elSpBtn">
+              <property name="text">
+               <string>Построить</string>
+              </property>
              </widget>
             </item>
            </layout>
