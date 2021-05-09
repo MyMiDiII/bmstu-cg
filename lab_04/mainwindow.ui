@@ -1,0 +1,526 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1451</width>
+    <height>836</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Maslova Lab04</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="verticalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>440</width>
+      <height>813</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QGroupBox" name="colorGB">
+       <property name="title">
+        <string>Цвет</string>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QComboBox" name="colorCB">
+          <item>
+           <property name="text">
+            <string>Черный</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Белый (фон)</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Синий</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Красный</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="algoGB">
+       <property name="title">
+        <string>Алгоритм</string>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QComboBox" name="algoCB">
+          <item>
+           <property name="text">
+            <string>Каноническое уравнение</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Параметрическое уравнение</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Алгоритм Брезенхема</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Алгоритм средней точки</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Библиотечная функция</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="figureGB">
+       <property name="title">
+        <string>Фигура</string>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QComboBox" name="figureCB">
+          <item>
+           <property name="text">
+            <string>Окружность</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Эллипс</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="figureSetGB">
+       <property name="title">
+        <string>Одиночная фигура</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_3">
+        <item row="0" column="0">
+         <widget class="QStackedWidget" name="figureSW">
+          <property name="currentIndex">
+           <number>0</number>
+          </property>
+          <widget class="QWidget" name="cirPage">
+           <layout class="QGridLayout" name="gridLayout_6">
+            <item row="0" column="0">
+             <widget class="QLabel" name="cirXcLbl">
+              <property name="text">
+               <string>Xc:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QSpinBox" name="cirXcSB">
+              <property name="maximum">
+               <number>981</number>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2" rowspan="2">
+             <widget class="QPushButton" name="cirCentreBtn">
+              <property name="text">
+               <string>Центр
+холста</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="cirYcLbl">
+              <property name="text">
+               <string>Yc:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QSpinBox" name="cirYcSB">
+              <property name="maximum">
+               <number>811</number>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="cirRLbl">
+              <property name="text">
+               <string>R:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1" colspan="2">
+             <widget class="QSpinBox" name="cirRSB">
+              <property name="maximum">
+               <number>1000</number>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0" colspan="3">
+             <widget class="QPushButton" name="cirBtn">
+              <property name="text">
+               <string>Построить</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="elPage">
+           <layout class="QGridLayout" name="gridLayout_2">
+            <item row="0" column="0">
+             <widget class="QLabel" name="elXcLbl">
+              <property name="text">
+               <string>Xc:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QSpinBox" name="elXcSB">
+              <property name="maximum">
+               <number>981</number>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2">
+             <widget class="QLabel" name="elYcLbl">
+              <property name="text">
+               <string>Yc:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="3" colspan="2">
+             <widget class="QSpinBox" name="elYcSB">
+              <property name="maximum">
+               <number>811</number>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="5">
+             <widget class="QPushButton" name="elCentreBtn">
+              <property name="text">
+               <string>Центр холста</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="elRaLbl">
+              <property name="text">
+               <string>Ra:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QSpinBox" name="elRaSB">
+              <property name="maximum">
+               <number>1000</number>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2" colspan="2">
+             <widget class="QLabel" name="elRbLbl">
+              <property name="text">
+               <string>Rb:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="4" colspan="2">
+             <widget class="QSpinBox" name="elRbSB">
+              <property name="maximum">
+               <number>1000</number>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0" colspan="6">
+             <widget class="QPushButton" name="elBtn">
+              <property name="text">
+               <string>Построить</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="spectrumGB">
+       <property name="title">
+        <string>Спектр</string>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <item>
+         <widget class="QStackedWidget" name="spectrumSW">
+          <property name="currentIndex">
+           <number>1</number>
+          </property>
+          <widget class="QWidget" name="cirSpPage">
+           <layout class="QGridLayout" name="gridLayout_4">
+            <item row="2" column="2" colspan="2">
+             <widget class="QLabel" name="cirSpNumLbl">
+              <property name="text">
+               <string>Количество</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="cirSpRbLbl">
+              <property name="text">
+               <string>Rнач</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2" colspan="2">
+             <widget class="QLabel" name="cirSpStepLbl">
+              <property name="text">
+               <string>Шаг</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="4">
+             <widget class="QSpinBox" name="cirSpStepSB">
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>10000</number>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="cirSpReLbl">
+              <property name="text">
+               <string>Rкон</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QSpinBox" name="cirSpReSB">
+              <property name="maximum">
+               <number>10000</number>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QSpinBox" name="cirSpRbSB">
+              <property name="maximum">
+               <number>10000</number>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="4">
+             <widget class="QSpinBox" name="cirSpNumSB">
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>10000</number>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0" colspan="5">
+             <widget class="QPushButton" name="cirSpBtn">
+              <property name="text">
+               <string>Построить</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0" colspan="2">
+             <widget class="QLabel" name="cirSpConfLbl">
+              <property name="text">
+               <string>Параметры</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2" colspan="3">
+             <widget class="QComboBox" name="cirSpConfCB">
+              <item>
+               <property name="text">
+                <string>Без Rнач</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Без Rкон</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Без шага</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Без количества</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="elSpPage">
+           <layout class="QGridLayout" name="gridLayout_5">
+            <item row="2" column="1">
+             <widget class="QSpinBox" name="elSpRbSB">
+              <property name="maximum">
+               <number>10000</number>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="elSpRaLbl">
+              <property name="text">
+               <string>Ra нач</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="4">
+             <widget class="QSpinBox" name="elSpNumSB">
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>10000</number>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0" colspan="2">
+             <widget class="QLabel" name="elSpConfLbl">
+              <property name="text">
+               <string>Параметры</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QLabel" name="elSpStepLbl">
+              <property name="text">
+               <string>Шаг</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QSpinBox" name="elSpRaSB">
+              <property name="maximum">
+               <number>10000</number>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="elSpRbLbl">
+              <property name="text">
+               <string>Rb нач</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="4">
+             <widget class="QSpinBox" name="elSpStepSB">
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>10000</number>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2" colspan="3">
+             <widget class="QComboBox" name="elSpConfCB">
+              <item>
+               <property name="text">
+                <string>Шаг по Ra</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Шаг по Rb</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="2" column="2" colspan="2">
+             <widget class="QLabel" name="elSpNumLbl">
+              <property name="text">
+               <string>Количество</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0" colspan="5">
+             <widget class="QPushButton" name="elSpBtn">
+              <property name="text">
+               <string>Построить</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="generalLayout">
+       <item>
+        <widget class="QPushButton" name="timeBtn">
+         <property name="text">
+          <string>Сравнить время</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="clearBtn">
+         <property name="text">
+          <string>Очистить холст</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QGraphicsView" name="graphicsView">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>10</y>
+      <width>981</width>
+      <height>811</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
