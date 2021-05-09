@@ -495,7 +495,7 @@
        <item>
         <widget class="QPushButton" name="clearBtn">
          <property name="text">
-          <string>Очистить экран</string>
+          <string>Очистить холст</string>
          </property>
         </widget>
        </item>

@@ -313,4 +313,4 @@ class Ui_MainWindow(object):
         self.elSpNumLbl.setText(_translate("MainWindow", "Количество"))
         self.elSpBtn.setText(_translate("MainWindow", "Построить"))
         self.timeBtn.setText(_translate("MainWindow", "Сравнить время"))
-        self.clearBtn.setText(_translate("MainWindow", "Очистить экран"))
+        self.clearBtn.setText(_translate("MainWindow", "Очистить холст"))
