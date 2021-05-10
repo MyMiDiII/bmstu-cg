@@ -9,15 +9,21 @@ from PyQt5.QtGui import (
 )
 from PyQt5.QtCore import QSize
 
+import copy
+
 from MainWindow import Ui_MainWindow
 
 from draw import Canvas
 from geometry import Point, Edge, Polygon
+from fill import Filler
 
 BACKGROUNDSTRING = ("background-color: qlineargradient(spread:pad, "
                    + "x1:0, y1:0, x2:0, y2:0, stop:0 %s"
                    + ", stop:1 rgba(255, 255, 255, 255));")
 
+
+# TODO
+#// холст
 
 def callError(title, text):
     msg = QtWidgets.QMessageBox()
@@ -38,15 +44,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         """
         super(MainWindow, self).__init__(*args, **kwargs)
         self.setupUi(self)
+        self.graphicsView.setMouseTracking(True)
 
         self.polygons = []
         self.polygon = Polygon()
+        self.color = QColor("black")
         
         self.colorBtn.clicked.connect(self.chooseColor)
 
         self.img = QImage(1185, 874, QImage.Format_RGB32)
         self.img.fill(QColor("white"))
-        self.scene = Canvas(self, self.img, self.polygons, self.polygon)
+        self.scene = Canvas(self, self.img, self.polygon)
         self.scene.setSceneRect(0, 0, 1185, 874)
         self.graphicsView.setScene(self.scene)
         self.scene.addPixmap(QPixmap.fromImage(self.img))
@@ -55,28 +63,27 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.closeFigBtn.setDisabled(True)
         self.closeFigBtn.clicked.connect(self.closeFig)
 
+        self.paintBtn.clicked.connect(self.fill)
         self.clearBtn.clicked.connect(self.clear)
 
-        self.draw()
+    def fill(self):
+        filler = Filler(
+            self.scene,
+            self.img,
+            self.color,
+            self.polygons
+        )
 
+        delay = self.delaySB.value()
+
+        filler.run(delay)
+    
     def closeFig(self):
         if self.polygon.num < 3:
             self.closeFigBtn.setDisabled(False)
             return
 
-        # TODO функция :З
-        num = self.pointsTable.rowCount()
-        self.pointsTable.setRowCount(num + 1)
-        self.pointsTable.setItem(
-            num,
-            0,
-            QTableWidgetItem("end")
-        )
-        self.pointsTable.setItem(
-            num,
-            1,
-            QTableWidgetItem("end")
-        )
+        self.addRow("end", "end")
 
         painter = QPainter(self.img)
 
@@ -90,7 +97,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         painter.end()
 
-        self.polygons.append(self.polygon)
+        self.polygons.append(copy.deepcopy(self.polygon))
         self.polygon.clear()
 
         self.closeFigBtn.setDisabled(True)
@@ -100,20 +107,25 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.img.fill(QColor("white"))
         self.scene.addPixmap(QPixmap.fromImage(self.img))
         self.pointsTable.setRowCount(0)
+        self.polygons = []
+        self.polygon.clear()
 
-    def addPoint(self, point):
+    def addRow(self, xStr, yStr):
         num = self.pointsTable.rowCount()
         self.pointsTable.setRowCount(num + 1)
         self.pointsTable.setItem(
             num,
             0,
-            QTableWidgetItem(str(point.x))
+            QTableWidgetItem(xStr)
         )
         self.pointsTable.setItem(
             num,
             1,
-            QTableWidgetItem(str(point.y))
+            QTableWidgetItem(yStr)
         )
+
+    def addPoint(self, point):
+        self.addRow(str(point.x), str(point.y))
 
     def handleAddPoint(self):
         """
@@ -145,16 +157,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         """
         self.color = QColorDialog.getColor()
         self.colorBtn.setStyleSheet(BACKGROUNDSTRING % self.color.name())
-
-    def draw(self):
-        for x in range(0, 100):
-            self.img.setPixelColor(x, 100, QColor("black"))
-
-        self.scene.clear()
-        self.scene.addPixmap(QPixmap.fromImage(self.img))
-
-        print(self.img.pixelColor(0, 100).name())
-        print(self.img.pixelColor(0, 101).name())
 
 
 if __name__ == '__main__':
