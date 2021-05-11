@@ -5,8 +5,6 @@ from PyQt5.QtGui import QPainter, QPixmap, QColor
 from PyQt5.QtCore import QTime
 from PyQt5.QtCore import QCoreApplication, QEventLoop
 
-from math import floor
-
 
 class Filler:
 
@@ -60,33 +58,18 @@ class Filler:
         painter = QPainter(self.img)
         painter.setPen(self.color)
 
-        #print("DEBUG BEGIN")
-        #print("len = ", len(activeEdges))
-        #print("list = ", activeEdges)
         for i in range(0, len(activeEdges), 2):
-            #print("i = ", i)
-            #print("activeEdges[i] = ", activeEdges[i])
             x = int(round(activeEdges[i][0] + 1 / 2))
             while x < int(round(activeEdges[i + 1][0]) + 1 / 2):
                 painter.drawPoint(x, y)
                 x += 1
 
             self.scene.clear()
-
-            painter.setPen(QColor("black"))
-            for pol in self.polygons:
-                for i in range(pol.num):
-                    f = pol.points[i]
-                    s = pol.points[i - 1]
-                    painter.drawLine(f.x, f.y, s.x, s.y)
-            painter.setPen(self.color)
-
             self.scene.addPixmap(QPixmap.fromImage(self.img))
 
-        if delay:
-            sleepTime = QTime.currentTime().addMSecs(delay)
-            while (QTime.currentTime() < sleepTime):
-                QCoreApplication.processEvents(QEventLoop.AllEvents, delay)
+        sleepTime = QTime.currentTime().addMSecs(delay)
+        while (QTime.currentTime() < sleepTime):
+            QCoreApplication.processEvents(QEventLoop.AllEvents, delay)
 
 
     def updateActiveAdges(self, activeEdges):

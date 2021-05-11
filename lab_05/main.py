@@ -1,15 +1,16 @@
 import sys
 
 from PyQt5 import QtWidgets, uic
-from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
+from PyQt5.QtWidgets import QLabel, QTableWidget, QTableWidgetItem
 from PyQt5.QtWidgets import QHeaderView, QGraphicsScene
 from PyQt5.QtWidgets import QColorDialog
 from PyQt5.QtGui import (
     QPen, QColor, QPainter, QPixmap, QImage
 )
-from PyQt5.QtCore import QSize
+from PyQt5.QtCore import QSize, QTime
 
 import copy
+import time
 
 from MainWindow import Ui_MainWindow
 
@@ -21,9 +22,6 @@ BACKGROUNDSTRING = ("background-color: qlineargradient(spread:pad, "
                    + "x1:0, y1:0, x2:0, y2:0, stop:0 %s"
                    + ", stop:1 rgba(255, 255, 255, 255));")
 
-
-# TODO
-#// холст
 
 def callError(title, text):
     msg = QtWidgets.QMessageBox()
@@ -76,7 +74,22 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         delay = self.delaySB.value()
 
+        dt = time.time()
         filler.run(delay)
+        dt = time.time() - dt
+
+        painter = QPainter(self.img)
+        for pol in self.polygons:
+            for i in range(pol.num):
+                f = pol.points[i]
+                s = pol.points[i - 1]
+                painter.drawLine(f.x, f.y, s.x, s.y)
+
+        self.scene.clear()
+        self.scene.addPixmap(QPixmap.fromImage(self.img))
+
+        self.timeLbl.setText("Время заполнения: {:.2f} c".format(dt))
+
     
     def closeFig(self):
         if self.polygon.num < 3:
@@ -109,6 +122,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.pointsTable.setRowCount(0)
         self.polygons = []
         self.polygon.clear()
+        self.timeLbl.setText("Время заполнения:")
 
     def addRow(self, xStr, yStr):
         num = self.pointsTable.rowCount()
