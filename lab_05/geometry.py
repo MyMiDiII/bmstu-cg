@@ -42,6 +42,10 @@ class Polygon:
         self.points.append(point)
         self.num += 1
 
+    def deletePoint(self):
+        self.points.pop()
+        self.num -= 1
+
     def getLastPoint(self):
         return self.points[self.num - 1] if self.num else None
 

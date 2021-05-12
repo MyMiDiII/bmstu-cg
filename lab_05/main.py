@@ -12,11 +12,16 @@ from PyQt5.QtCore import QSize, QTime
 import copy
 import time
 
+from PyQt5.sip import delete
+
 from MainWindow import Ui_MainWindow
 
 from draw import Canvas
 from geometry import Point, Edge, Polygon
 from fill import Filler
+
+# TODO
+# ! Удаление последней точки
 
 BACKGROUNDSTRING = ("background-color: qlineargradient(spread:pad, "
                    + "x1:0, y1:0, x2:0, y2:0, stop:0 %s"
@@ -58,13 +63,28 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.scene.addPixmap(QPixmap.fromImage(self.img))
 
         self.addPointBtn.clicked.connect(self.handleAddPoint)
+        self.deletePointBtn.setDisabled(True)
+        self.deletePointBtn.clicked.connect(self.handleDeletePoint)
         self.closeFigBtn.setDisabled(True)
         self.closeFigBtn.clicked.connect(self.closeFig)
 
         self.paintBtn.clicked.connect(self.fill)
         self.clearBtn.clicked.connect(self.clear)
 
+    def setBtnsState(self, state):
+        btns = [
+            self.addPointBtn,
+            self.deletePointBtn,
+            self.paintBtn,
+            self.clearBtn
+        ]
+
+        for btn in btns:
+            btn.setDisabled(state)
+
     def fill(self):
+        self.setBtnsState(True)
+
         filler = Filler(
             self.scene,
             self.img,
@@ -89,6 +109,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.scene.addPixmap(QPixmap.fromImage(self.img))
 
         self.timeLbl.setText("Время заполнения: {:.2f} c".format(dt))
+        self.setBtnsState(False)
 
     
     def closeFig(self):
@@ -114,6 +135,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.polygon.clear()
 
         self.closeFigBtn.setDisabled(True)
+        self.deletePointBtn.setDisabled(True)
 
     def clear(self):
         self.scene.clear()
@@ -142,9 +164,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.addRow(str(point.x), str(point.y))
 
     def handleAddPoint(self):
-        """
-            Добавление вершины
-        """
         point = Point(self.xSB.value(), self.ySB.value())
 
         self.addPoint(point)
@@ -153,6 +172,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         if self.polygon.num == 0:
             painter.drawPoint(point.x, point.y)
+            self.deletePointBtn.setDisabled(False)
         else:
             last = self.polygon.getLastPoint()
             painter.drawLine(last.x, last.y, point.x, point.y)
@@ -164,6 +184,32 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.polygon.addPoint(point)
         if self.polygon.num > 2:
             self.closeFigBtn.setDisabled(False)
+
+    def deleteRow(self):
+        num = self.pointsTable.rowCount()
+        self.pointsTable.setRowCount(num - 1)
+
+    def handleDeletePoint(self):
+        self.deleteRow()
+
+        painter = QPainter(self.img)
+        painter.setPen(QColor("white"))
+
+        last = self.polygon.getLastPoint()
+
+        if self.polygon.points:
+            self.polygon.deletePoint()
+
+        if self.polygon.num == 0:
+            painter.drawPoint(last.x, last.y)
+            self.deletePointBtn.setDisabled(True)
+        else:
+            prev = self.polygon.getLastPoint()
+            painter.drawLine(last.x, last.y, prev.x, prev.y)
+
+        self.scene.clear()
+        self.scene.addPixmap(QPixmap.fromImage(self.img))
+        painter.end()
 
     def chooseColor(self):
         """

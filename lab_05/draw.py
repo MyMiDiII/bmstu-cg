@@ -26,6 +26,9 @@ class Canvas(QGraphicsScene):
         if event.key() == Qt.Key_Shift:
             self.lineMode = True
 
+        if event.key() == Qt.Key_Escape:
+            self.window.handleDeletePoint()
+
     def keyReleaseEvent(self, event):
         if event.key() == Qt.Key_Shift:
             self.lineMode = False
@@ -57,13 +60,11 @@ class Canvas(QGraphicsScene):
             self.clear()
             self.addPixmap(QPixmap.fromImage(self.img))
 
-            print("event")
-            print(self.window.polygons)
             self.window.polygons.append(copy.deepcopy(self.polygon))
-            print(self.window.polygons)
             self.polygon.clear()
 
             self.window.closeFigBtn.setDisabled(True)
+            self.window.deletePointBtn.setDisabled(True)
             self.window.addRow("end", "end")
 
             return
@@ -77,6 +78,7 @@ class Canvas(QGraphicsScene):
 
         if self.polygon.num == 0:
             painter.drawPoint(point.x, point.y)
+            self.window.deletePointBtn.setDisabled(False)
         else:
             last = self.polygon.getLastPoint()
 
