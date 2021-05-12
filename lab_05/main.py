@@ -20,9 +20,6 @@ from draw import Canvas
 from geometry import Point, Edge, Polygon
 from fill import Filler
 
-# TODO
-# ! Удаление последней точки
-
 BACKGROUNDSTRING = ("background-color: qlineargradient(spread:pad, "
                    + "x1:0, y1:0, x2:0, y2:0, stop:0 %s"
                    + ", stop:1 rgba(255, 255, 255, 255));")
@@ -31,6 +28,13 @@ BACKGROUNDSTRING = ("background-color: qlineargradient(spread:pad, "
 def callError(title, text):
     msg = QtWidgets.QMessageBox()
     msg.setIcon(QtWidgets.QMessageBox.Critical)
+    msg.setWindowTitle(title)
+    msg.setText(text)
+    msg.exec_()
+
+def callInfo(title, text):
+    msg = QtWidgets.QMessageBox()
+    msg.setIcon(QtWidgets.QMessageBox.Information)
     msg.setWindowTitle(title)
     msg.setText(text)
     msg.exec_()
@@ -70,11 +74,20 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.paintBtn.clicked.connect(self.fill)
         self.clearBtn.clicked.connect(self.clear)
+        self.roolsBtn.clicked.connect(self.rools)
+
+    def rools(self):
+        title = "Правила ввода"
+        text = ("<b>ЛКМ</b> – добавление вершины;<br>"
+                + "<b>ПКМ</b> – замкнуть фигуру;<br>"
+                + "<b>Shift</b> – горизонтальное/вертикальное ребро;<br>"
+                + "<b>Esc</b> – удаление последней вершины.")
+
+        callInfo(title, text)
 
     def setBtnsState(self, state):
         btns = [
             self.addPointBtn,
-            self.deletePointBtn,
             self.paintBtn,
             self.clearBtn
         ]
@@ -83,6 +96,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             btn.setDisabled(state)
 
     def fill(self):
+        if self.polygon.points:
+            callError("Незамкнутая облать!", "Область не замкнута!")
+            return
+
         self.setBtnsState(True)
 
         filler = Filler(
