@@ -59,17 +59,18 @@ class Filler:
         painter.setPen(self.color)
 
         for i in range(0, len(activeEdges), 2):
-            x = int(round(activeEdges[i][0] + 1 / 2))
-            while x < int(round(activeEdges[i + 1][0]) + 1 / 2):
+            x = int(round(activeEdges[i][0]))
+            while x <= int(round(activeEdges[i + 1][0]) - 1 / 2):
                 painter.drawPoint(x, y)
                 x += 1
 
-            self.scene.clear()
-            self.scene.addPixmap(QPixmap.fromImage(self.img))
+        self.scene.clear()
+        self.scene.addPixmap(QPixmap.fromImage(self.img))
 
         sleepTime = QTime.currentTime().addMSecs(delay)
         while (QTime.currentTime() < sleepTime):
             QCoreApplication.processEvents(QEventLoop.AllEvents, delay)
+
 
 
     def updateActiveAdges(self, activeEdges):
