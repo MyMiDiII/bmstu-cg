@@ -63,7 +63,7 @@ def brezenham(xc, yc, R, scene, pen, drawFlag=True):
             else:
                 x += 1
                 y -= 1
-                capDelta = capDelta + 2 * x - 2 * y + 2
+                capDelta = capDelta + 2 * (x - y + 1)
 
         elif capDelta > 0:
             delta = 2 * capDelta - 2 * x - 1
@@ -71,7 +71,7 @@ def brezenham(xc, yc, R, scene, pen, drawFlag=True):
             if delta <= 0:
                 x += 1
                 y -= 1
-                capDelta = capDelta + 2 * x - 2 * y + 2
+                capDelta = capDelta + 2 * (x - y + 1)
             else:
                 y -= 1
                 capDelta = capDelta - 2 * y + 1
@@ -79,7 +79,7 @@ def brezenham(xc, yc, R, scene, pen, drawFlag=True):
         else:
             x += 1
             y -= 1
-            capDelta = capDelta + 2 * x - 2 * y + 2
+            capDelta = capDelta + 2 * (x - y + 1)
 
 
 def midpoint(xc, yc, R, scene, pen, drawFlag=True):
