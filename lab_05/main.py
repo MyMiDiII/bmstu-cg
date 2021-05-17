@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import QColorDialog
 from PyQt5.QtGui import (
     QPen, QColor, QPainter, QPixmap, QImage
 )
-from PyQt5.QtCore import QSize, QTime
+from PyQt5.QtCore import QSize, QTime, Qt
 
 import copy
 import time
@@ -234,6 +234,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         """
         self.color = QColorDialog.getColor()
         self.colorBtn.setStyleSheet(BACKGROUNDSTRING % self.color.name())
+
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_Shift:
+            self.scene.lineMode = True
+
+        if event.key() == Qt.Key_Escape:
+            self.handleDeletePoint()
+
+    def keyReleaseEvent(self, event):
+        if event.key() == Qt.Key_Shift:
+            self.scene.lineMode = False
 
 
 if __name__ == '__main__':
