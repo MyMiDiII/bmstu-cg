@@ -52,7 +52,6 @@ class Filler:
         if y in yGroups:
             for edge in yGroups[y]:
                 activeEdges.append(edge)
-        activeEdges.sort(key=lambda edge: edge[0])
 
     def drawScanLine(self, activeEdges, y, delay):
         painter = QPainter(self.img)
@@ -72,7 +71,6 @@ class Filler:
             QCoreApplication.processEvents(QEventLoop.AllEvents, delay)
 
 
-
     def updateActiveAdges(self, activeEdges):
         i = 0
 
@@ -80,10 +78,12 @@ class Filler:
             activeEdges[i][0] += activeEdges[i][1]
             activeEdges[i][2] -= 1
 
-            if not activeEdges[i][2]:
+            if activeEdges[i][2] < 0:
                 activeEdges.pop(i)
             else:
                 i += 1
+
+        activeEdges.sort(key=lambda edge: edge[0])
 
     def run(self, delay=0):
         yGroups = self.createYGroups()
@@ -93,6 +93,6 @@ class Filler:
         y = self.maxY
 
         for y in range(self.maxY, self.minY - 1, -1):
-            self.addActiveEdges(activeEdges, yGroups, y)
-            self.drawScanLine(activeEdges, y, delay)
             self.updateActiveAdges(activeEdges)
+            self.drawScanLine(activeEdges, y, delay)
+            self.addActiveEdges(activeEdges, yGroups, y)
