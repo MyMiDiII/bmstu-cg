@@ -59,10 +59,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         
         self.colorBtn.clicked.connect(self.chooseColor)
 
-        self.img = QImage(1185, 874, QImage.Format_RGB32)
+        self.img = QImage(1178, 872, QImage.Format_RGB32)
         self.img.fill(QColor("white"))
         self.scene = Canvas(self, self.img, self.polygon)
-        self.scene.setSceneRect(0, 0, 1185, 874)
+        self.scene.setSceneRect(0, 0, 1178, 872)
         self.graphicsView.setScene(self.scene)
         self.scene.addPixmap(QPixmap.fromImage(self.img))
 
