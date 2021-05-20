@@ -83,8 +83,6 @@ class Filler:
             else:
                 i += 1
 
-        activeEdges.sort(key=lambda edge: edge[0])
-
     def run(self, delay=0):
         yGroups = self.createYGroups()
 
@@ -94,5 +92,6 @@ class Filler:
 
         for y in range(self.maxY, self.minY - 1, -1):
             self.updateActiveAdges(activeEdges)
+            activeEdges.sort(key=lambda edge: edge[0])
             self.drawScanLine(activeEdges, y, delay)
             self.addActiveEdges(activeEdges, yGroups, y)
