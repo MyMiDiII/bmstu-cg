@@ -32,26 +32,28 @@ class Filler:
             dy = dy if dy else -1
             dx = (begin.x - end.x) / dy
 
-            return end.y, [end.x, dx, dy]
+            return [end.y, end.x, dx, dy]
 
-        yGroups = {}
+        yGroups = []
 
         for polygon in self.polygons:
             for i in range(polygon.num):
-                y, edge = getEdge(polygon.points[i], polygon.points[i - 1])
+                edge = getEdge(polygon.points[i], polygon.points[i - 1])
 
-                if edge[2] != -1:
-                    if y not in yGroups:
-                        yGroups[y] = [edge]
-                    else:
-                        yGroups[y].append(edge)
+                if edge[3] != -1:
+                    yGroups.append(edge)
+
+        yGroups.sort(key=lambda edge: edge[0], reverse=True)
 
         return yGroups
 
-    def addActiveEdges(self, activeEdges, yGroups, y):
-        if y in yGroups:
-            for edge in yGroups[y]:
-                activeEdges.append(edge)
+    def addActiveEdges(self, activeEdges, yGroups, index, y):
+
+        while index < len(yGroups) and yGroups[index][0] == y:
+            activeEdges.append(yGroups[index][1:])
+            index += 1
+
+        return index
 
     def drawScanLine(self, activeEdges, y, delay):
         painter = QPainter(self.img)
@@ -84,14 +86,12 @@ class Filler:
                 i += 1
 
     def run(self, delay=0):
-        yGroups = self.createYGroups()
+        index, yGroups = 0, self.createYGroups()
 
         activeEdges = []
-
-        y = self.maxY
 
         for y in range(self.maxY, self.minY - 1, -1):
             self.updateActiveAdges(activeEdges)
             activeEdges.sort(key=lambda edge: edge[0])
             self.drawScanLine(activeEdges, y, delay)
-            self.addActiveEdges(activeEdges, yGroups, y)
+            index = self.addActiveEdges(activeEdges, yGroups, index, y)
