@@ -20,6 +20,8 @@ from draw import Canvas
 from geometry import Point, Edge, Polygon
 from fill import Filler
 
+# ! удалить удаление :3
+
 BACKGROUNDSTRING = ("background-color: qlineargradient(spread:pad, "
                    + "x1:0, y1:0, x2:0, y2:0, stop:0 %s"
                    + ", stop:1 rgba(255, 255, 255, 255));")
@@ -124,10 +126,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         )
 
         delay = self.delaySB.value()
+        painter = QPainter(self.img)
+        painter.setPen(QColor(self.color))
 
         dt = time.time()
-        filler.run(delay, )
+        filler.run(painter, self.seed, delay)
         dt = time.time() - dt
+
+        self.scene.clear()
+        self.scene.addPixmap(QPixmap.fromImage(self.img))
+        painter.end()
 
         self.timeLbl.setText("Время заполнения: {:.2f} c".format(dt))
         self.setBtnsState(False)
