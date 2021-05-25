@@ -53,20 +53,22 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.graphicsView.setMouseTracking(True)
 
+        self.seed = None
         self.polygons = []
         self.polygon = Polygon()
         self.color = QColor("black")
         
         self.colorBtn.clicked.connect(self.chooseColor)
 
-        self.img = QImage(1178, 872, QImage.Format_RGB32)
+        self.img = QImage(1178, 873, QImage.Format_RGB32)
         self.img.fill(QColor("white"))
         self.scene = Canvas(self, self.img, self.polygon)
-        self.scene.setSceneRect(0, 0, 1178, 872)
+        self.scene.setSceneRect(0, 0, 1178, 873)
         self.graphicsView.setScene(self.scene)
         self.scene.addPixmap(QPixmap.fromImage(self.img))
 
         self.addPointBtn.clicked.connect(self.handleAddPoint)
+        self.setSeedPointBtn.clicked.connect(self.readSeed)
         self.deletePointBtn.setDisabled(True)
         self.deletePointBtn.clicked.connect(self.handleDeletePoint)
         self.closeFigBtn.setDisabled(True)
@@ -80,10 +82,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         title = "Правила ввода"
         text = ("<b>ЛКМ</b> – добавление вершины;<br>"
                 + "<b>ПКМ</b> – замкнуть фигуру;<br>"
+                + "<b>Ctrl+ЛКМ</b> – установить затравку;<br>"
                 + "<b>Shift</b> – горизонтальное/вертикальное ребро;<br>"
                 + "<b>Esc</b> – удаление последней вершины.")
 
         callInfo(title, text)
+
+    def setSeed(self, point):
+        self.seed = point
+        self.seedStateLbl.setText("({:d}, {:d})".format(point.x, point.y))
+
+    def readSeed(self):
+        point = Point(self.xSB.value(), self.ySB.value())
+        self.setSeed(point)
 
     def setBtnsState(self, state):
         btns = [
@@ -97,37 +108,28 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def fill(self):
         if self.polygon.points:
-            callError("Незамкнутая облать!", "Область не замкнута!")
+            callError("Незамкнутая область!", "Область не замкнута!")
             return
+
+        if self.seed is None:
+            callError("Отсутствие затравки", "Установите затравочный пиксель!")
 
         self.setBtnsState(True)
 
         filler = Filler(
             self.scene,
             self.img,
-            self.color,
-            self.polygons
+            self.color
         )
 
         delay = self.delaySB.value()
 
         dt = time.time()
-        filler.run(delay)
+        filler.run(delay, )
         dt = time.time() - dt
-
-        painter = QPainter(self.img)
-        for pol in self.polygons:
-            for i in range(pol.num):
-                f = pol.points[i]
-                s = pol.points[i - 1]
-                painter.drawLine(f.x, f.y, s.x, s.y)
-
-        self.scene.clear()
-        self.scene.addPixmap(QPixmap.fromImage(self.img))
 
         self.timeLbl.setText("Время заполнения: {:.2f} c".format(dt))
         self.setBtnsState(False)
-
     
     def closeFig(self):
         if self.polygon.num < 3:
@@ -159,9 +161,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.img.fill(QColor("white"))
         self.scene.addPixmap(QPixmap.fromImage(self.img))
         self.pointsTable.setRowCount(0)
+        self.seed = None
         self.polygons = []
         self.polygon.clear()
         self.timeLbl.setText("Время заполнения:")
+        self.seedStateLbl.setText("не установлена")
 
     def addRow(self, xStr, yStr):
         num = self.pointsTable.rowCount()
@@ -239,12 +243,18 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if event.key() == Qt.Key_Shift:
             self.scene.lineMode = True
 
+        if event.key() == Qt.Key_Control:
+            self.scene.seedMode = True
+
         if event.key() == Qt.Key_Escape:
-            self.handleDeletePoint()
+            self.window.handleDeletePoint()
 
     def keyReleaseEvent(self, event):
         if event.key() == Qt.Key_Shift:
             self.scene.lineMode = False
+
+        if event.key() == Qt.Key_Control:
+            self.scene.seedMode = False
 
 
 if __name__ == '__main__':

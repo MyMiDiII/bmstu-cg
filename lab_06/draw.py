@@ -14,17 +14,23 @@ import copy
 class Canvas(QGraphicsScene):
     """Класс холста"""
 
-    def __init__(self, window, img, polygon, lineMode=False, *args, **kwargs):
+    def __init__(self, window, img, polygon,
+                 lineMode=False, seedMode=False,
+                 *args, **kwargs):
         """Конструктор"""
         super(Canvas, self).__init__(*args, **kwargs)
         self.window = window
         self.img = img
         self.polygon = polygon
         self.lineMode = lineMode
+        self.seedMode = seedMode
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Shift:
             self.lineMode = True
+
+        if event.key() == Qt.Key_Control:
+            self.seedMode = True
 
         if event.key() == Qt.Key_Escape:
             self.window.handleDeletePoint()
@@ -32,6 +38,9 @@ class Canvas(QGraphicsScene):
     def keyReleaseEvent(self, event):
         if event.key() == Qt.Key_Shift:
             self.lineMode = False
+
+        if event.key() == Qt.Key_Control:
+            self.seedMode = False
 
     def getHorOrVerLine(self, last, point):
         dx = abs(point.x - last.x)
@@ -45,6 +54,15 @@ class Canvas(QGraphicsScene):
         return point
 
     def mousePressEvent(self, event):
+        point = Point(
+            int(event.scenePos().x()),
+            int(event.scenePos().y())
+        )
+
+        if self.seedMode:
+            self.window.setSeed(point)
+
+            return
 
         if event.button() == Qt.RightButton:
             if self.polygon.num < 3:
@@ -68,11 +86,6 @@ class Canvas(QGraphicsScene):
             self.window.addRow("end", "end")
 
             return
-
-        point = Point(
-            int(event.scenePos().x()),
-            int(event.scenePos().y())
-        )
 
         painter = QPainter(self.img)
 

@@ -108,7 +108,7 @@
      </widget>
     </item>
     <item row="3" column="2" colspan="4">
-     <widget class="QPushButton" name="setSeedPoint">
+     <widget class="QPushButton" name="setSeedPointBtn">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -231,13 +231,6 @@
       </property>
      </widget>
     </item>
-    <item row="10" column="0" colspan="4">
-     <widget class="QLabel" name="timeLbl">
-      <property name="text">
-       <string>Время заполнения:</string>
-      </property>
-     </widget>
-    </item>
     <item row="11" column="0" colspan="6">
      <widget class="QPushButton" name="roolsBtn">
       <property name="sizePolicy">
@@ -253,6 +246,12 @@
     </item>
     <item row="1" column="0" colspan="2">
      <widget class="QLabel" name="seedLbl">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="text">
        <string>Затравка:</string>
       </property>
@@ -260,8 +259,27 @@
     </item>
     <item row="1" column="2" colspan="4">
      <widget class="QLabel" name="seedStateLbl">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="text">
        <string>не установлена</string>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="0" colspan="6">
+     <widget class="QLabel" name="timeLbl">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Время заполнения:</string>
       </property>
      </widget>
     </item>
