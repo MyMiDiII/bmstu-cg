@@ -113,6 +113,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         if self.seed is None:
             callError("Отсутствие затравки", "Установите затравочный пиксель!")
+            return
 
         self.setBtnsState(True)
 
