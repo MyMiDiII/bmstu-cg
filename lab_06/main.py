@@ -20,8 +20,6 @@ from draw import Canvas
 from geometry import Point, Edge, Polygon
 from fill import Filler
 
-# ! удалить удаление :3
-
 BACKGROUNDSTRING = ("background-color: qlineargradient(spread:pad, "
                    + "x1:0, y1:0, x2:0, y2:0, stop:0 %s"
                    + ", stop:1 rgba(255, 255, 255, 255));")
@@ -62,17 +60,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         
         self.colorBtn.clicked.connect(self.chooseColor)
 
-        self.img = QImage(1178, 873, QImage.Format_RGB32)
+        self.img = QImage(1182, 874, QImage.Format_RGB32)
         self.img.fill(QColor("white"))
         self.scene = Canvas(self, self.img, self.polygon)
-        self.scene.setSceneRect(0, 0, 1178, 873)
+        self.scene.setSceneRect(0, 0, 1182, 874)
         self.graphicsView.setScene(self.scene)
         self.scene.addPixmap(QPixmap.fromImage(self.img))
 
         self.addPointBtn.clicked.connect(self.handleAddPoint)
         self.setSeedPointBtn.clicked.connect(self.readSeed)
-        self.deletePointBtn.setDisabled(True)
-        self.deletePointBtn.clicked.connect(self.handleDeletePoint)
         self.closeFigBtn.setDisabled(True)
         self.closeFigBtn.clicked.connect(self.closeFig)
 
@@ -85,8 +81,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         text = ("<b>ЛКМ</b> – добавление вершины;<br>"
                 + "<b>ПКМ</b> – замкнуть фигуру;<br>"
                 + "<b>Ctrl+ЛКМ</b> – установить затравку;<br>"
-                + "<b>Shift</b> – горизонтальное/вертикальное ребро;<br>"
-                + "<b>Esc</b> – удаление последней вершины.")
+                + "<b>Shift</b> – горизонтальное/вертикальное ребро.")
 
         callInfo(title, text)
 
@@ -163,7 +158,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.polygon.clear()
 
         self.closeFigBtn.setDisabled(True)
-        self.deletePointBtn.setDisabled(True)
 
     def clear(self):
         self.scene.clear()
@@ -202,7 +196,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         if self.polygon.num == 0:
             painter.drawPoint(point.x, point.y)
-            self.deletePointBtn.setDisabled(False)
         else:
             last = self.polygon.getLastPoint()
             painter.drawLine(last.x, last.y, point.x, point.y)
@@ -232,7 +225,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         if self.polygon.num == 0:
             painter.drawPoint(last.x, last.y)
-            self.deletePointBtn.setDisabled(True)
         else:
             prev = self.polygon.getLastPoint()
             painter.drawLine(last.x, last.y, prev.x, prev.y)

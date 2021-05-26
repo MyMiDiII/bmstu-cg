@@ -21,6 +21,60 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
+    <item row="2" column="2">
+     <widget class="QLabel" name="yLbl">
+      <property name="text">
+       <string>Y:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0" colspan="2">
+     <widget class="QLabel" name="seedLbl">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Затравка:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="2" colspan="3">
+     <widget class="QSpinBox" name="delaySB">
+      <property name="maximum">
+       <number>50</number>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="0" colspan="3">
+     <widget class="QLabel" name="colorLbl">
+      <property name="text">
+       <string>Цвет заполнения:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0" colspan="6">
+     <widget class="QPushButton" name="closeFigBtn">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Замкнуть фигуру</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="5">
+     <widget class="QLabel" name="msLbl">
+      <property name="text">
+       <string>мс</string>
+      </property>
+     </widget>
+    </item>
     <item row="0" column="0" colspan="6">
      <widget class="QTableWidget" name="pointsTable">
       <property name="sizePolicy">
@@ -62,8 +116,18 @@
       </column>
      </widget>
     </item>
-    <item row="0" column="6" rowspan="12">
-     <widget class="QGraphicsView" name="graphicsView"/>
+    <item row="1" column="2" colspan="4">
+     <widget class="QLabel" name="seedStateLbl">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>не установлена</string>
+      </property>
+     </widget>
     </item>
     <item row="2" column="0">
      <widget class="QLabel" name="xLbl">
@@ -72,91 +136,7 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="1">
-     <widget class="QSpinBox" name="xSB">
-      <property name="maximum">
-       <number>1184</number>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="2">
-     <widget class="QLabel" name="yLbl">
-      <property name="text">
-       <string>Y:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="3" colspan="2">
-     <widget class="QSpinBox" name="ySB">
-      <property name="maximum">
-       <number>873</number>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="0" colspan="2">
-     <widget class="QPushButton" name="addPointBtn">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text">
-       <string>Добавить
-вершину</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="2" colspan="4">
-     <widget class="QPushButton" name="setSeedPointBtn">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text">
-       <string>Установить
-затравочную
-точку</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="0" colspan="6">
-     <widget class="QPushButton" name="deletePointBtn">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text">
-       <string>Удалить последнюю
-вершину</string>
-      </property>
-     </widget>
-    </item>
-    <item row="5" column="0" colspan="6">
-     <widget class="QPushButton" name="closeFigBtn">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text">
-       <string>Замкнуть фигуру</string>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="0" colspan="3">
-     <widget class="QLabel" name="colorLbl">
-      <property name="text">
-       <string>Цвет заполнения:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="4" colspan="2">
+    <item row="5" column="4" colspan="2">
      <widget class="QPushButton" name="colorBtn">
       <property name="enabled">
        <bool>true</bool>
@@ -184,41 +164,10 @@
       </property>
      </widget>
     </item>
-    <item row="7" column="0" colspan="2">
-     <widget class="QLabel" name="delayLbl">
-      <property name="text">
-       <string>Задержка:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="7" column="2" colspan="3">
-     <widget class="QSpinBox" name="delaySB">
-      <property name="maximum">
-       <number>50</number>
-      </property>
-     </widget>
-    </item>
-    <item row="7" column="5">
-     <widget class="QLabel" name="msLbl">
-      <property name="text">
-       <string>мс</string>
-      </property>
-     </widget>
+    <item row="0" column="6" rowspan="11">
+     <widget class="QGraphicsView" name="graphicsView"/>
     </item>
     <item row="8" column="0" colspan="6">
-     <widget class="QPushButton" name="paintBtn">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text">
-       <string>Закрасить</string>
-      </property>
-     </widget>
-    </item>
-    <item row="9" column="0" colspan="6">
      <widget class="QPushButton" name="clearBtn">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -231,7 +180,34 @@
       </property>
      </widget>
     </item>
-    <item row="11" column="0" colspan="6">
+    <item row="3" column="0" colspan="2">
+     <widget class="QPushButton" name="addPointBtn">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Добавить
+вершину</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="0" colspan="6">
+     <widget class="QPushButton" name="paintBtn">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Закрасить</string>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="0" colspan="6">
      <widget class="QPushButton" name="roolsBtn">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -244,33 +220,7 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="0" colspan="2">
-     <widget class="QLabel" name="seedLbl">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text">
-       <string>Затравка:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="2" colspan="4">
-     <widget class="QLabel" name="seedStateLbl">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text">
-       <string>не установлена</string>
-      </property>
-     </widget>
-    </item>
-    <item row="10" column="0" colspan="6">
+    <item row="9" column="0" colspan="6">
      <widget class="QLabel" name="timeLbl">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -280,6 +230,42 @@
       </property>
       <property name="text">
        <string>Время заполнения:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="3" colspan="2">
+     <widget class="QSpinBox" name="ySB">
+      <property name="maximum">
+       <number>873</number>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QSpinBox" name="xSB">
+      <property name="maximum">
+       <number>1184</number>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="0" colspan="2">
+     <widget class="QLabel" name="delayLbl">
+      <property name="text">
+       <string>Задержка:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="2" colspan="4">
+     <widget class="QPushButton" name="setSeedPointBtn">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Установить
+затравочную
+точку</string>
       </property>
      </widget>
     </item>
