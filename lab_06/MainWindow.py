@@ -163,7 +163,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Maslova Lab06"))
         self.yLbl.setText(_translate("MainWindow", "Y:"))
         self.seedLbl.setText(_translate("MainWindow", "Затравка:"))
         self.colorLbl.setText(_translate("MainWindow", "Цвет заполнения:"))
