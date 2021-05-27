@@ -17,41 +17,12 @@ class Point:
         return self.x == other.x and self.y == other.y
 
 
-class Edge:
+class Segment:
     """
-        Класс ребра
+        Класс отрезка
     """
 
     def __init__(self, point1=Point(), point2=Point()):
         """Конструктор"""
         self.begin = point1
         self.end = point2
-
-
-class Polygon:
-    """
-        Класс многоугольной области
-    """
-
-    def __init__(self, points=[]):
-        """Конструктор"""
-        self.points = points
-        self.num = len(points)
-
-    def addPoint(self, point):
-        self.points.append(point)
-        self.num += 1
-
-    def deletePoint(self):
-        self.points.pop()
-        self.num -= 1
-
-    def getLastPoint(self):
-        return self.points[self.num - 1] if self.num else None
-
-    def getFirstPoint(self):
-        return self.points[0] if self.num else None
-
-    def clear(self):
-        self.points = []
-        self.num = 0

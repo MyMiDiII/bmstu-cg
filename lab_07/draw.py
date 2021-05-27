@@ -4,8 +4,8 @@
 
 from PyQt5.QtWidgets import QGraphicsScene
 
-from geometry import Point
-from PyQt5.QtGui import QPainter, QPixmap, QImage
+from geometry import Point, Segment
+from PyQt5.QtGui import QPainter, QPixmap, QImage, QColor
 from PyQt5.QtCore import Qt
 
 import copy
@@ -14,30 +14,23 @@ import copy
 class Canvas(QGraphicsScene):
     """Класс холста"""
 
-    def __init__(self, window, img, polygon,
-                 lineMode=False, seedMode=False,
+    def __init__(self, window, img,
+                 lineMode=False,
                  *args, **kwargs):
         """Конструктор"""
         super(Canvas, self).__init__(*args, **kwargs)
         self.window = window
         self.img = img
-        self.polygon = polygon
         self.lineMode = lineMode
-        self.seedMode = seedMode
+        self.prevPoint = None
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Shift:
             self.lineMode = True
 
-        if event.key() == Qt.Key_Control:
-            self.seedMode = True
-
     def keyReleaseEvent(self, event):
         if event.key() == Qt.Key_Shift:
             self.lineMode = False
-
-        if event.key() == Qt.Key_Control:
-            self.seedMode = False
 
     def getHorOrVerLine(self, last, point):
         dx = abs(point.x - last.x)
@@ -56,11 +49,8 @@ class Canvas(QGraphicsScene):
             int(event.scenePos().y())
         )
 
-        if self.seedMode:
-            self.window.setSeed(point)
-
-            return
-
+        """
+        TODO обработка отсекателя
         if event.button() == Qt.RightButton:
             if self.polygon.num < 3:
                 return
@@ -82,38 +72,40 @@ class Canvas(QGraphicsScene):
             self.window.addRow("end", "end")
 
             return
-
+        """
         painter = QPainter(self.img)
+        painter.setPen(QColor(self.window.segColor))
 
-        if self.polygon.num == 0:
+        if not self.prevPoint:
             painter.drawPoint(point.x, point.y)
+            self.prevPoint = point
+
         else:
-            last = self.polygon.getLastPoint()
+            prev = self.prevPoint
 
             if self.lineMode:
-                point = self.getHorOrVerLine(last, point)
+                point = self.getHorOrVerLine(prev, point)
 
-            painter.drawLine(last.x, last.y, point.x, point.y)
+            painter.drawLine(prev.x, prev.y, point.x, point.y)
+
+            seg = Segment(self.prevPoint, point)
+            self.window.addSegment(seg)
+            self.prevPoint = None
 
         self.clear()
         self.addPixmap(QPixmap.fromImage(self.img))
         painter.end()
 
-        self.polygon.addPoint(point)
-
-        self.window.addPoint(point)
-        if self.polygon.num > 2:
-            self.window.closeFigBtn.setDisabled(False)
-
     def mouseMoveEvent(self, event):
-        if self.polygon.num == 0:
+        if not self.prevPoint:
             return
 
         tmpImg = QImage(self.img)
 
         painter = QPainter(tmpImg)
+        painter.setPen(QColor(self.window.segColor))
 
-        last = self.polygon.getLastPoint()
+        prev = self.prevPoint
 
         point = Point(
             event.scenePos().x(),
@@ -121,9 +113,9 @@ class Canvas(QGraphicsScene):
         )
 
         if self.lineMode:
-            point = self.getHorOrVerLine(last, point)
+            point = self.getHorOrVerLine(prev, point)
 
-        painter.drawLine(last.x, last.y, point.x, point.y)
+        painter.drawLine(prev.x, prev.y, point.x, point.y)
 
         self.clear()
         self.addPixmap(QPixmap.fromImage(tmpImg))
