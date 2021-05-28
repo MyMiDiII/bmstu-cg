@@ -39,6 +39,8 @@ def callInfo(title, text):
     msg.setText(text)
     msg.exec_()
 
+# TODO формирование списка отрезков
+# TODO сохранение отсекателя
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     """
@@ -53,7 +55,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.graphicsView.setMouseTracking(True)
         self.tablesInit()
-        self.polygon = []
+        self.selecter = [-1, -1, -1, -1]
 
         self.segColor = QColor("black")
         self.selColor = QColor("red")
@@ -61,7 +63,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.img = QImage(1164, 874, QImage.Format_RGB32)
         self.img.fill(QColor("white"))
-        self.scene = Canvas(self, self.img, self.polygon)
+        self.scene = Canvas(self, self.img)
         self.scene.setSceneRect(0, 0, 1164, 874)
         self.graphicsView.setScene(self.scene)
         self.scene.addPixmap(QPixmap.fromImage(self.img))
@@ -71,6 +73,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.resultColorBtn.clicked.connect(self.chooseResColor)
 
         self.addSegmentBtn.clicked.connect(self.handleAddSegment)
+        self.setSelecterBtn.clicked.connect(self.handleSetSegment)
 
         self.clearBtn.clicked.connect(self.clear)
         self.roolsBtn.clicked.connect(self.rools)
@@ -138,6 +141,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.addSegment(segment)
 
         painter = QPainter(self.img)
+        painter.setPen(QColor(self.segColor))
 
         painter.drawLine(
             point1.x,
@@ -145,6 +149,62 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             point2.x,
             point2.y
         )
+
+        self.scene.clear()
+        self.scene.addPixmap(QPixmap.fromImage(self.img))
+        painter.end()
+
+    def setSelecterRow(self, xLeft, xRigth, yLow, yTop):
+        self.selecterTable.setRowCount(1)
+        self.selecterTable.setItem(
+            0,
+            0,
+            QTableWidgetItem(xLeft)
+        )
+        self.selecterTable.setItem(
+            0,
+            1,
+            QTableWidgetItem(xRigth)
+        )
+        self.selecterTable.setItem(
+            0,
+            2,
+            QTableWidgetItem(yLow)
+        )
+        self.selecterTable.setItem(
+            0,
+            3,
+            QTableWidgetItem(yTop)
+        )
+
+    def handleSetSegment(self):
+        xLeft = self.xLeftSB.value()
+        yLow = self.yLowSB.value()
+        xRight = self.xRightSB.value()
+        yTop = self.yTopSB.value()
+
+        if xLeft > xRight:
+            xLeft, xRight = xRight, xLeft
+
+        if yLow > yTop:
+            yLow, yTop = yTop, yLow
+
+        self.selecter = [xLeft, xRight, yLow, yTop]
+
+        self.setSelecterRow(
+            str(xLeft),
+            str(xRight),
+            str(yLow),
+            str(yTop)
+        )
+
+        painter = QPainter(self.img)
+        painter.setPen(QColor(self.selColor))
+
+        painter.drawLine(xLeft, yLow, xRight, yLow)
+        painter.drawLine(xRight, yLow, xRight, yTop)
+        painter.drawLine(xRight, yTop, xLeft, yTop)
+        painter.drawLine(xLeft, yTop, xLeft, yLow)
 
         self.scene.clear()
         self.scene.addPixmap(QPixmap.fromImage(self.img))

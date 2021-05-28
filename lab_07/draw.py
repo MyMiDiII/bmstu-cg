@@ -23,6 +23,7 @@ class Canvas(QGraphicsScene):
         self.img = img
         self.lineMode = lineMode
         self.prevPoint = None
+        self.firstCorner = None
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Shift:
@@ -49,30 +50,73 @@ class Canvas(QGraphicsScene):
             int(event.scenePos().y())
         )
 
-        """
-        TODO обработка отсекателя
         if event.button() == Qt.RightButton:
-            if self.polygon.num < 3:
+            if self.prevPoint:
                 return
 
-            first = self.polygon.getFirstPoint()
-            last = self.polygon.getLastPoint()
-
             painter = QPainter(self.img)
-            painter.drawLine(last.x, last.y, first.x, first.y)
+
+            if not self.firstCorner:
+                self.firstCorner = point
+                prevSelecter = self.window.selecter
+
+                xLeft = prevSelecter[0]
+                xRight = prevSelecter[1]
+                yLow = prevSelecter[2]
+                yTop = prevSelecter[3]
+
+                # TODO очистка таблицы
+                # TODO сохранение отсекателя
+
+                painter.setPen(QColor("white"))
+
+                painter.drawLine(xLeft, yLow, xRight, yLow)
+                painter.drawLine(xRight, yLow, xRight, yTop)
+                painter.drawLine(xRight, yTop, xLeft, yTop)
+                painter.drawLine(xLeft, yTop, xLeft, yLow)
+
+                self.clear()
+                self.addPixmap(QPixmap.fromImage(self.img))
+            
+            else:
+                xLeft = self.firstCorner.x
+                xRight = point.x
+                yLow = self.firstCorner.y
+                yTop = point.y
+
+                if xLeft > xRight:
+                    xLeft, xRight = xRight, xLeft
+
+                if yLow > yTop:
+                    yLow, yTop = yTop, yLow
+
+                self.window.setSelecterRow(
+                    str(xLeft),
+                    str(xRight),
+                    str(yLow),
+                    str(yTop)
+                )
+
+                painter.setPen(QColor(self.window.selColor))
+
+                painter.drawLine(xLeft, yLow, xRight, yLow)
+                painter.drawLine(xRight, yLow, xRight, yTop)
+                painter.drawLine(xRight, yTop, xLeft, yTop)
+                painter.drawLine(xLeft, yTop, xLeft, yLow)
+
+                self.firstCorner = None
+
+
             painter.end()
 
             self.clear()
             self.addPixmap(QPixmap.fromImage(self.img))
 
-            self.window.polygons.append(copy.deepcopy(self.polygon))
-            self.polygon.clear()
-
-            self.window.closeFigBtn.setDisabled(True)
-            self.window.addRow("end", "end")
-
             return
-        """
+
+        if self.firstCorner:
+            return
+
         painter = QPainter(self.img)
         painter.setPen(QColor(self.window.segColor))
 

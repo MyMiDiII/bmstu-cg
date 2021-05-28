@@ -257,7 +257,7 @@
        </layout>
       </item>
       <item>
-       <widget class="QPushButton" name="addSelecterBtn">
+       <widget class="QPushButton" name="setSelecterBtn">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
           <horstretch>0</horstretch>
