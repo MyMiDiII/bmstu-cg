@@ -18,7 +18,7 @@ from MainWindow import Ui_MainWindow
 
 from draw import Canvas
 from geometry import Point, Segment
-from fill import Filler
+from cut import Cutter
 
 BACKGROUNDSTRING = ("background-color: qlineargradient(spread:pad, "
                    + "x1:0, y1:0, x2:0, y2:0, stop:0 %s"
@@ -41,6 +41,7 @@ def callInfo(title, text):
 
 # TODO формирование списка отрезков
 # TODO сохранение отсекателя
+# TODO selectOr
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     """
@@ -109,6 +110,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.img.fill(QColor("white"))
         self.scene.addPixmap(QPixmap.fromImage(self.img))
         self.segmentsTable.setRowCount(0)
+        self.selecterTable.setRowCount(0)
+        self.selecter = [-1, -1, -1, -1]
 
     def addSegmentRow(self, point1Str, point2Str):
         num = self.segmentsTable.rowCount()

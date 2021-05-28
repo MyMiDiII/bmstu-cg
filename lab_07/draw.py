@@ -66,7 +66,6 @@ class Canvas(QGraphicsScene):
                 yTop = prevSelecter[3]
 
                 # TODO очистка таблицы
-                # TODO сохранение отсекателя
 
                 painter.setPen(QColor("white"))
 
@@ -89,6 +88,8 @@ class Canvas(QGraphicsScene):
 
                 if yLow > yTop:
                     yLow, yTop = yTop, yLow
+
+                self.window.selecter = [xLeft, xRight, yLow, yTop]
 
                 self.window.setSelecterRow(
                     str(xLeft),
@@ -141,20 +142,59 @@ class Canvas(QGraphicsScene):
         painter.end()
 
     def mouseMoveEvent(self, event):
-        if not self.prevPoint:
+        if not self.prevPoint and not self.firstCorner:
             return
-
-        tmpImg = QImage(self.img)
-
-        painter = QPainter(tmpImg)
-        painter.setPen(QColor(self.window.segColor))
-
-        prev = self.prevPoint
 
         point = Point(
             event.scenePos().x(),
             event.scenePos().y()
         )
+
+        tmpImg = QImage(self.img)
+
+        painter = QPainter(tmpImg)
+
+        if self.firstCorner:
+            painter.setPen(QColor(self.window.selColor))
+
+            painter.drawLine(
+                self.firstCorner.x,
+                self.firstCorner.y,
+                point.x,
+                self.firstCorner.y,
+            )
+
+            painter.drawLine(
+                point.x,
+                self.firstCorner.y,
+                point.x,
+                point.y
+            )
+
+            painter.drawLine(
+                point.x,
+                point.y,
+                self.firstCorner.x,
+                point.y
+            )
+
+            painter.drawLine(
+                self.firstCorner.x,
+                point.y,
+                self.firstCorner.x,
+                self.firstCorner.y
+            )
+
+            self.clear()
+            self.addPixmap(QPixmap.fromImage(tmpImg))
+
+            painter.end()
+
+            return
+
+        painter.setPen(QColor(self.window.segColor))
+
+        prev = self.prevPoint
 
         if self.lineMode:
             point = self.getHorOrVerLine(prev, point)
