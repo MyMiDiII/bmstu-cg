@@ -24,7 +24,7 @@ def getCircleTimes(scene, pen):
         "Каноническое уравнение",
         "Параметрическое уравнение",
         "Алгоритм Брезенхема",
-        "Алгорит средней точки"
+        "Алгоритм средней точки"
     ]
 
     plt.rcParams['font.size'] = '16'
@@ -35,14 +35,14 @@ def getCircleTimes(scene, pen):
     for i in range(4):
         timesList = []
         rList = []
-        for r in range(0, 10000, 500):
+        for r in range(0, 10000, 1000):
             sumtime = 0
-            for _ in range(25):
+            for _ in range(50):
                 start = time.time()
                 funcs[i](450, 400, r, scene, pen, False)
                 sumtime += time.time() - start
 
-            timesList.append(sumtime / 25)
+            timesList.append(sumtime / 50)
             rList.append(r)
         plt.plot(rList, timesList, label=funcsNames[i])
 
@@ -69,7 +69,7 @@ def getEllipseTimes(scene, pen):
         "Каноническое уравнение",
         "Параметрическое уравнение",
         "Алгоритм Брезенхема",
-        "Алгорит средней точки"
+        "Алгоритм средней точки"
     ]
 
     plt.rcParams['font.size'] = '16'
@@ -82,15 +82,15 @@ def getEllipseTimes(scene, pen):
         rList = []
 
         coef = 1 / 2
-        for Ra in range(0, 10000, 500):
+        for Ra in range(0, 10000, 1000):
             Rb = Ra * coef
             sumtime = 0
-            for _ in range(25):
+            for _ in range(50):
                 start = time.time()
                 funcs[i](450, 400, Ra, Rb, scene, pen, False)
                 sumtime += time.time() - start
 
-            timesList.append(sumtime / 25)
+            timesList.append(sumtime / 50)
             rList.append(Ra)
 
         plt.plot(rList, timesList, label=funcsNames[i])
