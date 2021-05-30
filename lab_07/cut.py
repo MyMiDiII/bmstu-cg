@@ -9,10 +9,13 @@ BORDER_COLOR = QColor("black").name()
 
 class Cutter:
 
-    def __init__(self, scene, img, color):
+    def __init__(self, scene, painter, img, color):
         self.scene = scene
+        self.painter = painter
         self.img = img
         self.color = color
 
-    def run(self, painter, seed, delay=0):
+    def run(self, segments, selecter):
+        print(segments)
+        print(selecter)
         pass

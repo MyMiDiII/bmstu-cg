@@ -134,6 +134,7 @@ class Canvas(QGraphicsScene):
             painter.drawLine(prev.x, prev.y, point.x, point.y)
 
             seg = Segment(self.prevPoint, point)
+            self.window.segments.append(seg)
             self.window.addSegment(seg)
             self.prevPoint = None
 

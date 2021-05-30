@@ -57,6 +57,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.graphicsView.setMouseTracking(True)
         self.tablesInit()
         self.selecter = [-1, -1, -1, -1]
+        self.segments = []
 
         self.segColor = QColor("black")
         self.selColor = QColor("red")
@@ -75,6 +76,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.addSegmentBtn.clicked.connect(self.handleAddSegment)
         self.setSelecterBtn.clicked.connect(self.handleSetSegment)
+        self.selectBtn.clicked.connect(self.cut)
 
         self.clearBtn.clicked.connect(self.clear)
         self.roolsBtn.clicked.connect(self.rools)
@@ -112,6 +114,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.segmentsTable.setRowCount(0)
         self.selecterTable.setRowCount(0)
         self.selecter = [-1, -1, -1, -1]
+        self.segments = []
+
+    def cut(self):
+        painter = QPainter(self.img)
+        painter.setPen(QColor(self.resColor))
+
+        cutter = Cutter(self.scene, painter, self.img, self.resColor)
+
+        cutter.run(self.segments, self.selecter)
+
+        self.scene.clear()
+        self.scene.addPixmap(QPixmap.fromImage(self.img))
+        painter.end()
 
     def addSegmentRow(self, point1Str, point2Str):
         num = self.segmentsTable.rowCount()
@@ -141,6 +156,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         point2 = Point(self.x2SB.value(), self.y2SB.value())
         segment = Segment(point1, point2)
 
+        self.segments.append(segment)
         self.addSegment(segment)
 
         painter = QPainter(self.img)
