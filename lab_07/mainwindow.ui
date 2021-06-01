@@ -213,14 +213,14 @@
          </widget>
         </item>
         <item row="1" column="3">
-         <widget class="QSpinBox" name="yLowSB">
+         <widget class="QSpinBox" name="yTopSB">
           <property name="maximum">
            <number>874</number>
           </property>
          </widget>
         </item>
         <item row="0" column="3">
-         <widget class="QSpinBox" name="yTopSB">
+         <widget class="QSpinBox" name="yLowSB">
           <property name="maximum">
            <number>874</number>
           </property>
@@ -234,9 +234,9 @@
          </widget>
         </item>
         <item row="0" column="2">
-         <widget class="QLabel" name="yTopLbl">
+         <widget class="QLabel" name="yLowLbl">
           <property name="text">
-           <string>Yв:</string>
+           <string>Yн:</string>
           </property>
          </widget>
         </item>
@@ -248,9 +248,9 @@
          </widget>
         </item>
         <item row="1" column="2">
-         <widget class="QLabel" name="yLowLbl">
+         <widget class="QLabel" name="yTopLbl">
           <property name="text">
-           <string>Yн:</string>
+           <string>Yв:</string>
           </property>
          </widget>
         </item>
