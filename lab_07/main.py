@@ -20,6 +20,8 @@ from draw import Canvas
 from geometry import Point, Segment
 from cut import Cutter
 
+# TODO цвет отсекателя по умолчанию
+
 BACKGROUNDSTRING = ("background-color: qlineargradient(spread:pad, "
                    + "x1:0, y1:0, x2:0, y2:0, stop:0 %s"
                    + ", stop:1 rgba(255, 255, 255, 255));")
@@ -39,8 +41,6 @@ def callInfo(title, text):
     msg.setText(text)
     msg.exec_()
 
-# TODO формирование списка отрезков
-# TODO сохранение отсекателя
 # TODO selectOr
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -61,7 +61,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.segColor = QColor("black")
         self.selColor = QColor("red")
-        self.resColor = QColor("green")
+        self.resColor = QColor(38, 255, 0, 255)
 
         self.img = QImage(1164, 874, QImage.Format_RGB32)
         self.img.fill(QColor("white"))
@@ -107,6 +107,18 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 QHeaderView.Stretch
             )
 
+    def conf(self, painter):
+        painter.setPen(self.selColor)
+        painter.setBrush(QColor("white"))
+        painter.drawRect(
+            self.selecter[0],
+            self.selecter[2],
+            self.selecter[1] - self.selecter[0],
+            self.selecter[3] - self.selecter[2]
+        )
+
+        painter.setPen(self.resColor)
+
     def clear(self):
         self.scene.clear()
         self.img.fill(QColor("white"))
@@ -118,7 +130,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def cut(self):
         painter = QPainter(self.img)
-        painter.setPen(QColor(self.resColor))
+        self.conf(painter)
 
         cutter = Cutter(self.scene, painter, self.img, self.resColor)
 
