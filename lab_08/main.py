@@ -16,6 +16,7 @@ from PyQt5.sip import delete
 
 from MainWindow import Ui_MainWindow
 
+from errors import callError, callInfo
 from draw import Canvas
 from geometry import Point, Segment, Polygon
 from cut import Cutter
@@ -23,19 +24,6 @@ from cut import Cutter
 BACKGROUNDSTRING = "background-color: %s;"
 
 
-def callError(title, text):
-    msg = QtWidgets.QMessageBox()
-    msg.setIcon(QtWidgets.QMessageBox.Critical)
-    msg.setWindowTitle(title)
-    msg.setText(text)
-    msg.exec_()
-
-def callInfo(title, text):
-    msg = QtWidgets.QMessageBox()
-    msg.setIcon(QtWidgets.QMessageBox.Information)
-    msg.setWindowTitle(title)
-    msg.setText(text)
-    msg.exec_()
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     """
@@ -150,6 +138,20 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.scene.clear()
         self.scene.addPixmap(QPixmap.fromImage(self.img))
         painter.end()
+    
+    def conf(self, painter):
+        """
+        painter.setPen(self.selColor)
+        painter.setBrush(QColor("white"))
+        painter.drawRect(
+            self.selecter[0],
+            self.selecter[2],
+            self.selecter[1] - self.selecter[0],
+            self.selecter[3] - self.selecter[2]
+        )
+        """
+
+        painter.setPen(self.resColor)
 
 
     def cut(self):
@@ -166,7 +168,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         cutter = Cutter(self.scene, painter, self.img, self.resColor)
 
-        cutter.run(self.segments, self.selecter)
+        cutter.run(self.segments, self.selector)
 
         self.scene.clear()
         self.scene.addPixmap(QPixmap.fromImage(self.img))
@@ -203,6 +205,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.segmentsTable.setRowCount(0)
         self.selectorTable.setRowCount(0)
         self.selector.clear()
+        self.segments = []
 
     def addRow(self, xStr, yStr):
         num = self.selectorTable.rowCount()

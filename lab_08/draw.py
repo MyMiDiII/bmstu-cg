@@ -175,7 +175,6 @@ class Canvas(QGraphicsScene):
 
             return
 
-        print("draw seg")
         painter.setPen(QColor(self.window.segColor))
 
         prev = self.prevPoint
