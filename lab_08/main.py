@@ -18,7 +18,7 @@ from MainWindow import Ui_MainWindow
 
 from draw import Canvas
 from geometry import Point, Segment, Polygon
-from fill import Filler
+from cut import Cutter
 
 BACKGROUNDSTRING = "background-color: %s;"
 
@@ -75,6 +75,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setSelectorBtn.clicked.connect(self.closeSel)
         self.addSegmentBtn.clicked.connect(self.handleAddSegment)
 
+        self.selectBtn.clicked.connect(self.cut)
         self.clearBtn.clicked.connect(self.clear)
         self.roolsBtn.clicked.connect(self.rools)
 
@@ -151,30 +152,26 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         painter.end()
 
 
-    def fill(self):
-        if self.polygon.points:
-            callError("Незамкнутая область!", "Область не замкнута!")
+    def cut(self):
+        if not self.selector.isClosed:
+            callError("Незамкнутый отсекатель!", "Замкните отсекатель!")
             return
 
-        self.setBtnsState(True)
+        if not self.segments:
+            callError("Отсутствие отрезков", "Добавьте отрезки!")
+            return
 
-        filler = Filler(
-            self.scene,
-            self.img,
-            self.color
-        )
-
-        delay = self.delaySB.value()
         painter = QPainter(self.img)
-        painter.setPen(QColor(self.color))
+        self.conf(painter)
 
-        dt = time.time()
-        filler.run(painter, self.seed, delay)
-        dt = time.time() - dt
+        cutter = Cutter(self.scene, painter, self.img, self.resColor)
+
+        cutter.run(self.segments, self.selecter)
 
         self.scene.clear()
         self.scene.addPixmap(QPixmap.fromImage(self.img))
         painter.end()
+
 
     def closeSel(self):
         if self.selector.num < 3:
