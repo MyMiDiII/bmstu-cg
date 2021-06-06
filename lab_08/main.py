@@ -37,7 +37,6 @@ def callInfo(title, text):
     msg.setText(text)
     msg.exec_()
 
-
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     """
         Класс главного окна

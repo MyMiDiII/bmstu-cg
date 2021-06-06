@@ -72,6 +72,8 @@ class Canvas(QGraphicsScene):
             return
 
         if event.button() == Qt.RightButton:
+            if self.prevPoint:
+                return
             painter = QPainter(self.img)
 
             if self.polygon.isClosed:
@@ -119,6 +121,7 @@ class Canvas(QGraphicsScene):
 
         if not self.prevPoint:
             painter.drawPoint(point.x, point.y)
+            self.window.addVertexBtn.setDisabled(True)
             self.prevPoint = point
 
         else:
@@ -133,6 +136,7 @@ class Canvas(QGraphicsScene):
             self.window.segments.append(seg)
             self.window.addSegment(seg)
             self.prevPoint = None
+            self.window.addVertexBtn.setDisabled(False)
 
         self.clear()
         self.addPixmap(QPixmap.fromImage(self.img))
@@ -141,26 +145,45 @@ class Canvas(QGraphicsScene):
 
     def mouseMoveEvent(self, event):
         if (not self.prevPoint 
-           or not self.polygon.num
-           or self.polygon.isClosed):
+           and (not self.polygon.num
+           or self.polygon.isClosed)):
             return
 
         tmpImg = QImage(self.img)
-
-        painter = QPainter(tmpImg)
-        painter.setPen(QColor(self.window.selColor))
-
-        last = self.polygon.getLastPoint()
 
         point = Point(
             event.scenePos().x(),
             event.scenePos().y()
         )
 
-        if self.lineMode:
-            point = self.getHorOrVerLine(last, point)
+        painter = QPainter(tmpImg)
 
-        painter.drawLine(last.x, last.y, point.x, point.y)
+        if not self.prevPoint:
+            painter.setPen(QColor(self.window.selColor))
+
+            last = self.polygon.getLastPoint()
+
+            if self.lineMode:
+                point = self.getHorOrVerLine(last, point)
+
+            painter.drawLine(last.x, last.y, point.x, point.y)
+
+            self.clear()
+            self.addPixmap(QPixmap.fromImage(tmpImg))
+
+            painter.end()
+
+            return
+
+        print("draw seg")
+        painter.setPen(QColor(self.window.segColor))
+
+        prev = self.prevPoint
+
+        if self.lineMode:
+            point = self.getHorOrVerLine(prev, point)
+
+        painter.drawLine(prev.x, prev.y, point.x, point.y)
 
         self.clear()
         self.addPixmap(QPixmap.fromImage(tmpImg))
