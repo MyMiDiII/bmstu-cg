@@ -76,12 +76,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.addSegmentBtn.clicked.connect(self.handleAddSegment)
 
         self.clearBtn.clicked.connect(self.clear)
+        self.roolsBtn.clicked.connect(self.rools)
 
     def rools(self):
         title = "Правила ввода"
-        text = ("<b>ЛКМ</b> – добавление вершины;<br>"
-                + "<b>ПКМ</b> – замкнуть фигуру;<br>"
-                + "<b>Ctrl+ЛКМ</b> – установить затравку;<br>"
+        text = ("<b>ЛКМ</b> – добавление отрезка;<br>"
+                + "<b>ПКМ</b> – добавление отсекателя;<br>"
+                + "<b>ЦКМ(колесико)</b> – замыкание отсекателя;<br>"
                 + "<b>Shift</b> – горизонтальное/вертикальное ребро.")
 
         callInfo(title, text)
