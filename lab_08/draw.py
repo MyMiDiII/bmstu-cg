@@ -14,8 +14,8 @@ import copy
 class Canvas(QGraphicsScene):
     """Класс холста"""
 
-    def __init__(self, window, img, polygon,
-                 lineMode=False, seedMode=False,
+    def __init__(self, window, img,
+                 polygon, lineMode=False,
                  *args, **kwargs):
         """Конструктор"""
         super(Canvas, self).__init__(*args, **kwargs)
@@ -64,11 +64,8 @@ class Canvas(QGraphicsScene):
             self.clear()
             self.addPixmap(QPixmap.fromImage(self.img))
 
-            self.window.polygons.append(copy.deepcopy(self.polygon))
-            self.polygon.clear()
-
-            self.window.closeFigBtn.setDisabled(True)
-            self.window.addRow("end", "end")
+            self.polygon.isClosed = True
+            self.window.setSelectorBtn.setDisabled(True)
 
             return
 
@@ -91,13 +88,14 @@ class Canvas(QGraphicsScene):
 
             self.polygon.addPoint(point)
 
-            #self.window.addPoint(point)
+            self.window.addPoint(point)
             print("количество вершин", self.polygon.num)
             if self.polygon.num > 2:
                 self.window.setSelectorBtn.setDisabled(False)
 
+
     def mouseMoveEvent(self, event):
-        if self.polygon.num == 0:
+        if self.polygon.num == 0 or self.polygon.isClosed:
             return
 
         tmpImg = QImage(self.img)

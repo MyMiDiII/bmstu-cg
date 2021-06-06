@@ -33,10 +33,11 @@ class Polygon:
         Класс многоугольной области
     """
 
-    def __init__(self, points=[]):
+    def __init__(self, points=[], isClosed=False):
         """Конструктор"""
         self.points = points
         self.num = len(points)
+        self.isClosed = isClosed
 
     def addPoint(self, point):
         self.points.append(point)
@@ -55,3 +56,4 @@ class Polygon:
     def clear(self):
         self.points = []
         self.num = 0
+        self.isClosed = False

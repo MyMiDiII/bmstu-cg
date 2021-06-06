@@ -20,7 +20,51 @@
    <string>Maslova Lab08</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout_4">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QTableWidget" name="segmentsTable">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>301</width>
+        <height>141</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>301</width>
+        <height>141</height>
+       </size>
+      </property>
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
+      <attribute name="verticalHeaderMinimumSectionSize">
+       <number>21</number>
+      </attribute>
+      <attribute name="verticalHeaderDefaultSectionSize">
+       <number>41</number>
+      </attribute>
+      <column>
+       <property name="text">
+        <string>(X1, Y1)</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>(X2, Y2)</string>
+       </property>
+      </column>
+     </widget>
+    </item>
+    <item row="0" column="1" rowspan="8">
+     <widget class="QGraphicsView" name="graphicsView"/>
+    </item>
     <item row="1" column="0">
      <layout class="QVBoxLayout" name="segmentsLayout">
       <item>
@@ -100,7 +144,7 @@
      </layout>
     </item>
     <item row="2" column="0">
-     <widget class="QTableWidget" name="selecterTable">
+     <widget class="QTableWidget" name="selectorTable">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
         <horstretch>0</horstretch>
@@ -110,13 +154,13 @@
       <property name="minimumSize">
        <size>
         <width>301</width>
-        <height>91</height>
+        <height>141</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
         <width>301</width>
-        <height>91</height>
+        <height>141</height>
        </size>
       </property>
       <property name="editTriggers">
@@ -138,19 +182,6 @@
         <string>Y</string>
        </property>
       </column>
-     </widget>
-    </item>
-    <item row="7" column="0">
-     <widget class="QPushButton" name="roolsBtn">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text">
-       <string>Правила ввода</string>
-      </property>
      </widget>
     </item>
     <item row="3" column="0">
@@ -368,50 +399,6 @@
       </property>
      </widget>
     </item>
-    <item row="0" column="0">
-     <widget class="QTableWidget" name="segmentsTable">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>301</width>
-        <height>141</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>301</width>
-        <height>141</height>
-       </size>
-      </property>
-      <property name="editTriggers">
-       <set>QAbstractItemView::NoEditTriggers</set>
-      </property>
-      <attribute name="verticalHeaderMinimumSectionSize">
-       <number>21</number>
-      </attribute>
-      <attribute name="verticalHeaderDefaultSectionSize">
-       <number>41</number>
-      </attribute>
-      <column>
-       <property name="text">
-        <string>(X1, Y1)</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>(X2, Y2)</string>
-       </property>
-      </column>
-     </widget>
-    </item>
-    <item row="0" column="1" rowspan="8">
-     <widget class="QGraphicsView" name="graphicsView"/>
-    </item>
     <item row="6" column="0">
      <widget class="QPushButton" name="clearBtn">
       <property name="sizePolicy">
@@ -422,6 +409,19 @@
       </property>
       <property name="text">
        <string>Очистить</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="0">
+     <widget class="QPushButton" name="roolsBtn">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Правила ввода</string>
       </property>
      </widget>
     </item>

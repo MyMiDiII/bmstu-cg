@@ -99,10 +99,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             callError("Незамкнутая область!", "Область не замкнута!")
             return
 
-        if self.seed is None:
-            callError("Отсутствие затравки", "Установите затравочный пиксель!")
-            return
-
         self.setBtnsState(True)
 
         filler = Filler(
@@ -123,9 +119,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.scene.addPixmap(QPixmap.fromImage(self.img))
         painter.end()
 
-        self.timeLbl.setText("Время заполнения: {:.2f} c".format(dt))
-        self.setBtnsState(False)
-    
     def closeFig(self):
         if self.polygon.num < 3:
             self.closeFigBtn.setDisabled(False)
@@ -162,14 +155,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.seedStateLbl.setText("не установлена")
 
     def addRow(self, xStr, yStr):
-        num = self.pointsTable.rowCount()
-        self.pointsTable.setRowCount(num + 1)
-        self.pointsTable.setItem(
+        num = self.selectorTable.rowCount()
+        self.selectorTable.setRowCount(num + 1)
+        self.selectorTable.setItem(
             num,
             0,
             QTableWidgetItem(xStr)
         )
-        self.pointsTable.setItem(
+        self.selectorTable.setItem(
             num,
             1,
             QTableWidgetItem(yStr)
@@ -197,7 +190,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.polygon.addPoint(point)
         if self.polygon.num > 2:
-            self.closeFigBtn.setDisabled(False)
+            self.setSelectorBtn.setDisabled(False)
 
     def deleteRow(self):
         num = self.pointsTable.rowCount()
