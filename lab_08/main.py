@@ -20,9 +20,7 @@ from draw import Canvas
 from geometry import Point, Edge, Polygon
 from fill import Filler
 
-BACKGROUNDSTRING = ("background-color: qlineargradient(spread:pad, "
-                   + "x1:0, y1:0, x2:0, y2:0, stop:0 %s"
-                   + ", stop:1 rgba(255, 255, 255, 255));")
+BACKGROUNDSTRING = "background-color: %s;"
 
 
 def callError(title, text):
@@ -54,9 +52,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.graphicsView.setMouseTracking(True)
 
         self.setSelectorBtn.setDisabled(True)
+        self.tablesInit()
 
         self.selector = Polygon()
-        self.color = QColor("black")
+        self.segColor = QColor(38, 255, 0 , 255)
+        self.selColor = QColor("red")
+        self.resColor = QColor("blue")
+
+        self.segmentsColorBtn.clicked.connect(self.chooseSegColor)
+        self.selectorColorBtn.clicked.connect(self.chooseSelColor)
+        self.resultColorBtn.clicked.connect(self.chooseResColor)
         
         self.img = QImage(1165, 874, QImage.Format_RGB32)
         self.img.fill(QColor("white"))
@@ -75,6 +80,24 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 + "<b>Shift</b> – горизонтальное/вертикальное ребро.")
 
         callInfo(title, text)
+
+    def tablesInit(self):
+        """
+            Начальные настройки таблиц
+        """
+        self.segmentsTable.setColumnCount(2)
+        for i in range(2):
+            self.segmentsTable.horizontalHeader().setSectionResizeMode(
+                i,
+                QHeaderView.Stretch
+            )
+
+        self.selectorTable.setColumnCount(2)
+        for i in range(2):
+            self.selectorTable.horizontalHeader().setSectionResizeMode(
+                i,
+                QHeaderView.Stretch
+            ) 
 
     def setSeed(self, point):
         self.seed = point
@@ -216,6 +239,33 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.scene.clear()
         self.scene.addPixmap(QPixmap.fromImage(self.img))
         painter.end()
+
+    def chooseSegColor(self):
+        """
+            Выбор цвета отрезков
+        """
+        self.segColor = QColorDialog.getColor()
+        self.segmentsColorBtn.setStyleSheet(
+            BACKGROUNDSTRING % self.segColor.name()
+        )
+
+    def chooseSelColor(self):
+        """
+            Выбор цвета отсекателя
+        """
+        self.selColor = QColorDialog.getColor()
+        self.selectorColorBtn.setStyleSheet(
+            BACKGROUNDSTRING % self.selColor.name()
+        )
+
+    def chooseResColor(self):
+        """
+            Выбор цвета результата
+        """
+        self.resColor = QColorDialog.getColor()
+        self.resultColorBtn.setStyleSheet(
+            BACKGROUNDSTRING % self.resColor.name()
+        ) 
 
     def chooseColor(self):
         """

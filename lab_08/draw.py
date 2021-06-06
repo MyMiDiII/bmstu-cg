@@ -5,7 +5,7 @@
 from PyQt5.QtWidgets import QGraphicsScene
 
 from geometry import Point
-from PyQt5.QtGui import QPainter, QPixmap, QImage
+from PyQt5.QtGui import QPainter, QPixmap, QImage, QColor
 from PyQt5.QtCore import Qt
 
 import copy
@@ -58,6 +58,7 @@ class Canvas(QGraphicsScene):
             last = self.polygon.getLastPoint()
 
             painter = QPainter(self.img)
+            painter.setPen(QColor(self.window.selColor))
             painter.drawLine(last.x, last.y, first.x, first.y)
             painter.end()
 
@@ -66,13 +67,31 @@ class Canvas(QGraphicsScene):
 
             self.polygon.isClosed = True
             self.window.setSelectorBtn.setDisabled(True)
+            self.window.selectorColorBtn.setDisabled(False)
 
             return
 
         if event.button() == Qt.RightButton:
             painter = QPainter(self.img)
 
+            if self.polygon.isClosed:
+                painter.setPen(QColor("white"))
+
+                for i, pnt in enumerate(self.polygon.points):
+                    painter.drawLine(
+                        pnt.x,
+                        pnt.y,
+                        self.polygon.points[i - 1].x,
+                        self.polygon.points[i - 1].y,
+                    )
+
+                self.window.selectorTable.setRowCount(0)
+                self.polygon.clear()
+
+            painter.setPen(QColor(self.window.selColor))
+
             if self.polygon.num == 0:
+                self.window.selectorColorBtn.setDisabled(True)
                 painter.drawPoint(point.x, point.y)
             else:
                 last = self.polygon.getLastPoint()
@@ -101,6 +120,7 @@ class Canvas(QGraphicsScene):
         tmpImg = QImage(self.img)
 
         painter = QPainter(tmpImg)
+        painter.setPen(QColor(self.window.selColor))
 
         last = self.polygon.getLastPoint()
 

@@ -251,7 +251,7 @@
        </widget>
       </item>
       <item row="0" column="0">
-       <widget class="QLabel" name="selecterColorLbl">
+       <widget class="QLabel" name="selectorColorLbl">
         <property name="text">
          <string>Цвет отсекателя:</string>
         </property>
@@ -298,7 +298,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QPushButton" name="selecterColorBtn">
+       <widget class="QPushButton" name="selectorColorBtn">
         <property name="enabled">
          <bool>true</bool>
         </property>
