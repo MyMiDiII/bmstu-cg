@@ -50,7 +50,6 @@ class Canvas(QGraphicsScene):
         )
 
         if event.button() == Qt.MiddleButton:
-            print("замыкаем")
             if self.polygon.num < 3:
                 return
 
@@ -108,7 +107,6 @@ class Canvas(QGraphicsScene):
             self.polygon.addPoint(point)
 
             self.window.addPoint(point)
-            print("количество вершин", self.polygon.num)
             if self.polygon.num > 2:
                 self.window.setSelectorBtn.setDisabled(False)
 

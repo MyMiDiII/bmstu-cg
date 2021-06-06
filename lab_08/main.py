@@ -70,6 +70,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.graphicsView.setScene(self.scene)
         self.scene.addPixmap(QPixmap.fromImage(self.img))
 
+        self.addVertexBtn.clicked.connect(self.handleAddPoint)
+        self.setSelectorBtn.clicked.connect(self.closeSel)
+
         self.clearBtn.clicked.connect(self.clear)
 
     def rools(self):
@@ -98,14 +101,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 i,
                 QHeaderView.Stretch
             ) 
-
-    def setSeed(self, point):
-        self.seed = point
-        self.seedStateLbl.setText("({:d}, {:d})".format(point.x, point.y))
-
-    def readSeed(self):
-        point = Point(self.xSB.value(), self.ySB.value())
-        self.setSeed(point)
 
     def setBtnsState(self, state):
         btns = [
@@ -142,17 +137,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.scene.addPixmap(QPixmap.fromImage(self.img))
         painter.end()
 
-    def closeFig(self):
-        if self.polygon.num < 3:
-            self.closeFigBtn.setDisabled(False)
+    def closeSel(self):
+        if self.selector.num < 3:
+            self.setSelectorBtn.setDisabled(False)
             return
 
-        self.addRow("end", "end")
-
         painter = QPainter(self.img)
+        painter.setPen(QColor(self.selColor))
 
-        first = self.polygon.getFirstPoint()
-        last = self.polygon.getLastPoint()
+        first = self.selector.getFirstPoint()
+        last = self.selector.getLastPoint()
 
         painter.drawLine(last.x, last.y, first.x, first.y)
 
@@ -161,21 +155,18 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         painter.end()
 
-        self.polygons.append(copy.deepcopy(self.polygon))
-        self.polygon.clear()
+        self.selector.isClosed = True
+        self.setSelectorBtn.setDisabled(True)
+        self.selectorColorBtn.setDisabled(False)
 
-        self.closeFigBtn.setDisabled(True)
 
     def clear(self):
         self.scene.clear()
         self.img.fill(QColor("white"))
         self.scene.addPixmap(QPixmap.fromImage(self.img))
-        self.pointsTable.setRowCount(0)
-        self.seed = None
-        self.polygons = []
-        self.polygon.clear()
-        self.timeLbl.setText("Время заполнения:")
-        self.seedStateLbl.setText("не установлена")
+        self.segmentsTable.setRowCount(0)
+        self.selectorTable.setRowCount(0)
+        self.selector.clear()
 
     def addRow(self, xStr, yStr):
         num = self.selectorTable.rowCount()
@@ -195,24 +186,38 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.addRow(str(point.x), str(point.y))
 
     def handleAddPoint(self):
-        point = Point(self.xSB.value(), self.ySB.value())
-
-        self.addPoint(point)
+        point = Point(self.xSelSB.value(), self.ySelSB.value())
 
         painter = QPainter(self.img)
 
-        if self.polygon.num == 0:
+        if self.selector.isClosed:
+            painter.setPen(QColor("white"))
+
+            for i, pnt in enumerate(self.selector.points):
+                painter.drawLine(
+                    pnt.x,
+                    pnt.y,
+                    self.selector.points[i - 1].x,
+                    self.selector.points[i - 1].y,
+                )
+
+            self.selectorTable.setRowCount(0)
+            self.selector.clear()
+
+        self.addPoint(point)
+        painter.setPen(QColor(self.selColor))
+        if self.selector.num == 0:
             painter.drawPoint(point.x, point.y)
         else:
-            last = self.polygon.getLastPoint()
+            last = self.selector.getLastPoint()
             painter.drawLine(last.x, last.y, point.x, point.y)
 
         self.scene.clear()
         self.scene.addPixmap(QPixmap.fromImage(self.img))
         painter.end()
 
-        self.polygon.addPoint(point)
-        if self.polygon.num > 2:
+        self.selector.addPoint(point)
+        if self.selector.num > 2:
             self.setSelectorBtn.setDisabled(False)
 
     def deleteRow(self):
@@ -278,18 +283,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if event.key() == Qt.Key_Shift:
             self.scene.lineMode = True
 
-        if event.key() == Qt.Key_Control:
-            self.scene.seedMode = True
-
-        if event.key() == Qt.Key_Escape:
-            self.window.handleDeletePoint()
-
     def keyReleaseEvent(self, event):
         if event.key() == Qt.Key_Shift:
             self.scene.lineMode = False
-
-        if event.key() == Qt.Key_Control:
-            self.scene.seedMode = False
 
 
 if __name__ == '__main__':
