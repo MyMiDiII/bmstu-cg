@@ -17,9 +17,9 @@ class Point:
         return self.x == other.x and self.y == other.y
 
 
-class Edge:
+class Segment:
     """
-        Класс ребра
+        Класс отрезка
     """
 
     def __init__(self, point1=Point(), point2=Point()):

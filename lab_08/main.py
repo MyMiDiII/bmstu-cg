@@ -17,7 +17,7 @@ from PyQt5.sip import delete
 from MainWindow import Ui_MainWindow
 
 from draw import Canvas
-from geometry import Point, Edge, Polygon
+from geometry import Point, Segment, Polygon
 from fill import Filler
 
 BACKGROUNDSTRING = "background-color: %s;"
@@ -55,6 +55,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.tablesInit()
 
         self.selector = Polygon()
+        self.segments = []
+
         self.segColor = QColor(38, 255, 0 , 255)
         self.selColor = QColor("red")
         self.resColor = QColor("blue")
@@ -72,6 +74,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.addVertexBtn.clicked.connect(self.handleAddPoint)
         self.setSelectorBtn.clicked.connect(self.closeSel)
+        self.addSegmentBtn.clicked.connect(self.handleAddSegment)
 
         self.clearBtn.clicked.connect(self.clear)
 
@@ -102,15 +105,51 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 QHeaderView.Stretch
             ) 
 
-    def setBtnsState(self, state):
-        btns = [
-            self.addPointBtn,
-            self.paintBtn,
-            self.clearBtn
-        ]
+    def addSegmentRow(self, point1Str, point2Str):
+        num = self.segmentsTable.rowCount()
+        self.segmentsTable.setRowCount(num + 1)
+        self.segmentsTable.setItem(
+            num,
+            0,
+            QTableWidgetItem(point1Str)
+        )
+        self.segmentsTable.setItem(
+            num,
+            1,
+            QTableWidgetItem(point2Str)
+        )
 
-        for btn in btns:
-            btn.setDisabled(state)
+    def addSegment(self, seg):
+        strX1 = str(seg.begin.x)
+        strY1 = str(seg.begin.y)
+        point1 = '(' + strX1 + ',' + strY1 + ')'
+        strX2 = str(seg.end.x)
+        strY2 = str(seg.end.y)
+        point2 = '(' + strX2 + ',' + strY2 + ')'
+        self.addSegmentRow(point1, point2)
+
+    def handleAddSegment(self):
+        point1 = Point(self.x1SB.value(), self.y1SB.value())
+        point2 = Point(self.x2SB.value(), self.y2SB.value())
+        segment = Segment(point1, point2)
+
+        self.segments.append(segment)
+        self.addSegment(segment)
+
+        painter = QPainter(self.img)
+        painter.setPen(QColor(self.segColor))
+
+        painter.drawLine(
+            point1.x,
+            point1.y,
+            point2.x,
+            point2.y
+        )
+
+        self.scene.clear()
+        self.scene.addPixmap(QPixmap.fromImage(self.img))
+        painter.end()
+
 
     def fill(self):
         if self.polygon.points:
