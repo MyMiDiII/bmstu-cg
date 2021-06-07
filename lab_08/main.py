@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import QColorDialog
 from PyQt5.QtGui import (
     QPen, QColor, QPainter, QPixmap, QImage
 )
-from PyQt5.QtCore import QSize, QTime, Qt
+from PyQt5.QtCore import QPoint, QSize, QTime, Qt
 
 import copy
 import time
@@ -139,17 +139,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.scene.addPixmap(QPixmap.fromImage(self.img))
         painter.end()
     
-    def conf(self, painter):
-        """
+    def conf(self, painter : QPainter):
         painter.setPen(self.selColor)
         painter.setBrush(QColor("white"))
-        painter.drawRect(
-            self.selecter[0],
-            self.selecter[2],
-            self.selecter[1] - self.selecter[0],
-            self.selecter[3] - self.selecter[2]
-        )
-        """
+
+        polygon = []
+        for point in self.selector:
+            polygon.append(QPoint(point.x, point.y))
+
+        painter.drawPolygon(*polygon)
 
         painter.setPen(self.resColor)
 

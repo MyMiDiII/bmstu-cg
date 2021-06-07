@@ -54,9 +54,13 @@ class Cutter:
 
             t = - Wsc / Dsc
             if Dsc > 0:
+                if t > 1 and not isclose(t, 1, abs_tol=EPS):
+                    return
                 if t > tIn:
                     tIn = t
             else:
+                if t < 0 and not isclose(t, 0, abs_tol=EPS):
+                    return
                 if t < tOut:
                     tOut = t
 
