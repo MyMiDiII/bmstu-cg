@@ -2,6 +2,8 @@
     Модуль геометрических объектов
 """
 
+from PyQt5.QtGui import QPainter
+
 class Point:
     """
         Класс точки в двумерном пространстве
@@ -112,3 +114,9 @@ class Polygon:
         self.points = []
         self.num = 0
         self.isClosed = False
+
+    def draw(self, painter : QPainter):
+        for i in range(len(self)):
+            painter.drawLine(self[i].x, self[i].y,
+                             self[i - 1].x, self[i - 1].y)
+

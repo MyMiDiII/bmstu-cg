@@ -81,7 +81,7 @@ class Cutter:
             )
 
 
-    def run(self, segments, selector):
+    def run(self, polygons, selector):
         if not selector.isConvex():
             callError(
                 "Невыпуклый отсекатель!",
@@ -89,5 +89,6 @@ class Cutter:
             )
             return
 
-        for seg in segments:
-            self.cutSegment(seg, selector)
+        for poly in polygons:
+            poly.draw(self.painter)
+            #self.cutPolygon(poly, selector)

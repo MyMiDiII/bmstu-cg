@@ -82,8 +82,10 @@ class Canvas(QGraphicsScene):
             if self.mode == POLYGON:
                 self.window.setPolygonBtn.setDisabled(True)
                 self.window.addRow(self.window.polygonsTable, "end", "end")
+                self.window.polygon.clear()
                 self.window.polygons.append(copy.deepcopy(self.polygon))
 
+            self.mode = NONE
             self.polygon.clear()
 
             return
@@ -102,12 +104,12 @@ class Canvas(QGraphicsScene):
             if self.window.selector.isClosed:
                 painter.setPen(QColor("white"))
 
-                for i, pnt in enumerate(self.selector):
+                for i, pnt in enumerate(self.window.selector):
                     painter.drawLine(
                         pnt.x,
                         pnt.y,
-                        self.selector[i - 1].x,
-                        self.selector[i - 1].y,
+                        self.window.selector[i - 1].x,
+                        self.window.selector[i - 1].y,
                     )
 
                 self.window.selectorTable.setRowCount(0)
@@ -140,18 +142,19 @@ class Canvas(QGraphicsScene):
         self.polygon.addPoint(point)
 
         if event.button() == Qt.RightButton:
+            self.window.selector = copy.deepcopy(self.polygon)
             self.window.addPoint(self.window.selectorTable, point)
 
             if self.polygon.num > 2:
                 self.window.setSelectorBtn.setDisabled(False)
 
         if event.button() == Qt.LeftButton:
+            self.window.polygon = copy.deepcopy(self.polygon)
             self.window.addPoint(self.window.polygonsTable, point)
 
             if self.polygon.num > 2:
-                self.window.setSelectorBtn.setDisabled(False)
+                self.window.setPolygonBtn.setDisabled(False)
 
-    """
     def mouseMoveEvent(self, event):
         if (not self.prevPoint 
             and (not self.polygon.num
@@ -168,7 +171,10 @@ class Canvas(QGraphicsScene):
         painter = QPainter(tmpImg)
 
         if not self.prevPoint:
-            painter.setPen(QColor(self.window.selColor))
+            color = (self.window.selColor
+                     if self.mode == SELECTOR
+                     else self.window.segColor)
+            painter.setPen(color)
 
             last = self.polygon.getLastPoint()
 
@@ -197,4 +203,3 @@ class Canvas(QGraphicsScene):
         self.addPixmap(QPixmap.fromImage(tmpImg))
 
         painter.end()
-        """

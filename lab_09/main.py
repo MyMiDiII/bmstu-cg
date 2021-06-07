@@ -17,7 +17,7 @@ from PyQt5.sip import delete
 from MainWindow import Ui_MainWindow
 
 from errors import callError, callInfo
-from draw import Canvas
+from draw import Canvas, POLYGON, SELECTOR, NONE
 from geometry import Point, Segment, Polygon
 from cut import Cutter
 
@@ -60,9 +60,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.graphicsView.setScene(self.scene)
         self.scene.addPixmap(QPixmap.fromImage(self.img))
 
-        self.addSelVrtBtn.clicked.connect(self.handleAddPoint)
+        self.addSelVrtBtn.clicked.connect(self.handleAddSelVrt)
+        self.addPolVrtBtn.clicked.connect(self.handleAddPolVrt)
         self.setSelectorBtn.clicked.connect(self.closeSel)
-        #self.addSegmentBtn.clicked.connect(self.handleAddSegment)
+        self.setPolygonBtn.clicked.connect(self.closePol)
 
         self.selectBtn.clicked.connect(self.cut)
         self.clearBtn.clicked.connect(self.clear)
@@ -95,63 +96,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 QHeaderView.Stretch
             ) 
 
-    def addSegmentRow(self, point1Str, point2Str):
-        num = self.segmentsTable.rowCount()
-        self.segmentsTable.setRowCount(num + 1)
-        self.segmentsTable.setItem(
-            num,
-            0,
-            QTableWidgetItem(point1Str)
-        )
-        self.segmentsTable.setItem(
-            num,
-            1,
-            QTableWidgetItem(point2Str)
-        )
-
-    def addSegment(self, seg):
-        strX1 = str(seg.begin.x)
-        strY1 = str(seg.begin.y)
-        point1 = '(' + strX1 + ',' + strY1 + ')'
-        strX2 = str(seg.end.x)
-        strY2 = str(seg.end.y)
-        point2 = '(' + strX2 + ',' + strY2 + ')'
-        self.addSegmentRow(point1, point2)
-
-    def handleAddSegment(self):
-        point1 = Point(self.x1SB.value(), self.y1SB.value())
-        point2 = Point(self.x2SB.value(), self.y2SB.value())
-        segment = Segment(point1, point2)
-
-        self.segments.append(segment)
-        self.addSegment(segment)
-
-        painter = QPainter(self.img)
-        painter.setPen(QColor(self.segColor))
-
-        painter.drawLine(
-            point1.x,
-            point1.y,
-            point2.x,
-            point2.y
-        )
-
-        self.scene.clear()
-        self.scene.addPixmap(QPixmap.fromImage(self.img))
-        painter.end()
-    
-    def conf(self, painter : QPainter):
-        painter.setPen(self.selColor)
-        painter.setBrush(QColor("white"))
-
-        polygon = []
-        for point in self.selector:
-            polygon.append(QPoint(point.x, point.y))
-
-        painter.drawPolygon(*polygon)
-
-        painter.setPen(self.resColor)
-
     def cut(self):
         if not self.selector.isClosed:
             callError("Незамкнутый отсекатель!", "Замкните отсекатель!")
@@ -162,43 +106,20 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             return
 
         painter = QPainter(self.img)
-        self.conf(painter)
+        pen = QPen()
+        pen.setColor(self.resColor)
+        pen.setWidth(2)
+        painter.setPen(pen)
 
         cutter = Cutter(self.scene, painter, self.img, self.resColor)
 
-        cutter.run(self.segments, self.selector)
+        cutter.run(self.polygons, self.selector)
 
         self.scene.clear()
         self.scene.addPixmap(QPixmap.fromImage(self.img))
         painter.end()
-
-
-    def closeSel(self):
-        if self.selector.num < 3:
-            self.setSelectorBtn.setDisabled(False)
-            return
-
-        painter = QPainter(self.img)
-        painter.setPen(QColor(self.selColor))
-
-        first = self.selector.getFirstPoint()
-        last = self.selector.getLastPoint()
-
-        painter.drawLine(last.x, last.y, first.x, first.y)
-
-        self.scene.clear()
-        self.scene.addPixmap(QPixmap.fromImage(self.img))
-
-        painter.end()
-
-        self.selector.isClosed = True
-        self.setSelectorBtn.setDisabled(True)
-        self.selectorColorBtn.setDisabled(False)
-
 
     def clear(self):
-        print(len(self.polygons))
-        print(self.selector.num)
         self.scene.clear()
         self.img.fill(QColor("white"))
         self.scene.addPixmap(QPixmap.fromImage(self.img))
@@ -225,7 +146,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def addPoint(self, table, point):
         self.addRow(table, str(point.x), str(point.y))
 
-    def handleAddPoint(self):
+    def handleAddSelVrt(self):
+        if self.scene.mode == POLYGON:
+            callInfo("Незаконченный ввод", "Закончите ввод многоугольника!")
+            return
+
+        self.scene.mode = SELECTOR
+
         point = Point(self.xSelSB.value(), self.ySelSB.value())
 
         painter = QPainter(self.img)
@@ -247,7 +174,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.addPoint(self.selectorTable, point)
         painter.setPen(QColor(self.selColor))
 
-        if self.selector.num == 0:
+        if not self.selector.num:
             painter.drawPoint(point.x, point.y)
         else:
             last = self.selector.getLastPoint()
@@ -258,8 +185,90 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         painter.end()
 
         self.selector.addPoint(point)
+        self.scene.polygon = self.selector
         if self.selector.num > 2:
             self.setSelectorBtn.setDisabled(False)
+
+    def closeSel(self):
+        if self.selector.num < 3:
+            self.setSelectorBtn.setDisabled(False)
+            return
+
+        painter = QPainter(self.img)
+        painter.setPen(QColor(self.selColor))
+
+        first = self.selector.getFirstPoint()
+        last = self.selector.getLastPoint()
+
+        painter.drawLine(last.x, last.y, first.x, first.y)
+
+        self.scene.clear()
+        self.scene.addPixmap(QPixmap.fromImage(self.img))
+
+        painter.end()
+
+        self.scene.mode = NONE
+        self.selector.isClosed = True
+        self.scene.polygon = self.selector
+        self.setSelectorBtn.setDisabled(True)
+        self.selectorColorBtn.setDisabled(False)
+        self.addRow(self.selectorTable, "end", "end")
+
+    def handleAddPolVrt(self):
+        if self.scene.mode == SELECTOR:
+            callInfo("Незаконченный ввод", "Закончите ввод отсекателя!")
+            return
+
+        self.scene.mode = POLYGON
+
+        point = Point(self.xPolSB.value(), self.yPolSB.value())
+
+        painter = QPainter(self.img)
+
+        self.addPoint(self.polygonsTable, point)
+        painter.setPen(QColor(self.segColor))
+
+        if not self.polygon.num:
+            painter.drawPoint(point.x, point.y)
+        else:
+            last = self.polygon.getLastPoint()
+            painter.drawLine(last.x, last.y, point.x, point.y)
+
+        self.scene.clear()
+        self.scene.addPixmap(QPixmap.fromImage(self.img))
+        painter.end()
+
+        self.polygon.addPoint(point)
+        self.scene.polygon = self.polygon
+        if self.polygon.num > 2:
+            self.setPolygonBtn.setDisabled(False)
+
+    def closePol(self):
+        if self.polygon.num < 3:
+            self.setPolygonBtn.setDisabled(False)
+            return
+
+        painter = QPainter(self.img)
+        painter.setPen(QColor(self.selColor))
+
+        first = self.polygon.getFirstPoint()
+        last = self.polygon.getLastPoint()
+
+        painter.drawLine(last.x, last.y, first.x, first.y)
+
+        self.scene.clear()
+        self.scene.addPixmap(QPixmap.fromImage(self.img))
+
+        painter.end()
+
+        self.scene.mode = NONE
+        self.polygon.isClosed = True
+        self.polygons.append(copy.deepcopy(self.polygon))
+        self.scene.polygon = self.polygon
+        self.polygon.clear()
+        self.setPolygonBtn.setDisabled(True)
+        self.segmentsColorBtn.setDisabled(False)
+        self.addRow(self.polygonsTable, "end", "end")
 
     def chooseSegColor(self):
         """
