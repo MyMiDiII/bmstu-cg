@@ -16,6 +16,10 @@ class Point:
         """ Оператор == """
         return self.x == other.x and self.y == other.y
 
+    def __ne__(self, other):
+        """ Оператор != """
+        return not self == other
+
 
 class Segment:
     """
@@ -32,13 +36,24 @@ class Vector:
         Класс свободного вектора
     """
 
-    def __init__(self, begin=Point(), end=Point):
+    def __init__(self, *args):
         """ Конструктор """
-        self.x = end.x - begin.x
-        self.y = end.y - begin.y
+        if isinstance(args[0], (int, float)):
+            self.x = args[0]
+            self.y = args[1]
+        else:
+            self.x = args[1].x - args[0].x
+            self.y = args[1].y - args[0].y
+
+    def neg(self):
+        self.x = -self.x
+        self.y = -self.y
 
     def vecProd(self, vector):
         return self.x * vector.y - self.y * vector.x
+
+    def scalarProd(self, vector):
+        return self.x * vector.x + self.y * vector.y
 
 
 class Polygon:
@@ -51,6 +66,12 @@ class Polygon:
         self.points = points
         self.num = len(points)
         self.isClosed = isClosed
+
+    def __len__(self):
+        return self.num
+
+    def __getitem__(self, key):
+        return self.points[key]
 
     def addPoint(self, point):
         self.points.append(point)
