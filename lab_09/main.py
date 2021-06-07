@@ -24,7 +24,6 @@ from cut import Cutter
 BACKGROUNDSTRING = "background-color: %s;"
 
 
-
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     """
         Класс главного окна
@@ -43,6 +42,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.tablesInit()
 
         self.selector = Polygon()
+        self.polygon = Polygon()
         self.polygons = []
 
         self.segColor = QColor(38, 255, 0 , 255)
@@ -60,7 +60,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.graphicsView.setScene(self.scene)
         self.scene.addPixmap(QPixmap.fromImage(self.img))
 
-        #self.addVertexBtn.clicked.connect(self.handleAddPoint)
+        self.addSelVrtBtn.clicked.connect(self.handleAddPoint)
         self.setSelectorBtn.clicked.connect(self.closeSel)
         #self.addSegmentBtn.clicked.connect(self.handleAddSegment)
 
@@ -152,7 +152,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         painter.setPen(self.resColor)
 
-
     def cut(self):
         if not self.selector.isClosed:
             callError("Незамкнутый отсекатель!", "Замкните отсекатель!")
@@ -198,30 +197,33 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
 
     def clear(self):
+        print(len(self.polygons))
+        print(self.selector.num)
         self.scene.clear()
         self.img.fill(QColor("white"))
         self.scene.addPixmap(QPixmap.fromImage(self.img))
-        self.segmentsTable.setRowCount(0)
+        self.polygonsTable.setRowCount(0)
         self.selectorTable.setRowCount(0)
         self.selector.clear()
-        self.segments = []
+        self.polygon.clear()
+        self.polygons = []
 
-    def addRow(self, xStr, yStr):
-        num = self.selectorTable.rowCount()
-        self.selectorTable.setRowCount(num + 1)
-        self.selectorTable.setItem(
+    def addRow(self, table, xStr, yStr):
+        num = table.rowCount()
+        table.setRowCount(num + 1)
+        table.setItem(
             num,
             0,
             QTableWidgetItem(xStr)
         )
-        self.selectorTable.setItem(
+        table.setItem(
             num,
             1,
             QTableWidgetItem(yStr)
         )
 
-    def addPoint(self, point):
-        self.addRow(str(point.x), str(point.y))
+    def addPoint(self, table, point):
+        self.addRow(table, str(point.x), str(point.y))
 
     def handleAddPoint(self):
         point = Point(self.xSelSB.value(), self.ySelSB.value())
@@ -231,19 +233,20 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if self.selector.isClosed:
             painter.setPen(QColor("white"))
 
-            for i, pnt in enumerate(self.selector.points):
+            for i, pnt in enumerate(self.selector):
                 painter.drawLine(
                     pnt.x,
                     pnt.y,
-                    self.selector.points[i - 1].x,
-                    self.selector.points[i - 1].y,
+                    self.selector[i - 1].x,
+                    self.selector[i - 1].y,
                 )
 
             self.selectorTable.setRowCount(0)
             self.selector.clear()
 
-        self.addPoint(point)
+        self.addPoint(self.selectorTable, point)
         painter.setPen(QColor(self.selColor))
+
         if self.selector.num == 0:
             painter.drawPoint(point.x, point.y)
         else:
@@ -257,31 +260,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.selector.addPoint(point)
         if self.selector.num > 2:
             self.setSelectorBtn.setDisabled(False)
-
-    def deleteRow(self):
-        num = self.pointsTable.rowCount()
-        self.pointsTable.setRowCount(num - 1)
-
-    def handleDeletePoint(self):
-        self.deleteRow()
-
-        painter = QPainter(self.img)
-        painter.setPen(QColor("white"))
-
-        last = self.polygon.getLastPoint()
-
-        if self.polygon.points:
-            self.polygon.deletePoint()
-
-        if self.polygon.num == 0:
-            painter.drawPoint(last.x, last.y)
-        else:
-            prev = self.polygon.getLastPoint()
-            painter.drawLine(last.x, last.y, prev.x, prev.y)
-
-        self.scene.clear()
-        self.scene.addPixmap(QPixmap.fromImage(self.img))
-        painter.end()
 
     def chooseSegColor(self):
         """
