@@ -209,7 +209,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Maslova Lab08"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Maslova Lab09"))
         self.segmentsColorLbl.setText(_translate("MainWindow", "Цвет многоугольников:"))
         self.selectorColorLbl.setText(_translate("MainWindow", "Цвет отсекателя:"))
         self.resultColorLbl.setText(_translate("MainWindow", "Цвет результата:"))
