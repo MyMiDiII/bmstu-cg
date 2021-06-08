@@ -140,16 +140,18 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         painter.end()
     
     def conf(self, painter : QPainter):
-        painter.setPen(self.selColor)
-        painter.setBrush(QColor("white"))
-
+        """
         polygon = []
         for point in self.selector:
             polygon.append(QPoint(point.x, point.y))
 
         painter.drawPolygon(*polygon)
+        """
 
-        painter.setPen(self.resColor)
+        pen = QPen()
+        pen.setColor(self.resColor)
+        pen.setWidth(2)
+        painter.setPen(pen)
 
 
     def cut(self):
