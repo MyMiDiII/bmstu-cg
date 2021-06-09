@@ -41,8 +41,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setPolygonBtn.setDisabled(True)
         self.tablesInit()
 
-        self.selector = Polygon()
-        self.polygon = Polygon()
+        self.selector = Polygon([])
+        self.polygon = Polygon([])
         self.polygons = []
 
         self.segColor = QColor(38, 255, 0 , 255)
@@ -55,7 +55,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         
         self.img = QImage(1165, 874, QImage.Format_RGB32)
         self.img.fill(QColor("white"))
-        self.scene = Canvas(self, self.img, self.selector)
+        self.scene = Canvas(self, self.img, self.selector, self.polygon)
         self.scene.setSceneRect(0, 0, 1165, 874)
         self.graphicsView.setScene(self.scene)
         self.scene.addPixmap(QPixmap.fromImage(self.img))
@@ -121,6 +121,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def clear(self):
         self.scene.clear()
+        self.scene.mode = NONE
         self.img.fill(QColor("white"))
         self.scene.addPixmap(QPixmap.fromImage(self.img))
         self.polygonsTable.setRowCount(0)
@@ -185,7 +186,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         painter.end()
 
         self.selector.addPoint(point)
-        self.scene.polygon = self.selector
         if self.selector.num > 2:
             self.setSelectorBtn.setDisabled(False)
 
@@ -209,7 +209,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.scene.mode = NONE
         self.selector.isClosed = True
-        self.scene.polygon = self.selector
         self.setSelectorBtn.setDisabled(True)
         self.selectorColorBtn.setDisabled(False)
         self.addRow(self.selectorTable, "end", "end")
@@ -239,7 +238,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         painter.end()
 
         self.polygon.addPoint(point)
-        self.scene.polygon = self.polygon
         if self.polygon.num > 2:
             self.setPolygonBtn.setDisabled(False)
 
@@ -249,7 +247,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             return
 
         painter = QPainter(self.img)
-        painter.setPen(QColor(self.selColor))
+        painter.setPen(QColor(self.segColor))
 
         first = self.polygon.getFirstPoint()
         last = self.polygon.getLastPoint()
@@ -264,7 +262,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.scene.mode = NONE
         self.polygon.isClosed = True
         self.polygons.append(copy.deepcopy(self.polygon))
-        self.scene.polygon = self.polygon
         self.polygon.clear()
         self.setPolygonBtn.setDisabled(True)
         self.segmentsColorBtn.setDisabled(False)

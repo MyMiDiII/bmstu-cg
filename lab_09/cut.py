@@ -3,7 +3,7 @@ from PyQt5.QtCore import QCoreApplication, QEventLoop
 
 from math import isclose
 
-from geometry import Point, Segment, Vector
+from geometry import Point, Polygon, Segment, Vector
 from errors import callInfo, callError
 
 EPS = 1e-6
@@ -31,55 +31,89 @@ class Cutter:
             normal.neg()
 
         return normal
+    
+    def isVisible(self, point, edge):
+        edgeVect = Vector(edge.begin, edge.end)
+        toPointVect = Vector(edge.begin, point)
+        prod = edgeVect.vecProd(toPointVect)
+        return prod < 0 or isclose(prod, 0, abs_tol=EPS)
 
-    def cutSegment(self, seg, selector):
-        tIn = 0
-        tOut = 1
-        vecDir = Vector(seg.begin, seg.end)
-        vertNum = len(selector)
+    def findIntersection(self, seg, edge, normal):
+        segVect = Vector(seg.begin, seg.end)
+        weight = Vector(edge.begin, seg.begin)
 
-        for i in range(vertNum):
-            weight = Vector(selector[i], seg.begin)
+        Dsc = segVect.scalarProd(normal)
+        Wsc = weight.scalarProd(normal)
 
-            normal = self.getNormal(selector, i)
+        t = -Wsc / Dsc
 
-            Dsc = vecDir.scalarProd(normal)
-            Wsc = weight.scalarProd(normal)
+        return Point(seg.begin.x + segVect.x * t, seg.begin.y + segVect.y * t)
 
-            if isclose(Dsc, 0, abs_tol=EPS):
-                if Wsc < 0 and not isclose(Wsc, 0, abs_tol=EPS):
-                    return
+    def cutPolyByEdge(self, poly, edge, normal):
+        result = Polygon([])
+        if len(poly) < 3:
+            return result
+
+        prevPoint = poly[0]
+        prevVis = self.isVisible(prevPoint, edge)
+
+        for i in range(1, len(poly) + 1):
+            curPoint = poly[i % len(poly)]
+
+            curVis = self.isVisible(curPoint, edge)
+
+            if prevVis:
+                if curVis:
+                    result.addPoint(curPoint)
                 else:
-                    continue
+                    seg = Segment(prevPoint, curPoint)
+                    result.addPoint(self.findIntersection(
+                        seg,
+                        edge,
+                        normal
+                    ))
 
-            t = - Wsc / Dsc
-            if Dsc > 0:
-                if t > 1 and not isclose(t, 1, abs_tol=EPS):
-                    return
-                if t > tIn:
-                    tIn = t
             else:
-                if t < 0 and not isclose(t, 0, abs_tol=EPS):
-                    return
-                if t < tOut:
-                    tOut = t
+                if curVis:
+                    seg = Segment(prevPoint, curPoint)
+                    result.addPoint(self.findIntersection(
+                        seg,
+                        edge,
+                        normal
+                    ))
+                    result.addPoint(curPoint)
 
-        if tIn < tOut:
-            p1 = Point(
-                round(seg.begin.x + vecDir.x * tIn),
-                round(seg.begin.y + vecDir.y * tIn)
-            )
-            p2 = Point(
-                round(seg.begin.x + vecDir.x * tOut),
-                round(seg.begin.y + vecDir.y * tOut)
-            )
-            self.painter.drawLine(
-                p1.x,
-                p1.y,
-                p2.x,
-                p2.y
-            )
+            prevPoint = curPoint
+            prevVis = curVis
 
+        return result
+
+    def selectorVisible(self, selector, polygon):
+        for i in range(len(polygon)):
+            edge = Segment(polygon[i - 1], polygon[i])
+
+            if not self.isVisible(selector[0], edge):
+                return Polygon([])
+
+        return selector
+
+    def cutPolygon(self, polygon, selector):
+        if selector.isPoint():
+            polygon.isConvex()
+            return self.selectorVisible(selector, polygon)
+
+        result = polygon
+
+        for i in range(len(selector)):
+            normal = self.getNormal(selector, i)
+            edge = Segment(selector[i],
+                        selector[(i + 1) % len(selector)])
+            result = self.cutPolyByEdge(result, edge, normal)
+
+            if len(result) < 3:
+                return Polygon([])
+
+        return result
 
     def run(self, polygons, selector):
         if not selector.isConvex():
@@ -90,5 +124,5 @@ class Cutter:
             return
 
         for poly in polygons:
-            poly.draw(self.painter)
-            #self.cutPolygon(poly, selector)
+            res = self.cutPolygon(poly, selector)
+            res.draw(self.painter)

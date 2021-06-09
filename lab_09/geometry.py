@@ -1,6 +1,10 @@
 """
     Модуль геометрических объектов
 """
+from math import isclose
+from itertools import combinations
+
+EPS = 1e-6
 
 from PyQt5.QtGui import QPainter
 
@@ -47,6 +51,10 @@ class Vector:
             self.x = args[1].x - args[0].x
             self.y = args[1].y - args[0].y
 
+    def isZero(self):
+        return (isclose(self.x, 0, abs_tol=EPS)
+                and isclose(self.y, 0, abs_tol=EPS))
+
     def neg(self):
         self.x = -self.x
         self.y = -self.y
@@ -89,6 +97,87 @@ class Polygon:
     def getFirstPoint(self):
         return self.points[0] if self.num else None
 
+    def isPoint(self):
+        if not self.num:
+            return False
+
+        prev = self[0]
+        for pnt in self:
+            if prev != pnt:
+                return False
+
+        return True
+
+    def isAdjacent(self, edge1, edge2):
+        return (edge1[0] == edge2[0]
+                or edge1[0] == edge2[1]
+                or edge1[1] == edge2[0]
+                or edge1[1] == edge2[1])
+
+    def onSeg(self, point, edge):
+        vecEdge = Vector(edge[0], edge[1])
+        toPVec = Vector(edge[0], point)
+        pToF = Vector(point, edge[0])
+        pToS = Vector(point, edge[1])
+
+        if isclose(vecEdge.vecProd(toPVec), 0, abs_tol=EPS):
+            scPr = pToF.scalarProd(pToS)
+            if scPr < 0 or isclose(scPr, 0, abs_tol=EPS):
+                return True
+
+        return False
+
+    def isInters(self, edge1, edge2):
+        edgeVec = Vector(edge1[0], edge1[1])
+        edgeToF = Vector(edge1[0], edge2[0])
+        edgeToS = Vector(edge1[0], edge2[1])
+
+        prod1 = edgeVec.vecProd(edgeToF)
+        prod2 = edgeVec.vecProd(edgeToS)
+
+        res = prod1 * prod2
+
+        if res < 0 and not isclose(res, 0, abs_tol=EPS):
+            return True
+
+        if res > 0 and not isclose(res, 0, abs_tol=EPS):
+            return False
+
+        if self.onSeg(edge1[0], edge2):
+            return True
+
+        if self.onSeg(edge1[1], edge2):
+            return True
+
+        if self.onSeg(edge2[0], edge1):
+            return True
+
+        if self.onSeg(edge2[1], edge1):
+            return True
+
+        return False
+
+
+    def noInters(self):
+        edges = []
+
+        for i in range(len(self)):
+            edges.append([self[i - 1], self[i]])
+
+        combs = list(combinations(edges, 2))
+
+        for i in range(len(combs)):
+            edge1 = combs[i][0]
+            edge2 = combs[i][1]
+
+            if self.isAdjacent(edge1, edge2):
+                continue
+
+            if self.isInters(edge1, edge2):
+                return False
+
+        return True
+
     def isConvex(self):
         if self.num < 3:  
             return False  
@@ -108,7 +197,7 @@ class Polygon:
         if sign < 0:  
             self.points.reverse()  
     
-        return True 
+        return self.noInters()
 
     def clear(self):
         self.points = []

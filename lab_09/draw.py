@@ -19,13 +19,14 @@ class Canvas(QGraphicsScene):
     """Класс холста"""
 
     def __init__(self, window: Ui_MainWindow, img,
-                 polygon, lineMode=False,
+                 selector, polygon, lineMode=False,
                  *args, **kwargs):
         """Конструктор"""
         super(Canvas, self).__init__(*args, **kwargs)
         self.window = window
         self.img = img
         self.polygon = polygon
+        self.selector = selector
         self.lineMode = lineMode
         self.prevPoint = None
         self.mode = NONE
@@ -51,20 +52,21 @@ class Canvas(QGraphicsScene):
 
     def mousePressEvent(self, event):
         painter = QPainter(self.img)
+        curPoly = None
 
         if self.mode == SELECTOR:
-            print("here1")
             painter.setPen(self.window.selColor)
+            curPoly = self.selector
         else:
-            print("here2")
             painter.setPen(self.window.segColor)
+            curPoly = self.polygon
 
         if event.button() == Qt.MiddleButton:
-            if self.polygon.num < 3:
+            if curPoly.num < 3:
                 return
 
-            first = self.polygon.getFirstPoint()
-            last = self.polygon.getLastPoint()
+            first = curPoly.getFirstPoint()
+            last = curPoly.getLastPoint()
 
             painter.drawLine(last.x, last.y, first.x, first.y)
             painter.end()
@@ -72,21 +74,20 @@ class Canvas(QGraphicsScene):
             self.clear()
             self.addPixmap(QPixmap.fromImage(self.img))
 
-            self.polygon.isClosed = True
+            curPoly.isClosed = True
 
             if self.mode == SELECTOR:
                 self.window.setSelectorBtn.setDisabled(True)
                 self.window.addRow(self.window.selectorTable, "end", "end")
-                self.window.selector = copy.deepcopy(self.polygon)
 
             if self.mode == POLYGON:
                 self.window.setPolygonBtn.setDisabled(True)
                 self.window.addRow(self.window.polygonsTable, "end", "end")
-                self.window.polygon.clear()
                 self.window.polygons.append(copy.deepcopy(self.polygon))
+                self.window.polygon.clear()
+                self.polygon.clear()
 
             self.mode = NONE
-            self.polygon.clear()
 
             return
 
@@ -99,6 +100,7 @@ class Canvas(QGraphicsScene):
             if len(self.polygon) and self.mode == POLYGON:
                 return
 
+            curPoly = self.selector
             self.mode = SELECTOR
 
             if self.window.selector.isClosed:
@@ -118,17 +120,17 @@ class Canvas(QGraphicsScene):
             painter.setPen(self.window.selColor)
 
         if event.button() == Qt.LeftButton:
-            if len(self.polygon) and self.mode == SELECTOR:
+            if len(self.selector) and self.mode == SELECTOR:
                 return
 
             self.mode = POLYGON
+            curPoly = self.polygon
             painter.setPen(self.window.segColor)
 
-        print("I'm drawing")
-        if self.polygon.num == 0:
+        if curPoly.num == 0:
             painter.drawPoint(point.x, point.y)
         else:
-            last = self.polygon.getLastPoint()
+            last = curPoly.getLastPoint()
 
             if self.lineMode:
                 point = self.getHorOrVerLine(last, point)
@@ -139,27 +141,29 @@ class Canvas(QGraphicsScene):
         self.addPixmap(QPixmap.fromImage(self.img))
         painter.end()
 
-        self.polygon.addPoint(point)
+        curPoly.addPoint(point)
 
         if event.button() == Qt.RightButton:
-            self.window.selector = copy.deepcopy(self.polygon)
             self.window.addPoint(self.window.selectorTable, point)
 
-            if self.polygon.num > 2:
+            if curPoly.num > 2:
                 self.window.setSelectorBtn.setDisabled(False)
 
         if event.button() == Qt.LeftButton:
-            self.window.polygon = copy.deepcopy(self.polygon)
             self.window.addPoint(self.window.polygonsTable, point)
 
-            if self.polygon.num > 2:
+            if curPoly.num > 2:
                 self.window.setPolygonBtn.setDisabled(False)
 
     def mouseMoveEvent(self, event):
         if (not self.prevPoint 
             and (not self.polygon.num
-            or self.polygon.isClosed)):
+            or self.polygon.isClosed)
+            and (not self.selector.num
+            or self.selector.isClosed)):
             return
+
+        curPoly = self.selector if self.mode == SELECTOR else self.polygon
 
         tmpImg = QImage(self.img)
 
@@ -176,7 +180,7 @@ class Canvas(QGraphicsScene):
                      else self.window.segColor)
             painter.setPen(color)
 
-            last = self.polygon.getLastPoint()
+            last = curPoly.getLastPoint()
 
             if self.lineMode:
                 point = self.getHorOrVerLine(last, point)
