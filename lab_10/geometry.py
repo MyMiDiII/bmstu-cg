@@ -209,3 +209,9 @@ class Polygon:
             painter.drawLine(self[i].x, self[i].y,
                              self[i - 1].x, self[i - 1].y)
 
+class Range:
+
+    def __init__(self, begin, end, step):
+        self.begin = begin
+        self.end = end
+        self.step = step

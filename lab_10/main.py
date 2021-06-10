@@ -1,3 +1,4 @@
+from math import isclose
 import sys
 
 from PyQt5 import QtWidgets, uic
@@ -12,14 +13,12 @@ from PyQt5.QtCore import QPoint, QSize, QTime, Qt
 from MainWindow import Ui_MainWindow
 
 from errors import callError, callInfo
-from geometry import Point
+from geometry import Point, Range
+from Func3DDrawer import Func3DDrawer
+from funcs import funcs
 
 BACKGROUNDSTRING = "background-color: %s;"
-
-SCENEWIDTH = 1474
-SCENEHEIGHT = 759
-
-CENTRE = Point(SCENEWIDTH // 2, SCENEHEIGHT // 2)
+EPS = 1e-6
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     """
@@ -32,11 +31,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         """
         super(MainWindow, self).__init__(*args, **kwargs)
         self.setupUi(self)
+        self.sceneWidth = 1474 
+        self.sceneHeight = 759
+        self.centre = Point(self.sceneWidth // 2, self.sceneHeight // 2)
 
-        self.img = QImage(SCENEWIDTH, SCENEHEIGHT, QImage.Format_RGB32)
+        self.img = QImage(self.sceneWidth, self.sceneHeight, QImage.Format_RGB32)
         self.img.fill(QColor("white"))
         self.scene = QGraphicsScene()
-        self.scene.setSceneRect(0, 0, SCENEWIDTH, SCENEHEIGHT)
+        self.scene.setSceneRect(0, 0, self.sceneWidth, self.sceneHeight)
         self.scene.addPixmap(QPixmap.fromImage(self.img))
         self.graphicsView.setScene(self.scene)
 
@@ -44,7 +46,64 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.colorBtn.clicked.connect(self.chooseColor)
 
         self.clearBtn.clicked.connect(self.clear)
+        self.drawBtn.clicked.connect(self.draw)
 
+    def readXRange(self):
+        begin = self.xFromDSB.value()
+        end = self.xToDSB.value()
+        step = self.xStepDSB.value()
+
+        if isclose(step, 0, abs_tol=EPS):
+            return None
+
+        if (end - begin) / step < 0:
+            return None
+
+        return Range(begin, end, step)
+
+
+    def readZRange(self):
+        begin = self.zFromDSB.value()
+        end = self.zToDSB.value()
+        step = self.zStepDSB.value()
+
+        if isclose(step, 0, abs_tol=EPS):
+            return None
+
+        num = (end - begin) / step
+
+        if num < 0 or isclose(num, 0, abs_tol=EPS):
+            return None
+
+        return Range(begin, end, step)
+
+
+    def draw(self):
+        xRange = self.readXRange()
+        zRange = self.readZRange()
+        func = funcs[self.funcCB.currentIndex()]
+
+        if not xRange or not zRange:
+            callError("Недопустимые интервалы",
+                      "Проверьте корректность введенных интервалов!")
+            return
+
+        self.img.fill(QColor("white"))
+        painter = QPainter(self.img)
+
+        drawer = Func3DDrawer(
+            self.img,
+            self.sceneWidth,
+            self.sceneHeight,
+            self.color,
+            xRange,
+            zRange
+        )
+
+        drawer.run()
+        
+        self.scene.clear()
+        self.scene.addPixmap(QPixmap.fromImage(self.img))
 
     def clear(self):
         """
