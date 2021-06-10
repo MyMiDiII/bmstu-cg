@@ -10,21 +10,34 @@ from PyQt5.QtGui import QPainter
 
 class Point:
     """
-        Класс точки в двумерном пространстве
+        Класс точки в трехмерном пространстве
     """
 
-    def __init__(self, x=0, y=0):
+    def __init__(self, x=0, y=0, z=0):
         """Конструктор"""
         self.x = x
         self.y = y
+        self.z = z
 
     def __eq__(self, other):
         """ Оператор == """
-        return self.x == other.x and self.y == other.y
+        return self.x == other.x and self.y == other.y and self.z == self.z
 
     def __ne__(self, other):
         """ Оператор != """
         return not self == other
+
+    def transform(self, matrix):
+        pointVector = [self.x, self.y, self.z, 1]
+        resPointVector = [0, 0, 0, 0]
+
+        for i in range(4):
+            for j in range(4):
+                resPointVector[i] += pointVector[j] * matrix[j][i]
+
+        self.x = resPointVector[0]
+        self.y = resPointVector[1]
+        self.z = resPointVector[2]
 
 
 class Segment:

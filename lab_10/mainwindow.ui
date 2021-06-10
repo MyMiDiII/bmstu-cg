@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>Maslova Lab09</string>
+   <string>Maslova Lab10</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_2">
@@ -111,6 +111,11 @@
          <widget class="QComboBox" name="funcCB">
           <item>
            <property name="text">
+            <string>sin(x) * cos(z)</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
             <string>cos(x * sin(z))</string>
            </property>
           </item>
@@ -138,13 +143,52 @@
          </widget>
         </item>
         <item row="2" column="2">
-         <widget class="QDoubleSpinBox" name="zToDSB"/>
+         <widget class="QDoubleSpinBox" name="zToDSB">
+          <property name="minimum">
+           <double>-100.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>100.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.100000000000000</double>
+          </property>
+          <property name="value">
+           <double>10.000000000000000</double>
+          </property>
+         </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QDoubleSpinBox" name="xFromDSB"/>
+         <widget class="QDoubleSpinBox" name="xFromDSB">
+          <property name="minimum">
+           <double>-100.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>100.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.100000000000000</double>
+          </property>
+          <property name="value">
+           <double>-10.000000000000000</double>
+          </property>
+         </widget>
         </item>
         <item row="1" column="3">
-         <widget class="QDoubleSpinBox" name="xStepDSB"/>
+         <widget class="QDoubleSpinBox" name="xStepDSB">
+          <property name="minimum">
+           <double>-100.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>100.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.100000000000000</double>
+          </property>
+          <property name="value">
+           <double>0.100000000000000</double>
+          </property>
+         </widget>
         </item>
         <item row="1" column="0">
          <widget class="QLabel" name="xLbl">
@@ -179,7 +223,20 @@
          </widget>
         </item>
         <item row="2" column="1">
-         <widget class="QDoubleSpinBox" name="zFromDSB"/>
+         <widget class="QDoubleSpinBox" name="zFromDSB">
+          <property name="minimum">
+           <double>-100.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>100.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.100000000000000</double>
+          </property>
+          <property name="value">
+           <double>-10.000000000000000</double>
+          </property>
+         </widget>
         </item>
         <item row="2" column="0">
          <widget class="QLabel" name="zLbl">
@@ -207,7 +264,20 @@
          </widget>
         </item>
         <item row="2" column="3">
-         <widget class="QDoubleSpinBox" name="zStepDSB"/>
+         <widget class="QDoubleSpinBox" name="zStepDSB">
+          <property name="minimum">
+           <double>-100.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>100.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.100000000000000</double>
+          </property>
+          <property name="value">
+           <double>0.100000000000000</double>
+          </property>
+         </widget>
         </item>
         <item row="0" column="1">
          <widget class="QLabel" name="fromLbl">
@@ -217,7 +287,20 @@
          </widget>
         </item>
         <item row="1" column="2">
-         <widget class="QDoubleSpinBox" name="xToDSB"/>
+         <widget class="QDoubleSpinBox" name="xToDSB">
+          <property name="minimum">
+           <double>-100.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>100.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.100000000000000</double>
+          </property>
+          <property name="value">
+           <double>10.000000000000000</double>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
@@ -231,7 +314,17 @@
          </widget>
         </item>
         <item row="0" column="1" colspan="2">
-         <widget class="QDoubleSpinBox" name="rotateDSB"/>
+         <widget class="QDoubleSpinBox" name="rotateDSB">
+          <property name="minimum">
+           <double>-360.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>360.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.100000000000000</double>
+          </property>
+         </widget>
         </item>
         <item row="1" column="2">
          <widget class="QPushButton" name="zRotateBtn">
@@ -266,7 +359,11 @@
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QSpinBox" name="scaleCoefSB"/>
+         <widget class="QSpinBox" name="scaleCoefSB">
+          <property name="value">
+           <number>30</number>
+          </property>
+         </widget>
         </item>
         <item row="1" column="0" colspan="2">
          <widget class="QPushButton" name="scaleBtn">

@@ -4,6 +4,7 @@
 from math import sin, cos, sqrt
 
 funcs = [
+    lambda x, z: sin(x) * cos(z),
     lambda x, z: cos(x * sin(z)),
     lambda x, z: cos(sqrt(x * x + z * z)),
     lambda x, z: sin(x) ** 2 + cos(z) ** 2

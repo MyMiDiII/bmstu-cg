@@ -1,5 +1,6 @@
-from math import isclose
+from math import cos, isclose, pi, sin
 import sys
+from copy import deepcopy
 
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QLabel, QTableWidget, QTableWidgetItem
@@ -20,6 +21,11 @@ from funcs import funcs
 BACKGROUNDSTRING = "background-color: %s;"
 EPS = 1e-6
 
+# TODO возврат поворота при очистке
+# TODO при выборе новой фигуры
+# TODO при нажатии отобразить
+# TODO боковые ребра
+
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     """
         Класс главного окна
@@ -35,6 +41,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.sceneHeight = 759
         self.centre = Point(self.sceneWidth // 2, self.sceneHeight // 2)
 
+        self.xAngle = 0
+        self.yAngle = 0
+        self.zAngle = 0
+
         self.img = QImage(self.sceneWidth, self.sceneHeight, QImage.Format_RGB32)
         self.img.fill(QColor("white"))
         self.scene = QGraphicsScene()
@@ -47,6 +57,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.clearBtn.clicked.connect(self.clear)
         self.drawBtn.clicked.connect(self.draw)
+        self.scaleBtn.clicked.connect(self.draw)
+        self.xRotateBtn.clicked.connect(self.xRotate)
+        self.yRotateBtn.clicked.connect(self.yRotate)
+        self.zRotateBtn.clicked.connect(self.zRotate)
 
     def readXRange(self):
         begin = self.xFromDSB.value()
@@ -55,9 +69,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         if isclose(step, 0, abs_tol=EPS):
             return None
+        
+        num = (end - begin) / step
 
-        if (end - begin) / step < 0:
+        if num < 0 or isclose(num, 0, abs_tol=EPS):
             return None
+
+        if step < 0:
+            begin, end = end, begin
+            step = -step
 
         return Range(begin, end, step)
 
@@ -75,13 +95,76 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if num < 0 or isclose(num, 0, abs_tol=EPS):
             return None
 
+        if step < 0:
+            begin, end = end, begin
+            step = -step
+
         return Range(begin, end, step)
 
+    def addTransform(self, matrix1, matrix2):
+        result = [[0 for i in range(4)] for j in range(4)]
+
+        for i in range(4):
+            for j in range(4):
+                for k in range(4):
+                    result[i][j] += matrix1[i][k] * matrix2[k][j]
+
+        for i in range(4):
+            for j in range(4):
+                matrix1[i][j] = result[i][j]
+        matrix1 = result
+
+    def xRotate(self):
+        self.xAngle += self.rotateDSB.value() / 180 * pi
+        self.draw()
+
+    def yRotate(self):
+        self.yAngle += self.rotateDSB.value() / 180 * pi
+        self.draw()
+
+    def zRotate(self):
+        self.zAngle += self.rotateDSB.value() / 180 * pi
+        self.draw()
+
+    def getTransformMatrix(self):
+        scale = self.scaleCoefSB.value()
+        result = [[int(i == j) for i in range(4)] for j in range(4)]
+
+        xRotateMatrix = [[1, 0, 0, 0],
+                         [0, cos(self.xAngle), sin(self.xAngle), 0],
+                         [0, -sin(self.xAngle), cos(self.xAngle), 0],
+                         [0, 0, 0, 1]]
+        self.addTransform(result, xRotateMatrix)
+
+        yRotateMatrix = [[cos(self.yAngle), 0, -sin(self.yAngle), 0],
+                        [0, 1, 0, 0],
+                        [sin(self.yAngle), 0, cos(self.yAngle), 0],
+                        [0, 0, 0, 1] ]
+        self.addTransform(result, yRotateMatrix)
+
+        zRotateMatrix = [[cos(self.zAngle), sin(self.zAngle), 0, 0],
+                        [-sin(self.zAngle), cos(self.zAngle), 0, 0],
+                        [0, 0, 1, 0],
+                        [0, 0, 0, 1]]
+        self.addTransform(result, zRotateMatrix)
+
+        scaleMatrix = [[scale, 0, 0, 0],
+                       [0, scale, 0, 0],
+                       [0, 0, scale, 0],
+                       [0, 0, 0, 1]]
+        self.addTransform(result, scaleMatrix)
+
+        result[3][0] = self.centre.x
+        result[3][1] = self.centre.y
+
+        return result
 
     def draw(self):
         xRange = self.readXRange()
         zRange = self.readZRange()
         func = funcs[self.funcCB.currentIndex()]
+        
+        matrix = self.getTransformMatrix()
 
         if not xRange or not zRange:
             callError("Недопустимые интервалы",
@@ -90,18 +173,22 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.img.fill(QColor("white"))
         painter = QPainter(self.img)
+        painter.setPen(self.color)
 
         drawer = Func3DDrawer(
-            self.img,
+            painter,
+            self.color,
             self.sceneWidth,
             self.sceneHeight,
-            self.color,
+            matrix,
             xRange,
-            zRange
+            zRange,
+            func
         )
 
         drawer.run()
         
+        painter.end()
         self.scene.clear()
         self.scene.addPixmap(QPixmap.fromImage(self.img))
 
@@ -109,19 +196,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         """
             Очистка
         """
-        DBSs = [
-            self.xFromDSB,
-            self.xToDSB,
-            self.xStepDSB,
-            self.zFromDSB,
-            self.zToDSB,
-            self.zStepDSB,
-            self.rotateDSB
-        ]
-
-        for DSB in DBSs:
-            DSB.setValue(0)
-
         self.scene.clear()
         self.img.fill(QColor("white"))
         self.scene.addPixmap(QPixmap.fromImage(self.img))
