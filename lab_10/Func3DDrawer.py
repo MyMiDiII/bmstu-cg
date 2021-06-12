@@ -35,7 +35,7 @@ class Func3DDrawer:
 
     def drawPointByHorizon(self, x, y, up, low):
         if not (0 <= x <= self.width and 0 <= y <= self.height):
-            return
+            return False
 
         if y > up[x]:
             up[x] = y
@@ -53,9 +53,16 @@ class Func3DDrawer:
             self.drawPointByHorizon(int(round(begin.x)), int(round(begin.y)), up, low)
             return
 
+        if end.y < begin.y:
+            begin, end = end, begin
+
         dx = end.x - begin.x
         dy = end.y - begin.y
         coef = abs(dx) if abs(dx) > abs(dy) else abs(dy)
+
+        if isclose(coef, 0, abs_tol=EPS):
+            return
+
         dx /= coef
         dy /= coef
 
@@ -73,16 +80,35 @@ class Func3DDrawer:
         upHorizon = [0 for x in range(self.width + 1)]
         lowHorizon = [self.height for x in range(self.width + 1)]
 
+        left = Point(-1, -1)
+        right = Point(-1, -1)
+
         z = self.zRange.end
 
         while z > self.zRange.begin - self.zRange.step / 2:
             prevPoint = None            
-            func = lambda x: self.func(x, z)
+
+            curPoint = Point(
+                self.xRange.begin,
+                self.func(self.xRange.begin, z),
+                z
+            )
+            curPoint.transform(self.matrix)
+
+            if left.x != -1:
+                self.drawLineByHorizon(
+                    curPoint,
+                    left,
+                    upHorizon,
+                    lowHorizon
+                )
+
+            left = curPoint
 
             x = self.xRange.begin
 
             while x < self.xRange.end + self.xRange.step / 2:
-                y = func(x)
+                y = self.func(x, z)
 
                 curPoint = Point(x, y, z)
                 curPoint.transform(self.matrix)
@@ -93,5 +119,10 @@ class Func3DDrawer:
                 prevPoint = curPoint
 
                 x += self.xRange.step
+
+            if right.x != -1:
+                self.drawLineByHorizon(prevPoint, right, upHorizon, lowHorizon)
+
+            right = prevPoint
 
             z -= self.zRange.step

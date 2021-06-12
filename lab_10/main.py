@@ -21,11 +21,6 @@ from funcs import funcs
 BACKGROUNDSTRING = "background-color: %s;"
 EPS = 1e-6
 
-# TODO возврат поворота при очистке
-# TODO при выборе новой фигуры
-# TODO при нажатии отобразить
-# TODO боковые ребра
-
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     """
         Класс главного окна
@@ -55,8 +50,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.color = QColor(92, 53, 102)
         self.colorBtn.clicked.connect(self.chooseColor)
 
+        self.funcCB.currentIndexChanged.connect(self.clearTurn)
+
         self.clearBtn.clicked.connect(self.clear)
-        self.drawBtn.clicked.connect(self.draw)
+        self.drawBtn.clicked.connect(self.handleDraw)
         self.scaleBtn.clicked.connect(self.draw)
         self.xRotateBtn.clicked.connect(self.xRotate)
         self.yRotateBtn.clicked.connect(self.yRotate)
@@ -159,6 +156,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         return result
 
+    def handleDraw(self):
+        self.clearTurn()
+        self.draw()
+
     def draw(self):
         xRange = self.readXRange()
         zRange = self.readZRange()
@@ -192,6 +193,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.scene.clear()
         self.scene.addPixmap(QPixmap.fromImage(self.img))
 
+    def clearTurn(self):
+        self.xAngle = 0
+        self.yAngle = 0
+        self.zAngle = 0
+
     def clear(self):
         """
             Очистка
@@ -199,6 +205,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.scene.clear()
         self.img.fill(QColor("white"))
         self.scene.addPixmap(QPixmap.fromImage(self.img))
+
+        self.clearTurn()
 
 
     def chooseColor(self):
